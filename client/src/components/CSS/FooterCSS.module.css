@@ -1,0 +1,43 @@
+.footer a{
+    text-decoration: none;
+    color: white;
+}
+.footer a:hover{
+    text-decoration: underline;
+  	text-decoration-color: white;
+}
+
+.textColor{
+    color: white;
+}
+.footer{
+    background-color: black;
+    padding-left:  5%;
+    padding-right:  5%;
+    display: flex;
+    justify-content: space-between;
+}
+.footerCol_3 .col_3_logo{
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+}
+
+.footerCol_2{
+    margin-left: 20px;
+}
+.footerCol_3{
+    margin-left: 20px;
+    padding-top: 28px;
+}
+.footerCol_4{
+    margin-left: 20px;
+}
+.footerCol_5 .loGoCol5{
+    height: 30px;
+    width: 140px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
