@@ -16,17 +16,14 @@ const ShopperSchema = new mongoose.Schema(
         },
         firstName: {
             type: String,
-            name: 'first_name',
             required: true,
         },
         lastName: {
             type: String,
-            name: 'last_name',
             required: true,
         },
         dateOfBirth: {
             type: String,
-            name: 'date_of_birth',
         },
         gender: {
             //MALE, FEMALE, OTHER
@@ -34,7 +31,6 @@ const ShopperSchema = new mongoose.Schema(
         },
         avatarUrl: {
             type: String,
-            name: 'avatar_url',
         },
         cccd: {
             type: String,
@@ -54,13 +50,11 @@ const ShopperSchema = new mongoose.Schema(
         },
         createdAt: {
             type: Date,
-            name: 'created_at',
             default: Date.now(),
             required: true,
         },
         updatedAt: {
             type: Date,
-            name: 'updated_at',
             default: Date.now(),
             required: true,
         },

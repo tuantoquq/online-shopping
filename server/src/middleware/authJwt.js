@@ -25,7 +25,7 @@ export const verifyToken = async (req, res, next) => {
         });
     }
 
-    verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) {
             return CatchExpiredTokenError(err, res);
         }
