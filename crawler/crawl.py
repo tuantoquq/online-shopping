@@ -15,20 +15,32 @@ args = parser.parse_args()
 client = MongoClient(
     "mongodb+srv://admin:admin123@cluster0.l7duj.mongodb.net/tipi-shopping")
 
-database = client['tiki']
+database = client['products']
 
-product_collections = database['products']
+product_collections = database['tiki']
 
 categories = [
-    'thoi-trang-nam',
+    'bach-hoa-online',
+    'nha-cua-doi-song',
     'dien-tu-dien-lanh',
-    'dien-gia-dung',
-    'balo-va-vali',
     'thiet-bi-kts-phu-kien-so',
+    'dien-thoai-may-tinh-bang',
+    'do-choi-me-be',
+    'lam-dep-suc-khoe',
     'dien-gia-dung',
+    'thoi-trang-nu',
+    'thoi-trang-nam',
     'giay-dep-nu',
+    'tui-vi-nu',
+    'giay-dep-nam',
+    'tui-thoi-trang-nam'
+    'balo-va-vali',
+    'phu-kien-thoi-trang',
+    'dong-ho-va-trang-suc',
+    'hang-quoc-te',
     'laptop-may-vi-tinh-linh-kien',
     'o-to-xe-may-xe-dap',
+    'nha-sach-tiki'
     'the-thao-da-ngoai',
     'may-anh',
 ]
@@ -40,8 +52,8 @@ api_product = 'https://tiki.vn/api/v2/products/{}'
 product_field = [
     'short_url', 'name', 'short_description', 'price', 'list_price', 'rating_average',
     'rating_average', 'review_count', 'inventory_status', 'inventory_type',
-    'productset_group_name', 'all_time_quantity_sold', 'description', 'images', 'brand',
-    'configurable_options', 'quantity_sold','categories'
+    'productset_group_name', 'all_time_quantity_sold', 'description', 'images', 'brand', 'current_seller',
+    'specifications', 'configurable_options', 'quantity_sold','categories'
 ]
 
 
