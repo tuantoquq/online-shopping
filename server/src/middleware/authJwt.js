@@ -33,3 +33,21 @@ export const verifyToken = async (req, res, next) => {
         next();
     });
 };
+
+export const verifyRefreshToken = async (req, res, next) => {
+    let refreshToken = req.headers.authorization.split(' ')[1];
+    if (!refreshToken) {
+        return res.status(httpStatus.FORBIDDEN).send({
+            status: apiStatus.AUTH_ERROR,
+            message: 'No refresh token provided!',
+        });
+    }
+
+    verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return CatchExpiredTokenError(err, res);
+        }
+        req.userId = decoded.id;
+        next();
+    });
+};

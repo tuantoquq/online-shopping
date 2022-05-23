@@ -5,6 +5,14 @@ export const validateLoginCustomerAndShopper = [
     check('password', 'Password does not empty').not().isEmpty(),
 ];
 
+export const validateAdmin = [
+    check('username', 'Username does not empty').not().isEmpty().isLength({ min: 6 }),
+    check('password', 'Password does not empty')
+        .not()
+        .isEmpty()
+        .isLength({ min: 6, max: 20 }),
+];
+
 export const validateRegister = [
     check('email', 'Email does not empty').not().isEmpty(),
     check('email', 'Invalid email').isEmail(),
