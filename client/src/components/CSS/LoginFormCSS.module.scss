@@ -1,0 +1,91 @@
+
+.loginContainer {
+    display: flex;
+    min-height: 700px;
+    background-color: #2196F3;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.loginLogo{
+    width: 600px;
+    margin-right: 40px;
+    color: #fff;
+    align-items: center;
+    text-align: center;
+}
+
+.loginLogo .title{
+    padding: 20px 12px;
+}
+
+
+.imgContainer{
+    justify-content: center;
+}
+.logo {
+    padding: 16px;
+    width: 120px;
+    background-color: #fff;
+    height: 120px;
+}
+
+.loginForm {
+    margin-left: 40px;
+    width: 400px;
+    background-color: #fff;
+    color: #333;
+    padding: 32px;
+    border-radius: 4px;
+}
+
+.formTitle{
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.formTitle .title{
+    font-size: 2em;
+}
+.formField{
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+/* Style inputs, select elements and textareas */
+.formInput{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+  
+  /* Style the label to display next to the inputs */
+.formLabel {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+.btn {
+    font-size: 16px;
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    border: none; /* Remove borders */
+    border-radius: 4px;
+    color: white; /* Add a text color */
+    padding: 14px 28px; /* Add some padding */
+    cursor: pointer; /* Add a pointer cursor on mouse-over */
+}
+
+.btn.primary {background-color: #2196F3;} /* Blue */
+.btn.primary:hover {background: #0b7dda;}
+
+.formFooter{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 16px
+}
