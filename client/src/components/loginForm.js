@@ -6,6 +6,15 @@ import styles from "./CSS/LoginFormCSS.module.scss";
 import logoImage from "../assets/logo-design.png";
 
 function LoginForm(props) {
+  console.log(props.role);
+  let dangky = "";
+  if (props.role === "user") {
+    dangky = "Đăng ký";
+  }
+  if (props.role === "seller") {
+    dangky = "Trở thành người bán hàng?";
+  }
+
   return (
     <div className={clsx(styles.loginContainer, styles.row)}>
       <div className={clsx(styles.loginLogo, styles.col)}>
@@ -23,7 +32,7 @@ function LoginForm(props) {
         <form className={clsx(styles.row)}>
           <div className={clsx(styles.formTitle, styles.row)}>
             <h2 className={clsx(styles.title)}> Đăng nhập </h2>
-            <Link to="/">Bạn cần giúp đỡ?</Link>
+            {props.role === "admin" || <Link to="/">Bạn cần giúp đỡ?</Link>}
           </div>
           <div className={clsx(styles.formField, styles.row)}>
             <label
@@ -61,14 +70,16 @@ function LoginForm(props) {
           </button>
         </form>
 
-        <div className={clsx(styles.formFooter, styles.row)}>
-          <Link to="/" className={clsx(styles.col)}>
-            Quên mật khẩu?
-          </Link>
-          <Link to="/" className={clsx(styles.col)}>
-            Đăng ký
-          </Link>
-        </div>
+        {props.role === "admin" || (
+          <div className={clsx(styles.formFooter, styles.row)}>
+            <Link to="/" className={clsx(styles.col)}>
+              Quên mật khẩu?
+            </Link>
+            <Link to="/" className={clsx(styles.col)}>
+              {dangky}
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

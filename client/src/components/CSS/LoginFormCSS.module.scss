@@ -38,6 +38,7 @@
     color: #333;
     padding: 32px;
     border-radius: 4px;
+    margin-right: 16px;
 }
 
 .formTitle{
@@ -55,6 +56,7 @@
 }
 /* Style inputs, select elements and textareas */
 .formInput{
+    font-size: 1em;
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -88,4 +90,39 @@
     display: flex;
     justify-content: space-between;
     padding-bottom: 16px
+}
+
+@media (max-width: 739px){
+    .loginLogo{
+        display: none;
+    }
+
+    .loginForm {
+        margin-left: 8px;
+        margin-right: 8px;
+        width: 100%;
+        background-color: #fff;
+        color: #333;
+        border-radius: 4px;
+        padding: 24px;
+    }
+}
+
+
+@media (min-width: 740px) and (max-width: 1024px){
+    .loginLogo{
+        width: 300px;
+        margin-right: 16px;
+        
+    }
+
+    .loginForm {
+        width: 400px;
+        background-color: #fff;
+        color: #333;
+        border-radius: 4px;
+        padding: 24px;
+        margin-left: 16px;
+        margin-right: 16px;
+    }
 }
