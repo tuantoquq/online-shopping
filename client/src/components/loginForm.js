@@ -54,12 +54,12 @@ function LoginForm(props) {
           headers: {
             'Content-Type': 'application/json',
           },
-          withCredentials: true,
+          // withCredentials: true,
         }
       );
       console.log(JSON.stringify(response?.data));
       console.log(JSON.stringify(response));
-      if (response.status === 2) {
+      if (response.data.status === 2) {
         setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
@@ -76,10 +76,10 @@ function LoginForm(props) {
       } else if (err.response?.status === 400) {
         setErrMsg('Missing Username or Password');
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized');
+        setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
-        setErrMsg('Login Failed');
+        setErrMsg('Đăng nhập thất bại.');
         setOpen(true);
       }
       errRef.current.focus();
