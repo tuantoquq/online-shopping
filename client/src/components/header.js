@@ -26,47 +26,17 @@ function Header() {
   const dayCurr = dictDay[date.getDay()]
 
 
-  const listTopic = [['Thời sự','thoi-su'],['Góc nhìn','goc-nhin'],['Thế giới','the-gioi'],
-  ['Kinh doanh','kinh-doanh'],['Du lịch','du-lich'],['Xem sau','xem-sau']]
+  const listTopic = [['Váy','váy'],['Túi','túi'],['Tai nghe','tai nghe'],
+  ['Điện thoại','điện thoại'],['Sạc iphone','sạc iphone']]
 
   const topicThoiSu = [['Chính trị','thoi-su/chinh-tri'],['Dân sinh','thoi-su/dan-sinh'],['Giao thông','thoisu-dan-sinh']]
   const toppicGocNhin = [['Bình luận nhiều','goc-nhin/nhieu-binh-luan'],['Covid-19','goc-nhin/covid-19'],['Kinh doanh','goc-nhin/kinh-doanh']]
 
-  const [isScroll,setIsScroll] = useState('');
   const [username, setUsername] = useState('');
-  const [VisibleMenuAll,setVisibleMenuAll] = useState(false)
-  const [VisibleMenuTop,setVisibleMenuTop] = useState(71+47)
 
-
-  useEffect(()=>{
-    const handlleScroll = ()=>{
-      // console.log(document.querySelector(`.${styles.narBar}`))
-      let x1 = document.querySelector(`.${styles.narBar}`)?.clientHeight
-      let x2 = document.querySelector(`.${styles.toolBar}`)?.clientHeight
-
-      if(window.scrollY>71){
-        setIsScroll('fixed')
-        setVisibleMenuTop(x1)
-      }else{
-        setIsScroll('')
-        setVisibleMenuTop(x1+x2-window.scrollY)
-      }
-    }
-    // let token = Cookies.get("access_token");
-    // if(token != null){
-    //   getUserInformation(token).then(
-    //     res => setUsername(res.data?.nick_name)
-    //   ).catch((err) => {
-    //     console.log(err)
-    //   })
-    // }
-    window.addEventListener('scroll',handlleScroll)
-  },[])
 
   
-  const handlleVisibleMenu = ()=>{
-    setVisibleMenuAll(!VisibleMenuAll)
-  }
+
 
   const navigatePath = function(path){
     if (window.location.pathname !== path){
@@ -77,7 +47,7 @@ function Header() {
 
 
   return (
-    <div className={styles.Header}>
+    <div className={styles.Header} >
       <div className={styles.toolBar}>
         <label className={styles.namePaper} onClick={()=>navigatePath('/')}>Time News</label>
         <label className={`${styles.textColor} ${styles.textDate}`}>{`${dayCurr}, ${dateCurr}`}</label>
@@ -98,71 +68,41 @@ function Header() {
 
       </div>
 
+      <div  className={styles.cmp_2} >
 
-      <div className={styles.narBar} style={{position:isScroll,top:0}}>
-        <ul className={`${styles.textColor} ${styles.narMenu}`}>
+        <div className={styles.narBar} >
+          <ul className={`${styles.textColor} ${styles.narMenu}`}>
 
-          {
-            listTopic.map(topic => <li ><Link to={`/${topic[1]}`} >{topic[0]}</Link></li>)
-          }
-          <li >
-            <div className={styles.divUser} onClick={handlleVisibleMenu}>
-              <a>
-                Tất cả
-              </a>
-              <img src={menuImage} className={styles.image}  alt='menuImage'/>
-            </div>
+            {
+              listTopic.map(topic => <li ><Link to={`/${topic[1]}`} >{topic[0]}</Link></li>)
+            }
+            <li >
+              <div className={styles.divUser} >
+                <a>
+                  Tất cả
+                </a>
+                <img src={menuImage} className={styles.image}  alt='menuImage'/>
+              </div>
 
 
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </div>
+
+
+        <div className={styles.cart}>
+          <img src={'assets/shopping-cart.png'}/>
+        </div>
+      </div>
+
 
         
-
-      </div>
 
 
 
 
       
 
-      {VisibleMenuAll &&<div className={styles.rowMenu} style={{top:VisibleMenuTop}}>
-        <div className={`${styles.rowMenu_1} ${styles.textColor}`}>
-          <ul>
-            <h2>Thời sự</h2>
-            {
-              topicThoiSu.map(topic => <li><a href={`/${topic[1]}`}>{topic[0]}</a></li>)
-            }
-          </ul>
-          <ul>
-            <h2>Góc nhìn</h2>
-            {
-              toppicGocNhin.map(topic => <li><a href={`/${topic[1]}`}>{topic[0]}</a></li>)
-            }
-          </ul>
-          <ul>
-            <h2>Thế giới</h2>
-            {
-              topicThoiSu.map(topic => <li><a href={`/${topic[1]}`}>{topic[0]}</a></li>)
-            }
-          </ul>
-          <ul>
-            <h2>Kinh doanh</h2>
-            {
-              toppicGocNhin.map(topic => <li><a href={`/${topic[1]}`}>{topic[0]}</a></li>)
-            }
-          </ul>
-          <ul>
-            <h2>Du lịch</h2>
-            {
-              topicThoiSu.map(topic => <li><a href={`/${topic[1]}`}>{topic[0]}</a></li>)
-            }
-          </ul>        
-        </div>
-        <br/>
-        
-      </div>
-      }
 
 
     </div>

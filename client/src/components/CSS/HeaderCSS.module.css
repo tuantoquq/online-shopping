@@ -1,5 +1,10 @@
 .Header{
     background-color: black;
+    position: -webkit-sticky; /* Safari & IE */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
 }
 
 .toolBar{
@@ -57,7 +62,13 @@
 
 
 /* ------------- nar-bar */
+.cmp_2{
+    margin-bottom: 5px;
+    display: flex;
+    width: 90%;
+    justify-content:space-around;
 
+}
 .narBar{
     background-color: black;
     display: flex;
@@ -65,13 +76,16 @@
     /* padding-right: 13%; */
     /* padding-left: 15%;  */
     /* padding-right: 15%; */
-    width: 100%;
 
-    justify-content: space-around;
+    /* justify-content: space-around; */
+    margin-left: 20%;
+    /* width: 50%; */
+
+
 }
-.menuFixed{
-    position: fixed;
-    top:0;
+
+.cart{
+    right: 20%;
 }
 .narMenu{
     /* flex-direction: row; */
