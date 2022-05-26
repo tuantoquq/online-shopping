@@ -67,7 +67,7 @@ export const loginCustomer = async (req, res) => {
 
         let customer = await Customer.findOne({ email: req.body.email });
         if (!customer) {
-            return res.status(httpStatus.NOT_FOUND).send({
+            return res.status(httpStatus.UNAUTHORIZED).send({
                 status: apiStatus.INVALID_PARAM,
                 message: 'Email is not existed! Try again..',
             });
@@ -210,7 +210,7 @@ export const loginShopper = async (req, res) => {
 
         let shopper = await Shopper.findOne({ email: req.body.email });
         if (!shopper) {
-            return res.status(httpStatus.NOT_FOUND).send({
+            return res.status(httpStatus.UNAUTHORIZED).send({
                 status: apiStatus.INVALID_PARAM,
                 message: 'Email is not existed! Try again..',
             });
@@ -343,7 +343,7 @@ export const loginAdmin = async (req, res) => {
 
         let admin = await Admin.findOne({ username: req.body.username });
         if (!admin) {
-            return res.status(httpStatus.NOT_FOUND).send({
+            return res.status(httpStatus.UNAUTHORIZED).send({
                 status: apiStatus.INVALID_PARAM,
                 message: 'Username is not existed! Try again..',
             });
