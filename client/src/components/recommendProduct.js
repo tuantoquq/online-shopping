@@ -9,17 +9,16 @@ import Paper from '@mui/material/Paper';
 
 import { Grid } from '@mui/material';
 
-
-function ProductCategory(){
+function RecommendProduct(){
     return (
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}  style={{padding:'5px'}}>
-              {Array.from(Array(24)).map((_, index) => (
-                <Grid item xs={2} sm={1} md={1} key={index}>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}  style={{padding:'10px'}}>
+              {Array.from(Array(30)).map((_, index) => (
+                <Grid item xs={2} sm={1} md={2} key={index}>
                   <Card sx={{ maxWidth: 345 }}>
                     <CardActionArea>
                       <CardMedia
                         component="img"
-                        height="60"
+                        height="100"
                         image="/static/images/cards/contemplative-reptile.jpg"
                         alt="green iguana"
                       />
@@ -36,5 +35,4 @@ function ProductCategory(){
 
     )
 }
-
-export default ProductCategory;
+export default RecommendProduct

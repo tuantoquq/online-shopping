@@ -1,0 +1,17 @@
+.commentProduct{
+    margin: auto;
+    width: 60%;
+    margin-bottom: 30px;
+}
+.all{
+    margin-top: 20px;
+}
+.elm1{
+    display: flex;
+    margin: auto;
+
+}
+.rating{
+    margin-left: 30%;
+
+}
