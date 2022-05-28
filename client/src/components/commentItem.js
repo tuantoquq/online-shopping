@@ -8,7 +8,7 @@ function CommentItem(){
         <div className={styles.commentProduct}>
             <div>
                 <div className={clsx(styles.all,styles.elm1)}>
-                    <img src='assets/laptop.jpg'/>
+                    <img src='assets/laptop.jpg' style={{width:'300px',height:'200px'}}/>
                     <div>
                         <p>Laptop Dell</p>
                         <p>Phân loại hàng: laptop Gaming</p>
@@ -23,7 +23,7 @@ function CommentItem(){
                 </div>
 
                 <div className={clsx(styles.all,styles.textComment)}>
-                    <textarea rows="4" cols="50" placeholder='Hãy chia sẻ trải nghiệm của bạn...' style={{width:'1000px'}}/>
+                    <textarea rows="4" cols="50" placeholder='Hãy chia sẻ trải nghiệm của bạn...' style={{width:'100%'}}/>
                 </div>
             </div>
 
