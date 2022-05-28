@@ -1,0 +1,33 @@
+.commentProduct{
+    margin: auto;
+    width: 60%;
+    height: auto;
+    margin-bottom: 30px;
+}
+.all{
+    margin-top: 20px;
+}
+.elm1{
+    display: flex;
+    margin: auto;
+
+}
+.column {
+    width: 100%;
+    /* display: block; */
+    margin-bottom: 20px;
+    float: left;
+    display:inline-block;
+    vertical-align:top;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+.middle{
+    grid-column: 3;
+}
+.last{
+    grid-column: 11;
+}

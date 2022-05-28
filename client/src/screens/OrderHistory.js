@@ -1,14 +1,17 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
-import CommentItem from "../components/commentItem";
-import li_Item from "../components/listOrderedItem";
+import ListOrderedItem from "../components/listOrderedItem";
 function OrderHistory() {
     return(
         
         <div>
             <Header/> 
-            <li_Item/>
-            <CommentItem/>
+            <div className="container">
+                <h3 >Lịch sử mua hàng</h3> 
+            </div>       
+            <ListOrderedItem/>
+            <ListOrderedItem/>
+            <ListOrderedItem/>
             <div >
                 <button>Trở lại</button>
                 <button>Hoàn thành</button>
