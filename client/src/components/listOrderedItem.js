@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { Button, CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { Container } from '@mui/system';
@@ -54,7 +54,9 @@ function ListOrderedItem(){
                 <br></br>
                 Số lượng <br />
             </p>
-            <p className={styles.last}>Giá</p>
+            <p className={styles.last}>Giá sản phẩm</p>
+            <p className={styles.footer}>Tổng tiền</p>
+            <Button className={styles.button}>Mua lại</Button>
         </div>
     )
 }
