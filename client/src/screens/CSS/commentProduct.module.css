@@ -1,0 +1,7 @@
+.controlButton{
+    position: absolute;
+    right: 17%;
+    display: flex;
+    justify-content: space-around;
+    width: 20%;
+}
