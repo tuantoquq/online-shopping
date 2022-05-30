@@ -2,16 +2,16 @@ import mongoose from "mongoose";
 
 const CategorySchema = new mongoose.Schema(
     {
-        name:{
+        categoryName:{
             type: String,
             required: true
         },
-        created_at:{
+        createAt:{
             type: Date,
             default: Date.now(),
             required: true
         },
-        update_at:{
+        updateAt:{
             type: Date, 
             default: Date.now(),
             required: true
