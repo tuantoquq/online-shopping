@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import styles from './CSS/RegisterFormCSS.module.scss';
@@ -6,8 +6,33 @@ import defaultAvatar from '../assets/avatar/defaultAvatar.png';
 
 function RegisterForm(props) {
   const role = props.role;
+  const [username, setUsername] = useState(null);
+  const [fullName, setFullName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [birthday, setBirthday] = useState(null);
+  const [cmnd, setCmnd] = useState(null);
+  const [noiCap, setNoiCap] = useState(null);
+  const [ngayCap, setNgayCap] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [avatarImg, setAvatarImg] = useState(null);
 
-  console.log(role);
+  useEffect(() => {
+    // Cleanup
+    return () => {
+      avatarImg && URL.revokeObjectURL(avatarImg.preview);
+    };
+  }, [avatarImg]);
+
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatarImg(file);
+  };
+  //console.log(role);
   return (
     <div className={clsx(styles.registerContainer, styles.row)}>
       <div className={clsx(styles.registerForm)}>
@@ -38,6 +63,8 @@ function RegisterForm(props) {
                   <input
                     id="username"
                     name="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     type="text"
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Tên đăng nhập..."
@@ -55,6 +82,8 @@ function RegisterForm(props) {
                   <input
                     id="name"
                     name="name"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     type="text"
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Họ và tên..."
@@ -73,6 +102,8 @@ function RegisterForm(props) {
                     id="email"
                     name="email"
                     type="email"
+                    value={email}
+                    oncChange={(e) => setEmail(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Email..."
                     required
@@ -83,7 +114,7 @@ function RegisterForm(props) {
               <div className={clsx(styles.formRow, styles.row)}>
                 <div className={clsx(styles.formField, styles.col3)}>
                   <label
-                    htmlFor="phone"
+                    htmltarFor="phone"
                     className={clsx(styles.formLabel, styles.row)}
                   >
                     Số điện thoại:
@@ -92,6 +123,8 @@ function RegisterForm(props) {
                     id="phone"
                     name="phone"
                     type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Số điện thoại..."
                     required
@@ -118,6 +151,7 @@ function RegisterForm(props) {
                         id="male"
                         name="gender"
                         value="male"
+                        checked={gender === 'male'}
                       />
 
                       <label
@@ -137,6 +171,7 @@ function RegisterForm(props) {
                         id="female"
                         name="gender"
                         value="female"
+                        checked={gender === 'female'}
                       />
                       <label
                         className={clsx(
@@ -155,6 +190,7 @@ function RegisterForm(props) {
                         id="others"
                         name="gender"
                         value="others"
+                        checked={gender === 'others'}
                       />
                       <label
                         className={clsx(
@@ -180,6 +216,8 @@ function RegisterForm(props) {
                     id="birthday"
                     name="birthday"
                     type="date"
+                    value={birthday}
+                    onChange={(e) => setBirthday(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     required
                   />
@@ -199,6 +237,8 @@ function RegisterForm(props) {
                       id="cmnd/cccd"
                       name="cmnd/cccd"
                       type="text"
+                      value={cmnd}
+                      onChange={(e) => setCmnd(e.target.value)}
                       className={clsx(styles.formInput, styles.row)}
                       placeholder="Số CMND/CCCD..."
                       required
@@ -216,6 +256,8 @@ function RegisterForm(props) {
                       id="noiCap"
                       name="noiCap"
                       type="text"
+                      value={noiCap}
+                      onChange={(e) => setNoiCap(e.target.value)}
                       className={clsx(styles.formInput, styles.row)}
                       placeholder="Nơi cấp..."
                       required
@@ -233,6 +275,8 @@ function RegisterForm(props) {
                       id="ngayCap"
                       name="ngayCap"
                       type="date"
+                      value={ngayCap}
+                      onChange={(e) => setNgayCap(e.target.value)}
                       className={clsx(styles.formInput, styles.row)}
                       required
                     />
@@ -252,6 +296,8 @@ function RegisterForm(props) {
                     id="address"
                     name="address"
                     type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Địa chỉ..."
                     required
@@ -269,6 +315,7 @@ function RegisterForm(props) {
                     id="password"
                     name="password"
                     type="password"
+                    oncChange={(e) => setPassword(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Mật khẩu..."
                     required
@@ -286,6 +333,7 @@ function RegisterForm(props) {
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className={clsx(styles.formInput, styles.row)}
                     placeholder="Nhập lại mật khẩu..."
                     required
@@ -298,14 +346,16 @@ function RegisterForm(props) {
               <div className={clsx(styles.imgContainer)}>
                 <input
                   className={clsx(styles.imgInput)}
+                  onChange={handlePreviewAvatar}
                   name="avatar"
                   id="avatar"
                   type="file"
+                  accept="image/*"
                 />
                 <label htmlFor="avatar">
                   <img
                     className={styles.avatarImg}
-                    src={defaultAvatar}
+                    src={avatarImg ? avatarImg.preview : defaultAvatar}
                     alt="logo"
                   />
                 </label>

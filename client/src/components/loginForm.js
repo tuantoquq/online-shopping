@@ -125,7 +125,12 @@ function LoginForm(props) {
         <form className={clsx(styles.row)} onSubmit={handleSubmit}>
           <div className={clsx(styles.formTitle, styles.row)}>
             <h2 className={clsx(styles.title)}> Đăng nhập </h2>
-            {role === 'admin' || <Link to="/">Bạn cần giúp đỡ?</Link>}
+            {role === 'customer' && (
+              <Link to="/shopper/login">Bạn là người bán hàng?</Link>
+            )}
+            {role === 'shopper' && (
+              <Link to="/customer/login">Bạn là người mua hàng?</Link>
+            )}
           </div>
           <div className={clsx(styles.formField, styles.row)}>
             <label
