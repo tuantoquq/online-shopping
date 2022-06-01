@@ -1,0 +1,24 @@
+.Home{
+    background-color: rgb(245, 242, 242);
+}
+.content{
+    margin-right: 15%;
+    margin-left: 15%;
+    background-color: rgb(245, 242, 242);
+}
+.tdisplay{
+    font-size: 25px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid;
+    border-color: rgb(197, 180, 180);
+    padding: 10px;
+
+}
+.item{
+    margin-top: 10px;
+}
+.wraper{
+    margin-bottom: 20px;
+    background-color: #fff;
+}

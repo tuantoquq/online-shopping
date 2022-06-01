@@ -1,0 +1,24 @@
+.commentProduct{
+    margin: auto;
+    width: 60%;
+    margin-bottom: 30px;
+}
+.all{
+    margin-top: 20px;
+}
+.elm1{
+    display: flex;
+    margin: auto;
+    width: 80%;
+    justify-content: space-around;
+
+}
+.rating{
+    margin-left: 40%;
+
+}
+.textComment{
+    margin: auto;
+    width: 100%;
+
+}
