@@ -188,7 +188,7 @@ function AccountInformation(props){
                             Cập nhật thông tin
                         </lable>
                         <input placeholder='Nhập thông tin...'
-                            type = 'tel'
+                            type="number"
                             className={clsx(styles.midColumn,styles.inputUpdate)}
                             value={newPhone}
                             onChange={(e) => setNewPhone(e.target.value)}
@@ -226,7 +226,8 @@ function AccountInformation(props){
                             Cập nhật thông tin
                         </lable>
                         <DatePicker  
-                            className={styles.Column} 
+
+                            className={styles.midColumn} 
                             selected={newBirthday}
                             onChange={(date) => setNewBirthday(date)} 
                         />
