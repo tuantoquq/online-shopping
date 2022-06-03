@@ -1,5 +1,6 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import { Product } from '../model/index.js';
+import { Category } from '../model/category.js'
 
 const productControler = {}
 
@@ -12,35 +13,40 @@ productControler.insertProductToDatabase = async (req, res) => {
             codes,
             count,
             sizes,
-            shopName, 
-            categoryName
-
+            categoryName, 
+            shopId
         } = req.body
 
-        let product = await Product.findOne({
-            productName: productName
-        })
-        if (category) {
-            return res.status(httpStatus.BAD_REQUEST).json({
-                message: "Category name has exist"
-            })
-        }
-
         category = new Category({
-            categoryName: categoryName,
-            createAt: createAt,
-            updateAt: updateAt
+            categoryName: categoryName
         })
 
         try {
             const categorySave = await category.save()
-            res.status(httpStatus.CREATED).json({
-                data: {
-                    id: categorySave._id,
-                    categoryName: categoryName,
-                    createAt: createAt,
-                    updateAt: updateAt
-                }
+            let product = await Product.findOne({
+                productName: productName,
+                shopId: shopId
+            })
+
+            if(product){
+                return res.status(httpStatus.BAD_REQUEST).json({
+                    message: "Product has been exist in this Shop"
+                })
+            }
+            product = new Product({
+                productName: productName,
+                longDescription: longDescription,
+                price: price,
+                codes: codes,
+                count: count,
+                shopId: shopId,
+                sizes: sizes,
+                catergoryId: categorySave._id
+            })
+
+            const productSave = product.save()
+            return res.status(httpStatus.OK).json({
+                data: productSave
             })
         }
         catch (e) {
@@ -59,19 +65,18 @@ productControler.insertProductToDatabase = async (req, res) => {
 }
 
 
-categoryControler.getCategoryFromDatabase = async (req, res) => {
+productControler.getProductFromDatabase = async (req, res) => {
     try {
-        let categoryId = req.categoryId
-        console.log(categoryId)
-        let categoryFind = await Category.findById(categoryId)
+        let productId = req.query.productId
+        let productFind = await Product.findById(productId)
 
-        if (categoryFind == null ){
+        if (productFind == null ){
             return res.status(httpStatus.NOT_FOUND).json({
-                message : "Category not found"
+                message : "Product not found"
             })
         }
         return res.status(httpStatus.OK).json({
-            data: categoryFind
+            data: productFind
         })
     }
     catch (e) {
@@ -83,17 +88,17 @@ categoryControler.getCategoryFromDatabase = async (req, res) => {
 }
 
 
-categoryControler.deleteCategoryFromDatabse = async (req, res) => {
+productControler.deleteProductFromDatabse = async (req, res) => {
     try {
-        let category = await Category.findByIdAndRemove(req.params.id)
-        if (category == null){
+        let product = await Product.findByIdAndRemove(req.query.productId)
+        if (product == null){
             return res.status(httpStatus.NOT_FOUND).json({
-                message: "Can't find category"
+                message: "Can't find product"
             })
         }
 
         return req.status(httpStatus.OK).json({
-            message: "Delte category done"
+            message: "Delte product done"
         })
     }
     catch (e){
@@ -105,25 +110,35 @@ categoryControler.deleteCategoryFromDatabse = async (req, res) => {
 }
 
 
-categoryControler.updateCategoryFromDatabase = async (req, res) => {
+productControler.updateProductFromDatabase = async (req, res) => {
     try {
-        const {
-            categoryId,
-            categoryName
-        } = req.body 
-        dataUpdate = {}
+        let productId = req.productId 
+        const dataUpdate = {}
+        let listPros = [
+            'productName',
+            'longDescription',
+            'price',
+            'codes',
+            'count',
+            'sizes',
+            'ratingStart',
+            'ratingCount'
+        ]
+
+        for(let i=0; i < listPros.length; i++){
+            if(req.body.hasOwnProperty(pro)){
+                dataUpdate[pro] = req.body[pro]
+            }
+        }
         dataUpdate['updateAt'] = Date.now()
-        category = await Category.findOneAndUpdate({
-            _id: categoryId, 
-            dataUpdate
-        })
-        if (!category) {
+        product = await Product.findOneAndUpdate({_id: productId}, dataUpdate)
+        if(!product){
             return res.status(httpStatus.NOT_FOUND).json({
-                message : "Can't find category"
+                message: "Can't find product"
             })
         }
-        return  res.status(httpStatus.OK).json({
-            data:  category
+        return res.status(httpStatus.OK).json({
+            data: product
         })
     }
     catch (e) {
@@ -133,4 +148,4 @@ categoryControler.updateCategoryFromDatabase = async (req, res) => {
     }
 }
 
-export default categoryControler;
+export default productControler;

@@ -7,8 +7,6 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
     try {
         const {
             categoryName,
-            createAt, 
-            updateAt
         } = req.body
 
         let category = await Category.findOne({
@@ -22,8 +20,6 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
 
         category = new Category({
             categoryName: categoryName,
-            createAt: createAt,
-            updateAt: updateAt
         })
 
         try {
@@ -105,6 +101,7 @@ categoryControler.updateCategoryFromDatabase = async (req, res) => {
             categoryName
         } = req.body 
         dataUpdate = {}
+        data['categoryName'] = categoryName
         dataUpdate['updateAt'] = Date.now()
         category = await Category.findOneAndUpdate({
             _id: categoryId, 

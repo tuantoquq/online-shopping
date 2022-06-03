@@ -78,7 +78,7 @@ deliveryControler.insertToDatabase = async (req, res) => {
 deliveryControler.getDeliveryFromDatabase = async (req, res) => {
     try {
         let deliveryId = res.query.deliveryId
-        let deliveryFind = await delivery.findById(deliveryId)
+        let deliveryFind = await DeliveryAddress.findById(deliveryId)
 
         if (deliveryFind == null ){
             return res.status(httpStatus.NOT_FOUND).json({
@@ -100,7 +100,7 @@ deliveryControler.getDeliveryFromDatabase = async (req, res) => {
 
 deliveryControler.deleteDeliveryFromDatabse = async (req, res) => {
     try {
-        let delivery = await delivery.findByIdAndRemove(req.query.id)
+        let delivery = await DeliveryAddress.findByIdAndRemove(req.query.id)
         if (delivery == null){
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find delivery"
@@ -140,6 +140,7 @@ deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
                 dataUpdate[pro] = req.body[pro]
             }
         }
+        dataUpdate['updateAt'] = Date.now()
 
         delivery = await DeliveryAddress.findOneAndUpdate({_id: deliveryId}, dataUpdate)
 
@@ -158,3 +159,5 @@ deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
         })
     }
 }
+
+export default deliveryControler
