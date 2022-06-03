@@ -55,7 +55,7 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
 
 categoryControler.getCategoryFromDatabase = async (req, res) => {
     try {
-        let categoryId = res.categoryId
+        let categoryId = req.query.categoryId
         let categoryFind = await Category.findById(categoryId)
 
         if (categoryFind == null ){
@@ -78,7 +78,7 @@ categoryControler.getCategoryFromDatabase = async (req, res) => {
 
 categoryControler.deleteCategoryFromDatabse = async (req, res) => {
     try {
-        let category = await Category.findByIdAndRemove(req.params.id)
+        let category = await Category.findByIdAndRemove(req.query.categoryId)
         if (category == null){
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find category"

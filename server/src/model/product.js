@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import mongooseFloat from 'mongoose-float'
-import Float from mongooseFloat.loadType(mongoose)
+// import mongooseFloat from 'mongoose-float'
+// import Float from mongooseFloat.loadType(mongoose)
 
 const ProductSchema = new mongoose.Schema(
     {
@@ -13,15 +13,17 @@ const ProductSchema = new mongoose.Schema(
             required: true
         },
         price: {
-            type: Float,
+            type: mongoose.Types.Decimal128,
             required: true
         },
         soldHistoty: {
             type: {},
+            default: null,
             required: false
         },
         imageUrls: {
             type: Array,
+            default: null,
             required: true
         },
         codes: {
@@ -49,7 +51,7 @@ const ProductSchema = new mongoose.Schema(
         createAt: {
             type: Date,
             default: Date.now(),
-            required: True
+            required: true
         },
         updateAt: {
             type: Date,
