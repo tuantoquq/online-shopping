@@ -25,6 +25,7 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: 50px  50px;
+    border: 1px blue solid;
 }
 .middle{
     grid-column: 3;

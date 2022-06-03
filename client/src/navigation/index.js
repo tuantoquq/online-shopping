@@ -3,6 +3,7 @@ import Home from "../screens/home";
 import CommentProduct from "../screens/commentProduct";
 import UserInformation from "../screens/UserInformation";
 import OrderHistory from "../screens/OrderHistory";
+import Order from "../screens/Order";
 function RootRoutes(){
     return(
         <Routes>

@@ -47,6 +47,7 @@ function ListOrderedItem(){
             <img
                 src="/static/images/cards/contemplative-reptile.jpg"
                 alt="green iguana"
+                border="0"
                 height={150}
             ></img>
             <p className={styles.middle}>
