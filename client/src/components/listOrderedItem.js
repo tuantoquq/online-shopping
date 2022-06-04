@@ -1,64 +1,72 @@
 import styles from './CSS/listOrderedItem.module.css'
-import Stack from '@mui/material/Stack';
-import clsx from 'clsx';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import { Button, CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import { Container } from '@mui/system';
-
-import { Grid } from '@mui/material';
-function ListOrderedItem(){
-    return (
-    //     <div className="row">
-    //         <div className={styles.columns}>
-    //             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 3, md: 12 }}  style={{padding:'5px'}}>
-    //                 <Grid item xs={2} sm={1} md={1}>
-    //                     <Card sx={{ maxWidth: 345 }}>
-    //                         <CardActionArea>
-    //                         <CardMedia
-    //                             component="img"
-    //                             height="60"
-    //                             image="/static/images/cards/contemplative-reptile.jpg"
-    //                             alt="green iguana"
-    //                         />
-    //                         <CardContent>
-    //                             <Typography gutterBottom variant="h5" component="div">
-    //                             Sản phẩm
-    //                             </Typography>
-    //                         </CardContent>
-    //                         </CardActionArea>
-    //                     </Card>
-    //                 </Grid>
-    //             </Grid>
-    //         </div>
-    //         <div className={styles.column}>
-    //             <p>Tên sản phẩm</p>
-    //             <p>Số lượng</p>
-    //         </div>
-    //         <div className={styles.lastColumn}>
-    //             <p>Giá</p>
-    //         </div>
-    //     </div>
+import {useState} from 'react';
+function Single_Ordered() {
+    const [item, setItem] = useState({
+        name: 'tên sản phẩm',
+        quantity: 'số lượng',
+        price: 'đơn giá',
+        image: 'assets/sanpham.jpg'
+    });
+    return(
         <div className={styles.container}>
-            <img
-                src="/static/images/cards/contemplative-reptile.jpg"
-                alt="green iguana"
-                border="0"
-                height={150}
-            ></img>
-            <p className={styles.middle}>
-                Tên sản phẩm <br />
-                <br></br>
-                Số lượng <br />
-            </p>
-            <p className={styles.last}>Giá sản phẩm</p>
-            <p className={styles.footer}>Tổng tiền</p>
-            <Button className={styles.button}>Mua lại</Button>
-        </div>
+        <img
+            src= {item.image}
+            alt="Item_image"
+            border="0"
+            height={150}
+        ></img>
+        <p className={styles.middle}>
+            {item.name} <br />
+            <br></br>
+            {item.quantity} <br />
+        </p>
+        <p className={styles.last}> {item.price}</p>
+        <p className={styles.footer}>Tổng tiền</p>
+        <Button className={styles.button}>Mua lại</Button>
+    </div>
+    )
+    // const [item, setItem] = useState({
+    //     name: 'tên sản phẩm',
+    //     quantity: 'số lượng',
+    //     price: 'đơn giá',
+    //     image: 'assets/sanpham.jpg'
+    // });
+    // const [items, setItems] = useState([item, item])
+    // return(
+    // <div className={styles.container}>
+    //     <ul>
+    //         {items.map((item, index) => (
+    //             <div key={index}>
+    //                 <img
+    //                     src= {item.image}
+    //                     alt="Item_image"
+    //                     border="0"
+    //                     height={150}
+    //                 ></img>
+    //                 <p className={styles.middle}>
+    //                     {item.name} <br />
+    //                     <br></br>
+    //                     {item.quantity} <br />
+    //                 </p>
+    //                 <p className={styles.last}> {item.price}</p>
+    //                 <p className={styles.footer}>Tổng tiền</p>
+    //                 <Button className={styles.button}>Mua lại</Button>
+    //             </div>
+    //         ))}
+    //     </ul>
+    // </div>
+    // )
+}
+function ListOrderedItem(){
+    
+    return (
+    <div>
+        <h3> Đơn hàng </h3>
+        <Single_Ordered/>
+        <p className={styles.totalprice}>Tổng đơn hàng</p>
+    </div>
     )
 }
 
