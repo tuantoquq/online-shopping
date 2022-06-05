@@ -1,11 +1,14 @@
-import React from 'react';
-import searchImage from '../assets/magnifier.png';
-import userImage from '../assets/user1.png';
-import menuImage from '../assets/squares.png';
-import styles from './CSS/HeaderCSS.module.css';
 
-import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
+import React from "react";
+import searchImage from '../assets/magnifier.png'
+import userImage from '../assets/user1.png'
+import menuImage from '../assets/squares.png'
+import cartImage from '../assets/shopping-cart.png'
+import styles from './CSS/HeaderCSS.module.css'
+
+import Cookies from "js-cookie";
+import {useState,useEffect} from 'react'
+
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -116,7 +119,7 @@ function Header() {
         </div>
 
         <div className={styles.cart}>
-          <img src={'assets/shopping-cart.png'} />
+          <img src={cartImage}/>
         </div>
       </div>
     </div>

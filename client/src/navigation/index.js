@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from "react-router-dom";
+
 import UserInformation from "../screens/UserInformation";
 import OrderHistory from "../screens/OrderHistory";
 import Order from "../screens/Cart";
@@ -12,6 +13,7 @@ function RootRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/comment" element={<CommentProduct />} />
+      <Route path="/seller/accept-order" element={<AcceptOrder />} />
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
       <Route path="/admin/login" element={<Login role="admin" />} />
@@ -23,6 +25,7 @@ function RootRoutes() {
       <Route path="/cart" element={<Cart />} />
     </Routes>
   );
+
 }
 
 export default RootRoutes;
