@@ -8,6 +8,8 @@ import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
 import Register from '../screens/register';
 import Cart from "../screens/Cart";
+import AcceptOrder from "../screens/seller_acceptOrder";
+
 function RootRoutes() {
   return (
     <Routes>
