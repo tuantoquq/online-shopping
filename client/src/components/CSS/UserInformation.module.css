@@ -1,0 +1,16 @@
+.content{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 10%;
+}
+.wrapLogout{
+    text-align: center;
+}
+.logout{
+    margin-top: 5vh;
+    background-color: rgb(49, 111, 209);
+    width: 10vw;
+    height: 5vh;
+    color: white;
+    cursor: pointer;
+}
