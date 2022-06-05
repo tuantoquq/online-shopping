@@ -2,6 +2,7 @@ import React from "react";
 import searchImage from '../assets/magnifier.png'
 import userImage from '../assets/user1.png'
 import menuImage from '../assets/squares.png'
+import cartImage from '../assets/shopping-cart.png'
 import styles from './CSS/HeaderCSS.module.css'
 
 import Cookies from "js-cookie";
@@ -91,7 +92,7 @@ function Header() {
 
 
         <div className={styles.cart}>
-          <img src={'assets/shopping-cart.png'}/>
+          <img src={cartImage}/>
         </div>
       </div>
 
