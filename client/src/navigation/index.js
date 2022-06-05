@@ -3,6 +3,7 @@ import Home from '../screens/home';
 import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
 import Register from '../screens/register';
+import Search from '../screens/search';
 
 function RootRoutes() {
   return (
@@ -15,6 +16,7 @@ function RootRoutes() {
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/admin/register" element={<Register role="admin" />} />
+      <Route path="/search" element={<Search searchTerm="" />} />
     </Routes>
   );
 }

@@ -1,0 +1,112 @@
+.searchContainer {
+  display: flex;
+}
+// siderBar begin
+.searchSidebar {
+  width: 250px !important;
+  padding: 10px 16px 10px 32px;
+  border-right: 1px solid #ccc;
+}
+
+.sidebarTitle {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 12px;
+  margin-top: 24px;
+  margin-bottom: 0px;
+}
+
+.searchFilter {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+  transition: ease-in-out 2s;
+}
+.rowFilter {
+  // padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  transition: ease-in-out 2s;
+}
+
+.viewMore {
+  padding-top: 12px;
+  opacity: 0.5;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: ease-in-out 2s;
+}
+.rowFilter:hover {
+  cursor: pointer;
+}
+
+.checkBoxLabel {
+  padding: 8px 0px 8px 8px;
+  width: 100%;
+}
+
+.checkBox {
+  width: 20px;
+  height: 20px;
+}
+input[type='checkbox']:checked + label {
+  font-weight: bold;
+  color: #1565c0;
+}
+
+.priceFilter {
+  padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.priceInput {
+  width: 30%;
+  padding: 8px;
+  margin: 0px 0px 4px 0px;
+}
+.buttonGroup {
+  display: inline-flex;
+  justify-content: space-between;
+}
+.buttonGroup .button {
+  width: 48%;
+}
+
+.inputRadio {
+  display: none;
+}
+.rowFilter > input[type='radio']:checked + label {
+  outline: 1px solid #1565c0;
+}
+
+.radioLabel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 4px 12px;
+}
+
+.radioLabel:hover {
+  cursor: pointer;
+  outline: 1px solid #1565c0;
+}
+
+.rating {
+  padding-right: 4px;
+  opacity: 1 !important;
+}
+.button {
+  width: 100%;
+  margin: 16px 0px !important;
+}
+
+.searchBody {
+  padding-left: 12px;
+  width: calc(100% - 250px);
+}
