@@ -1,0 +1,48 @@
+.all{
+    margin-top: 20px;
+}
+.elm1{
+    display: flex;
+    margin: auto;
+
+}
+.column {
+    width: 100%;
+    /* display: block; */
+    margin-bottom: 20px;
+    float: left;
+    display:inline-block;
+    vertical-align:top;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 50px  50px;
+    border: 1px blue solid;
+    padding: 15px;
+}
+.middle{
+    grid-column: 3;
+}
+.last{
+    grid-column: 11;
+}
+.footer{
+    grid-column: 11;
+    grid-row: 5;
+}
+.button{
+    grid-column: 1;
+    grid-row: 5;
+}
+.totalprice{
+    float: right;
+    position: absolute;
+    right: 170px;  
+    border: 3px solid red;
+    white-space: nowrap;
+}
+.quantity{
+    grid-column: 7;
+}

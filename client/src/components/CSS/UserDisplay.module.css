@@ -1,0 +1,32 @@
+.container{
+    margin-top: 30px;
+    border-bottom: solid rgb(77, 75, 75) 1px;
+}
+.content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+.left_cpn{
+    width: 50%;
+    align-items: center;
+}
+/* .right_cpn{
+    width: 50%;
+    align-items: center;
+    
+} */
+.user_avatar{
+    border-radius: 50%;
+    height: 96px;
+    width: 96px;
+}
+.update{
+    display: none;
+    flex-direction: column;
+}
+.replaceInfor{
+    cursor: pointer;
+}
