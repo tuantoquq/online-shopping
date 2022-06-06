@@ -36,7 +36,7 @@ function UserInformation(){
                     user_age ={user?.date_of_birth}
                     user_phone ={user?.phone_number}
                 />
-                {/* <AccountInformation user={user}/> */}
+                <AccountInformation user={user}/>
                 
                 <div className = {styles.wrapLogout}>
 
