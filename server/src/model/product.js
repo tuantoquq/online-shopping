@@ -3,7 +3,11 @@ import mongoose from 'mongoose';
 // import Float from mongooseFloat.loadType(mongoose)
 
 const ProductSchema = new mongoose.Schema({
+<<<<<<< HEAD
     productName: {
+=======
+    name: {
+>>>>>>> fix bug
         type: String,
         required: true,
     },
@@ -11,11 +15,22 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+<<<<<<< HEAD
+=======
+    shortDescription: {
+        type: String,
+        required: true,
+    },
+>>>>>>> fix bug
     price: {
         type: mongoose.Types.Decimal128,
         required: true,
     },
+<<<<<<< HEAD
     soldHistory: {
+=======
+    soldHistoty: {
+>>>>>>> fix bug
         type: {},
         default: null,
         required: false,
@@ -25,7 +40,11 @@ const ProductSchema = new mongoose.Schema({
         default: null,
         required: true,
     },
+<<<<<<< HEAD
     code: {
+=======
+    codes: {
+>>>>>>> fix bug
         type: String,
         required: true,
     },
@@ -37,7 +56,11 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+<<<<<<< HEAD
     ratingStar: {
+=======
+    ratingStart: {
+>>>>>>> fix bug
         type: Number,
         default: 0,
         required: true,

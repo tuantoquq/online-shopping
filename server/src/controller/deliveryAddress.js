@@ -133,7 +133,11 @@ deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
         }
         dataUpdate['updateAt'] = Date.now();
 
+<<<<<<< HEAD
         delivery = await DeliveryAddress.findOneAndUpdate(
+=======
+        let delivery = await DeliveryAddress.findOneAndUpdate(
+>>>>>>> fix bug
             { _id: deliveryId },
             dataUpdate,
         );
