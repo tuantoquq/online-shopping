@@ -1,0 +1,13 @@
+.all{
+    padding: 25px;
+}
+.space{
+    white-space: nowrap;
+}
+.totalprice{
+    float: right;
+    position: absolute;
+    right: 170px;  
+    border: 3px solid red;
+    white-space: nowrap;
+}
