@@ -15,7 +15,7 @@ function RootRoutes() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/comment" element={<CommentProduct />} />
-      <Route path="/seller/accept-order" element={<AcceptOrder />} />
+      <Route path="/shopper/accept-order" element={<AcceptOrder />} />
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
       <Route path="/admin/login" element={<Login role="admin" />} />
