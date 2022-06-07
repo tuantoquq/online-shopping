@@ -30,3 +30,18 @@
     margin-bottom: 5px;
 
 }
+.comp3{
+    margin-left: 90%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+.displayInfo{
+    display: flex;
+    flex-direction: row;
+}
+.infor{
+    margin-left: 20px;
+    font-size: 20px;
+    color: red;
+}

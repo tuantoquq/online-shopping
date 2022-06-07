@@ -11,6 +11,11 @@ import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import BookmarkRemoveIcon from '@mui/icons-material/BookmarkRemove';
+import { Link } from 'react-router-dom';
 
 export default function InformationTab() {
   const [open, setOpen] = React.useState(true);
@@ -50,6 +55,7 @@ export default function InformationTab() {
         </List>
       </Collapse>
 
+
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
           <InboxIcon />
@@ -58,35 +64,49 @@ export default function InformationTab() {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
 
+
+
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Đơn chờ xác nhận" />
-          </ListItemButton>
 
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Đơn đang giao" />
-          </ListItemButton>
+          <Link to='/shopper/accept-order' style={{ textDecoration: 'none' ,color:'black'}}>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đơn chờ xác nhận" />
+            </ListItemButton>
+          </Link>
 
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Đã giao" />
-          </ListItemButton>
+          <Link to='/shopper/delivering-order' style={{ textDecoration: 'none',color:'black' }}>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <AccessTimeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đơn đang giao" />
+            </ListItemButton>
+          </Link>
 
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Đơn từ chối" />
-          </ListItemButton>
+          <Link to='/shopper/delivered-order' style={{ textDecoration: 'none',color:'black' }}>
+
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <FactCheckIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đã giao" />
+            </ListItemButton>
+          </Link>
+
+          <Link to='/shopper/reject-order' style={{ textDecoration: 'none' ,color:'black'}}>
+            <ListItemButton sx={{ pl: 4 }}>
+              <ListItemIcon>
+                <BookmarkRemoveIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đơn từ chối" />
+            </ListItemButton>
+
+          </Link>
+
         </List>
       </Collapse>
     </List>
