@@ -1,0 +1,37 @@
+import { apiStatus } from '../constants/apiStatus.js';
+import { httpStatus } from '../constants/httpStatus.js';
+import CustomError from '../error/customError.js';
+import { Customer } from '../model/index.js';
+
+const CustomerService = {};
+CustomerService.findCustomerById = async (id) => {
+    let customer = await Customer.findById(id);
+    if (!customer) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            'Customer not found!',
+        );
+    }
+    return customer;
+};
+
+CustomerService.findCustomerByEmail = async (email) => {
+    let customer = await Customer.findOne({ email: email });
+    if (!customer) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Customer not found with email: ${email}!`,
+        );
+    }
+    return customer;
+};
+
+CustomerService.addCustomer = async (customer) => {
+    await customer.save((err, customer) => {
+        if (err) throw Error;
+        else return customer;
+    });
+};
+export default CustomerService;

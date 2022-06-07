@@ -1,5 +1,10 @@
+.search {
+  background-color: #ccc;
+}
 .searchContainer {
+  background-color: #fff;
   display: flex;
+  margin: 0px 20%;
 }
 // siderBar begin
 .searchSidebar {
@@ -66,7 +71,7 @@ input[type='checkbox']:checked + label {
   justify-content: space-between;
 }
 .priceInput {
-  width: 30%;
+  width: 38%;
   padding: 8px;
   margin: 0px 0px 4px 0px;
 }
@@ -109,4 +114,11 @@ input[type='checkbox']:checked + label {
 .searchBody {
   padding-left: 12px;
   width: calc(100% - 250px);
+}
+
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
 }

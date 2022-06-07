@@ -12,7 +12,7 @@ const CatchExpiredTokenError = (err, res) => {
     }
     return res.status(httpStatus.UNAUTHORIZED).send({
         status: apiStatus.AUTH_ERROR,
-        message: 'Unauthorized!',
+        message: 'Unauthorized! Invalid token',
     });
 };
 
