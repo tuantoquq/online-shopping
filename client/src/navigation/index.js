@@ -9,6 +9,7 @@ import Login from '../screens/login';
 import Register from '../screens/register';
 import Cart from "../screens/Cart";
 import AcceptOrder from "../screens/seller_acceptOrder";
+import ProductInformation from "../components/product";
 
 function RootRoutes() {
   return (
@@ -25,6 +26,7 @@ function RootRoutes() {
       <Route path="/user" element={<UserInformation />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/ProductTest" element={<ProductInformation/ >} />
     </Routes>
   );
 
