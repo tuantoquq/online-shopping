@@ -1,6 +1,6 @@
-import Header from "../components/header";
-import Footer from "../components/footer";
-import RegisterForm from "../components/registerForm";
+import Header from '../components/header';
+import Footer from '../components/footer';
+import RegisterForm from '../components/registerForm';
 
 function Register(navigation, role) {
   console.log(role);
