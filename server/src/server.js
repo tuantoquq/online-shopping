@@ -12,7 +12,7 @@ app.use(express.json());
 //routes
 app.use(authRoutes);
 app.use(customerRoutes);
-app.use(categoryRoutes)
+app.use(categoryRoutes);
 
 const PORT = process.env.SERVER_PORT || 8081;
 
