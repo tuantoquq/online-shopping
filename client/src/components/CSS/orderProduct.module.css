@@ -1,0 +1,32 @@
+.content{
+    margin-bottom: 10px;
+    border: solid 1px rgb(43, 21, 21);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.customerName{
+    font-weight: bold;
+    font-size: 20px;
+}
+.listProduct{
+    border-bottom: solid rgb(233, 223, 223) 1px;
+}
+.displayMoney{
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid rgb(233, 223, 223) 1px;
+}
+.disTotalPrice{
+    margin-left: 80%;
+}
+.totalPrice{
+    position: absolute;
+    right: 5%;
+    color: red;
+}
+.comp2{
+    margin-left: 70%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
