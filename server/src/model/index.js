@@ -4,4 +4,4 @@ import Customer from './customer.js';
 import Category from './category.js';
 import Product from './product.js';
 
-export { Admin, Shopper, Customer, Category, Product};
+export { Admin, Shopper, Customer, Category, Product };

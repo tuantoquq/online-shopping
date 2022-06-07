@@ -3,6 +3,10 @@ import { httpStatus, apiStatus } from '../constants/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
+import CustomerService from '../service/customer.service.js';
+import CustomError from '../error/customError.js';
+import ShopperService from '../service/shopper.service.js';
+import AdminService from '../service/admin.service.js';
 
 const { hashSync, compareSync } = bcrypt;
 const { sign } = jwt;
@@ -12,46 +16,44 @@ const refreshTokensAdmin = {};
 
 //Customer
 export const registerCustomer = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).send({
-            status: apiStatus.INVALID_PARAM,
-            message: 'Invalid params',
-            error: errors.array(),
-        });
-    }
-    //check email is used?
-    await Customer.findOne({ email: req.body.email }).then((checkCustomer) => {
-        if (checkCustomer) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
             return res.status(httpStatus.BAD_REQUEST).send({
                 status: apiStatus.INVALID_PARAM,
-                message: 'Email is already used! Try another',
+                message: 'Invalid params',
+                error: errors.array(),
             });
         }
-    });
+        //check email is used?
+        await CustomerService.findCustomerByEmail(req.body.email);
 
-    //create new customer
-    const newCustomer = new Customer({
-        email: req.body.email,
-        password: hashSync(req.body.password),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-    });
-
-    newCustomer.save((err, newCustomer) => {
-        if (err) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-                status: apiStatus.DATABASE_ERROR,
-                message: 'Error when save customer: ' + err,
-            });
-        }
-        return res.status(httpStatus.OK).send({
-            status: apiStatus.SUCCESS,
-            message: 'User was registered successfully',
-            data: newCustomer,
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Email is already used! Try another',
         });
-    });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            //create new customer
+            const newCustomer = new Customer({
+                email: req.body.email,
+                password: hashSync(req.body.password),
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phoneNumber: req.body.phoneNumber,
+            });
+            let customer = await CustomerService.addCustomer(newCustomer);
+            return res.status(httpStatus.OK).send({
+                status: apiStatus.SUCCESS,
+                message: 'User was registered successfully',
+                data: customer,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.DATABASE_ERROR,
+            message: 'Error when save customer: ' + err,
+        });
+    }
 };
 
 export const loginCustomer = async (req, res) => {
@@ -65,13 +67,8 @@ export const loginCustomer = async (req, res) => {
             });
         }
 
-        let customer = await Customer.findOne({ email: req.body.email });
-        if (!customer) {
-            return res.status(httpStatus.UNAUTHORIZED).send({
-                status: apiStatus.INVALID_PARAM,
-                message: 'Email is not existed! Try again..',
-            });
-        }
+        //get customer by email
+        let customer = await CustomerService.findCustomerByEmail(req.body.email);
         const passwordIsValid = compareSync(req.body.password, customer.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -108,6 +105,12 @@ export const loginCustomer = async (req, res) => {
             },
         });
     } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: 'Email is not existed. Try again...',
+            });
+        }
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
@@ -150,51 +153,48 @@ export const refreshTokenForCustomer = async (req, res) => {
 
 //Shopper
 export const registerShopper = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).send({
-            status: apiStatus.INVALID_PARAM,
-            message: 'Invalid params',
-            error: errors.array(),
-        });
-    }
-    //check email is used?
-    await Shopper.findOne({ email: req.body.email }).then((checkShopper) => {
-        if (checkShopper) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
             return res.status(httpStatus.BAD_REQUEST).send({
                 status: apiStatus.INVALID_PARAM,
-                message: 'Email is already used! Try another',
+                message: 'Invalid params',
+                error: errors.array(),
             });
         }
-    });
-
-    //create new shopper
-    const newShopper = new Shopper({
-        email: req.body.email,
-        password: hashSync(req.body.password),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        gender: req.body.gender,
-        cccd: req.body.cccd,
-        issueDate: req.body.issueDate,
-        issuePlace: req.body.issuePlace,
-        state: 0,
-    });
-
-    newShopper.save((err, newShopper) => {
-        if (err) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-                status: apiStatus.DATABASE_ERROR,
-                message: 'Error when save shopper: ' + err,
-            });
-        }
-        return res.status(httpStatus.OK).send({
-            status: apiStatus.SUCCESS,
-            message: 'Registered successfully! Waiting for accept request!',
-            data: newShopper,
+        //check email is used?
+        await ShopperService.findShopperByEmail(req.body.email);
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Email is already used! Try another',
         });
-    });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            //create new shopper
+            const newShopper = new Shopper({
+                email: req.body.email,
+                password: hashSync(req.body.password),
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phoneNumber: req.body.phoneNumber,
+                gender: req.body.gender,
+                cccd: req.body.cccd,
+                issueDate: req.body.issueDate,
+                issuePlace: req.body.issuePlace,
+                state: 0,
+            });
+            let shopper = await ShopperService.addShopper(newShopper);
+            return res.status(httpStatus.OK).send({
+                status: apiStatus.SUCCESS,
+                message: 'Registered successfully! Waiting for accept request!',
+                data: shopper,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.DATABASE_ERROR,
+            message: 'Error when save shopper: ' + err,
+        });
+    }
 };
 
 export const loginShopper = async (req, res) => {
@@ -208,13 +208,8 @@ export const loginShopper = async (req, res) => {
             });
         }
 
-        let shopper = await Shopper.findOne({ email: req.body.email });
-        if (!shopper) {
-            return res.status(httpStatus.UNAUTHORIZED).send({
-                status: apiStatus.INVALID_PARAM,
-                message: 'Email is not existed! Try again..',
-            });
-        }
+        //get shopper by email
+        let shopper = await ShopperService.findShopperByEmail(req.body.email);
         const passwordIsValid = compareSync(req.body.password, shopper.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -251,6 +246,12 @@ export const loginShopper = async (req, res) => {
             },
         });
     } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: 'Email is not existed. Try again...',
+            });
+        }
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
@@ -292,43 +293,40 @@ export const refreshTokenForShopper = async (req, res) => {
 
 //admin
 export const registerAdmin = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(httpStatus.BAD_REQUEST).send({
-            status: apiStatus.INVALID_PARAM,
-            message: 'Invalid params',
-            error: errors.array(),
-        });
-    }
-    //check username is used?
-    await Admin.findOne({ username: req.body.username }).then((checkAdmin) => {
-        if (checkAdmin) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
             return res.status(httpStatus.BAD_REQUEST).send({
                 status: apiStatus.INVALID_PARAM,
-                message: 'Username is already used! Try another',
+                message: 'Invalid params',
+                error: errors.array(),
             });
         }
-    });
-
-    //create new admin
-    const newAdmin = new Admin({
-        username: req.body.username,
-        password: hashSync(req.body.password),
-    });
-
-    newAdmin.save((err, newAdmin) => {
-        if (err) {
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-                status: apiStatus.DATABASE_ERROR,
-                message: 'Error when save admin: ' + err,
-            });
-        }
-        return res.status(httpStatus.OK).send({
-            status: apiStatus.SUCCESS,
-            message: 'Registered successfully!',
-            data: newAdmin,
+        //check username is used?
+        await AdminService.findAdminByUsername(req.body.username);
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Username is already used! Try another',
         });
-    });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            //create new admin
+            const newAdmin = new Admin({
+                username: req.body.username,
+                password: hashSync(req.body.password),
+            });
+            let admin = await AdminService.addAdmin(newAdmin);
+            return res.status(httpStatus.OK).send({
+                status: apiStatus.SUCCESS,
+                message: 'Registered successfully!',
+                data: admin,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.DATABASE_ERROR,
+            message: 'Error when save admin: ' + err,
+        });
+    }
 };
 export const loginAdmin = async (req, res) => {
     try {
@@ -341,13 +339,8 @@ export const loginAdmin = async (req, res) => {
             });
         }
 
-        let admin = await Admin.findOne({ username: req.body.username });
-        if (!admin) {
-            return res.status(httpStatus.UNAUTHORIZED).send({
-                status: apiStatus.INVALID_PARAM,
-                message: 'Username is not existed! Try again..',
-            });
-        }
+        //get admin by username
+        let admin = await AdminService.findAdminByUsername(req.body.username);
         const passwordIsValid = compareSync(req.body.password, admin.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -381,6 +374,12 @@ export const loginAdmin = async (req, res) => {
             },
         });
     } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.INVALID_PARAM,
+                message: 'Username is not existed! Try again..',
+            });
+        }
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
