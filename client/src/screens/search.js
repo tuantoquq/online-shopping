@@ -95,20 +95,21 @@ function Search(navigation, search) {
       toPrice: toPriceApplied,
       page: page,
     };
-    console.log(console.log(filter));
+    //console.log(filter);
+    console.log('Filter changed');
     //request for new data
 
-    setNumPages(Math.floor(Math.random() * 10)); //numPages was responsed
+    setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
     setPage(page);
     getProductIdList(filter, page);
   }, [
+    search,
     categories,
     locations,
     brands,
     rating,
     fromPriceApplied,
     toPriceApplied,
-    search,
     page,
   ]);
 
@@ -133,8 +134,15 @@ function Search(navigation, search) {
   function handleSeeLessCategories() {
     const len = allCategories.length;
     setShowedCategories(allCategories.slice(0, 5));
-    for (const category of allCategories.slice(5, len)) {
-      setCategories(categories.filter((item) => item !== category));
+    const checkedUnshowed = allCategories
+      .slice(5, len)
+      .filter((item) => categories.find((category) => category === item));
+    //console.log(checkedUnshowed);
+    if (checkedUnshowed.length !== 0) {
+      for (const category of checkedUnshowed) {
+        //console.log(category);
+        setCategories(categories.filter((item) => item !== category));
+      }
     }
   }
 
@@ -153,8 +161,15 @@ function Search(navigation, search) {
   function handleSeeLessLocations() {
     const len = allLocations.length;
     setShowedLocations(allLocations.slice(0, 5));
-    for (const location of allLocations.slice(5, len)) {
-      setLocations(locations.filter((item) => item !== location));
+    const checkedUnshowed = allLocations
+      .slice(5, len)
+      .filter((item) => locations.find((location) => location === item));
+    //console.log(checkedUnshowed);
+    if (checkedUnshowed.length !== 0) {
+      for (const location of checkedUnshowed) {
+        //console.log(location);
+        setLocations(locations.filter((item) => item !== location));
+      }
     }
   }
 
@@ -173,8 +188,15 @@ function Search(navigation, search) {
   function handleSeeLessBrands() {
     const len = allBrands.length;
     setShowedBrands(allBrands.slice(0, 5));
-    for (const brand of allBrands.slice(5, len)) {
-      setBrands(brands.filter((item) => item !== brand));
+    const checkedUnshowed = allBrands
+      .slice(5, len)
+      .filter((item) => brands.find((brand) => brand === item));
+    //console.log(checkedUnshowed);
+    if (checkedUnshowed.length !== 0) {
+      for (const brand of checkedUnshowed) {
+        //console.log(brand);
+        setBrands(brands.filter((item) => item !== brand));
+      }
     }
   }
 
@@ -446,18 +468,14 @@ function Search(navigation, search) {
             Xóa tất cả
           </Button>
         </div>
-        <div sx={{ flexGrow: 1 }} className={clsx(styles.searchBody)}>
-          <Grid
-            container
-            spacing={{ xs: 1, md: 1 }}
-            columns={{ xs: 2, sm: 3, md: 4 }}
-          >
+        <div className={clsx(styles.searchBody)}>
+          <div className={clsx(styles.productContainer)}>
             {productIdList.map((value, index) => (
               <Grid item xs={1} sm={1} md={1} key={index}>
                 <ProductCard id={value} />
               </Grid>
             ))}
-          </Grid>
+          </div>
           {numPages > 1 && (
             <div className={clsx(styles.pagination)}>
               <Stack spacing={2}>

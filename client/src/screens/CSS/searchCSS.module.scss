@@ -4,11 +4,11 @@
 .searchContainer {
   background-color: #fff;
   display: flex;
-  margin: 0px 20%;
+  margin: 0 20%;
 }
 // siderBar begin
 .searchSidebar {
-  width: 250px !important;
+  width: 220px !important;
   padding: 10px 16px 10px 32px;
   border-right: 1px solid #ccc;
 }
@@ -113,7 +113,12 @@ input[type='checkbox']:checked + label {
 
 .searchBody {
   padding-left: 12px;
-  width: calc(100% - 250px);
+  width: calc(100% - 220px);
+}
+.productContainer {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 12px;
 }
 
 .pagination {
@@ -121,4 +126,28 @@ input[type='checkbox']:checked + label {
   display: flex;
   justify-content: center;
   padding-top: 20px;
+}
+
+@media (max-width: 739px) {
+}
+
+@media (min-width: 1201px) and (max-width: 1600px) {
+  .searchContainer {
+    margin: 0px 10%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .searchContainer {
+    margin: 0px 0%;
+  }
+  .productContainer {
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media (max-width: 939px) {
+  .productContainer {
+    grid-template-columns: auto auto;
+  }
 }
