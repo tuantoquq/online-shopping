@@ -13,6 +13,7 @@ import AcceptOrder from '../screens/seller_acceptOrder';
 import DeliveringOrder from '../screens/seller_deliveringOrder';
 import RejectOrder from '../screens/seller_rejectOrder';
 import DeliveredOrder from '../screens/seller_deliveredOrder';
+import StatisticOrder from '../screens/admin_statisticOrder';
 
 function RootRoutes() {
   return (
@@ -27,7 +28,7 @@ function RootRoutes() {
 
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
-      <Route path="/admin/login" element={<Login role="admin" />} />
+
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/admin/register" element={<Register role="admin" />} />
@@ -35,6 +36,11 @@ function RootRoutes() {
       <Route path="/user" element={<UserInformation />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
+
+
+      <Route path="/admin/login" element={<Login role="admin" />} />
+      <Route path="/admin/statistic-order" element={<StatisticOrder />} />
+
     </Routes>
   );
 }
