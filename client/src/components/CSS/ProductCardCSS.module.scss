@@ -1,0 +1,49 @@
+.cardContainer {
+  text-decoration: none;
+}
+
+.cardBody {
+  width: 200px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 0px !important;
+}
+.cardBody:hover {
+  cursor: pointer;
+  border: 1px solid #1565c0;
+}
+
+.cardContent {
+  padding: 12px;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  padding: 12px 0px;
+  margin: 0px;
+  text-align: justify;
+}
+
+.cardPrice {
+  font-weight: 600;
+  color: #1565c0;
+}
+
+.productContent {
+  padding: 12px 0px;
+  display: inline-block;
+}
+.rating {
+  width: 100%;
+  opacity: 1 !important;
+}
+.selledNumber {
+  display: inline-block;
+  padding-top: 12px;
+  width: 100%;
+}
+.location {
+  display: inline-flex;
+  padding-top: 12px;
+  width: 100%;
+  align-items: center;
+}

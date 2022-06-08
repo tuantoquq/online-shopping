@@ -5,7 +5,7 @@ import InformationTab from '../components/informationTab';
 import Search from '../components/search';
 import OrderProduct from '../components/orderProduct';
 
-function AcceptOrder({navigation}) {
+function RejectOrder({navigation}) {
     return (
       <div className={styles.Home}>
         <Header navigation={navigation}/>
@@ -30,4 +30,4 @@ function AcceptOrder({navigation}) {
     );
   }
   
-  export default AcceptOrder;
+  export default RejectOrder;
