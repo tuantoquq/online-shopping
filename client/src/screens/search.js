@@ -1,30 +1,62 @@
 import clsx from 'clsx';
 import styles from './CSS/searchCSS.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+
 import Header from '../components/header';
 import Footer from '../components/footer';
-import Rating from '@mui/material/Rating';
 import ProductCard from '../components/productCard';
+import ShopCard from '../components/shopCard';
+
+import Rating from '@mui/material/Rating';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 
-const allRating = [5, 4, 3, 2, 1];
-
-function Search(navigation, search) {
+function Search({ search }) {
   //request data with search term;
+  // console.log('re-render');
+  const allRating = useRef([5, 4, 3, 2, 1]);
+  const allSort = useRef([
+    {
+      value: 'related',
+      showed: 'Liên quan',
+    },
+    {
+      value: 'newer',
+      showed: 'Mới nhất',
+    },
+    {
+      value: 'bestseller',
+      showed: 'Bán chạy',
+    },
+    {
+      value: 'lowerPrice',
+      showed: 'Giá từ thấp đến cao',
+    },
+    {
+      value: 'higherPrice',
+      showed: 'Giá từ cao đến thấp',
+    },
+  ]);
 
   //for all data -request once time when component construct
-  const [allCategories] = useState((search) => getAllCategories(search));
-  const [allBrands] = useState((search) => getAllBrands(search));
-  const [allLocations] = useState((search) => getAllLocations(search));
+  const [allCategories, setAllCategories] = useState((search) =>
+    getAllCategories(search)
+  );
+  const [allBrands, setAllBrands] = useState((search) => getAllBrands(search));
+  const [allLocations, setAllLocations] = useState((search) =>
+    getAllLocations(search)
+  );
 
   function getAllLocations(searchTerm) {
+    // console.log('re-render');
     //get All location from list products
     const ressponseData = [
       'Hà Nội',
@@ -39,7 +71,6 @@ function Search(navigation, search) {
   }
 
   function getAllCategories(searchTerm) {
-    //requestData
     const ressponseData = [
       'Phụ kiện máy tính',
       'Đồ chơi',
@@ -59,6 +90,12 @@ function Search(navigation, search) {
     return ressponseData;
   }
 
+  useEffect(() => {
+    setAllCategories(getAllLocations(search));
+    setAllBrands(getAllBrands(search));
+    setAllLocations(getAllLocations(search));
+  }, [search]);
+
   //for display filter if all data too long
   const [showedCategories, setShowedCategories] = useState(
     allCategories.slice(0, 5)
@@ -67,8 +104,8 @@ function Search(navigation, search) {
     allLocations.slice(0, 5)
   );
   const [showedBrands, setShowedBrands] = useState(allBrands.slice(0, 5));
-
   const [numPages, setNumPages] = useState(0);
+  //console.log(numPages);
 
   //for changing Filter
   const [categories, setCategories] = useState([]);
@@ -81,43 +118,7 @@ function Search(navigation, search) {
   const [apply, setApply] = useState(false);
   const [rating, setRating] = useState(0);
   const [page, setPage] = useState(1);
-  const [productIdList, setProductIdList] = useState([]);
-
-  useEffect(() => {
-    //Request for new numPage
-    const filter = {
-      search: search,
-      category: categories,
-      location: locations,
-      brand: brands,
-      rating: rating,
-      fromPrice: fromPriceApplied,
-      toPrice: toPriceApplied,
-      page: page,
-    };
-    //console.log(filter);
-    console.log('Filter changed');
-    //request for new data
-
-    setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
-    setPage(page);
-    getProductIdList(filter, page);
-  }, [
-    search,
-    categories,
-    locations,
-    brands,
-    rating,
-    fromPriceApplied,
-    toPriceApplied,
-    page,
-  ]);
-
-  function getProductIdList(filter, page) {
-    //request data
-    const productIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; //sample data
-    setProductIdList(productIds);
-  }
+  const [sort, setSort] = useState('related');
 
   //Categories
   const handleCategories = (category) => {
@@ -201,7 +202,7 @@ function Search(navigation, search) {
   }
 
   function handleApply(apply) {
-    console.log('Set apply to', apply);
+    //console.log('Set apply to', apply);
     setApply(apply);
     if (apply === true) {
       setFromPriceApplied(Number(fromPrice));
@@ -215,7 +216,7 @@ function Search(navigation, search) {
   }
 
   const handlePageChange = (event, value) => {
-    console.log('Page: ', value);
+    //console.log('Page: ', value);
     setPage(value);
   };
 
@@ -228,6 +229,74 @@ function Search(navigation, search) {
     setToPrice('');
     setApply(false);
   }
+  function getProductIdList(filter, page) {
+    //request
+    function randomId() {
+      return Math.floor(Math.random() * 12 + 1);
+    }
+    let productIds = [];
+    for (let i = 0; i < 12; i++) {
+      productIds.push(randomId());
+    } //sample data
+    //console.log(productIds);
+    return productIds;
+  }
+
+  //data and request data
+  const [productIdList, setProductIdList] = useState([]);
+  const [shopId] = useState((search) => getShopId(search));
+
+  // console.log(productIdList);
+
+  function getShopId(searchTerm) {
+    //request
+    const responseData = Math.floor(Math.random() * 10) + 1;
+    return responseData;
+  }
+  useEffect(() => {
+    const filter = {
+      search: search,
+      category: categories,
+      location: locations,
+      brand: brands,
+      rating: rating,
+      fromPrice: fromPriceApplied,
+      toPrice: toPriceApplied,
+      sort: sort,
+    };
+    //console.log(filter);
+    //console.log('Filter changed');
+    //request for new data +numPages
+    setProductIdList(getProductIdList(filter, 1));
+    setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
+    setPage(1);
+  }, [
+    search,
+    categories,
+    locations,
+    brands,
+    rating,
+    fromPriceApplied,
+    toPriceApplied,
+    sort,
+  ]);
+
+  useEffect(() => {
+    //Request for new data
+    const filter = {
+      search: search,
+      category: categories,
+      location: locations,
+      brand: brands,
+      rating: rating,
+      fromPrice: fromPriceApplied,
+      toPrice: toPriceApplied,
+      sort: sort,
+    };
+    console.log(filter);
+    setProductIdList(getProductIdList(filter, page));
+    setPage(page);
+  }, [page]);
 
   return (
     <div className="search">
@@ -409,7 +478,6 @@ function Search(navigation, search) {
                 <Button
                   className={clsx(styles.button)}
                   variant="contained"
-                  color="success"
                   onClick={() => handleApply(true)}
                   disabled={apply || (fromPrice === '' && toPrice === '')}
                 >
@@ -433,7 +501,7 @@ function Search(navigation, search) {
           <div className={clsx(styles.searchFilter)}>
             <h3>Đánh giá</h3>
             <div>
-              {allRating.map((rate) => (
+              {allRating.current.map((rate) => (
                 <div key={rate} className={clsx(styles.rowFilter)}>
                   <input
                     id={`radio${rate}`}
@@ -452,6 +520,7 @@ function Search(navigation, search) {
                     <Rating
                       className={clsx(styles.rating)}
                       value={rate}
+                      div
                       disabled
                     />
                     {rate === 5 || <span> trở lên</span>}
@@ -469,27 +538,65 @@ function Search(navigation, search) {
           </Button>
         </div>
         <div className={clsx(styles.searchBody)}>
-          <div className={clsx(styles.productContainer)}>
-            {productIdList.map((value, index) => (
-              <Grid item xs={1} sm={1} md={1} key={index}>
-                <ProductCard id={value} />
-              </Grid>
-            ))}
+          <div className={clsx(styles.shopContainer)}>
+            <span className={clsx(styles.searchedTitle)}>
+              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
+              Shop liên quan đến '<strong> {search}</strong>'
+            </span>
+            <ShopCard id={shopId} />
           </div>
-          {numPages > 1 && (
-            <div className={clsx(styles.pagination)}>
-              <Stack spacing={2}>
-                <Pagination
-                  count={numPages}
-                  page={page}
-                  variant="outlined"
-                  shape="rounded"
-                  color="primary"
-                  onChange={handlePageChange}
-                />
-              </Stack>
+          <div>
+            <span className={clsx(styles.searchedTitle)}>
+              <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
+              Kết quả tìm kiếm liên quan đến '<strong> {search}</strong>'
+            </span>
+            <div className={clsx(styles.productContent)}>
+              <div className={clsx(styles.productSort)}>
+                <span className={clsx(styles.productSortTitle)}>
+                  Sắp xếp theo{' '}
+                </span>
+                <div className={clsx(styles.productSortNav)}>
+                  {allSort.current.map((item) => (
+                    <div
+                      key={item.value}
+                      className={clsx(styles.productSortItem)}
+                    >
+                      <button
+                        className={clsx(
+                          styles.productSortBtn,
+                          sort === item.value && styles.selectedItem
+                        )}
+                        onClick={() => setSort(item.value)}
+                      >
+                        {item.showed}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className={clsx(styles.productContainer)}>
+                {productIdList.map((value, index) => (
+                  <Grid item xs={1} sm={1} md={1} key={index}>
+                    <ProductCard id={value} />
+                  </Grid>
+                ))}
+              </div>
+              {numPages > 1 && (
+                <div className={clsx(styles.pagination)}>
+                  <Stack spacing={2}>
+                    <Pagination
+                      count={numPages}
+                      page={page}
+                      variant="outlined"
+                      shape="rounded"
+                      color="primary"
+                      onChange={handlePageChange}
+                    />
+                  </Stack>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

@@ -30,15 +30,13 @@ function RootRoutes() {
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/admin/register" element={<Register role="admin" />} />
-      <Route path="/search" element={<Search searchTerm="" />} />
+      <Route path="/search" element={<Search search="keycap" />} />
       <Route path="/user" element={<UserInformation />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
 
-
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />
-
     </Routes>
   );
 }
