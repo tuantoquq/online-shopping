@@ -14,7 +14,14 @@ function Cart() {
                 <OrderItem/>
                 <OrderItem/>
             </div>
-            <div className={styles.totalprice}>Tổng giỏ hàng</div>
+            
+          <div className={styles.comp1}>
+              <div className={styles.displayMoney}>
+                  <p className={styles.disTotalPrice}>Tổng số tiền:</p>
+                  <p className={styles.totalPrice}>đ 300.000</p>
+              </div>
+
+          </div>
             <div >
                 <button>Trở lại</button>
                 <button>Hoàn thành</button>

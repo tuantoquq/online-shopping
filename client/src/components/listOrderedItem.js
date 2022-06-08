@@ -2,6 +2,7 @@ import styles from './CSS/listOrderedItem.module.css'
 import { Button, CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {useState} from 'react';
+import OrderProduct from './orderProduct';
 function Single_Ordered() {
     const [item, setItem] = useState({
         name: 'tên sản phẩm',
@@ -64,8 +65,9 @@ function ListOrderedItem(){
     return (
     <div>
         <h3> Đơn hàng </h3>
-        <Single_Ordered/>
-        <p className={styles.totalprice}>Tổng đơn hàng</p>
+        <OrderProduct/>
+        {/* <Single_Ordered/>
+        <p className={styles.totalprice}>Tổng đơn hàng</p> */}
     </div>
     )
 }

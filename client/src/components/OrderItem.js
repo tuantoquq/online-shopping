@@ -1,8 +1,7 @@
 import styles from './CSS/listOrderedItem.module.css'
 import { Button, CardActionArea, ButtonGroup } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import {useState} from 'react';
-
+import clsx from 'clsx'
 function Single_Ordered() {
     const [item, setItem] = useState({
         name: 'tên sản phẩm',
@@ -47,11 +46,46 @@ function Single_Ordered() {
     )
 }
 function OrderItem(){
-    
+    const [itemCount, setItemCount] = useState(1);
     return (
-    <div>
-        <Single_Ordered/>
-    </div>
+      <div className={styles.content}>
+      
+          <div className={styles.listProduct}>
+          <div className={clsx(styles.all,styles.elm1)}>
+                  <img src='assets/laptop.jpg' className={styles.image}/>
+                  <div className={styles.left_comp}>
+                      <div className={styles.comp1}>
+                          <p>Laptop Dell</p>
+                          <p>Phân loại hàng: laptop Gaming</p>
+                          <p>Số lượng: {itemCount}</p>
+                      </div>
+                      
+                      <div className={styles.count}>
+                        <ButtonGroup>
+                          <Button
+                            onClick={() => {
+                              setItemCount(Math.max(itemCount - 1, 0));
+                            }}
+                          >
+                            {"-"}
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setItemCount(itemCount + 1);
+                            }}
+                          >
+                            {"+"}
+                          </Button>
+                        </ButtonGroup>
+                      </div>
+                      <div className={styles.comp2}>
+                              <p className={styles.product_price}>{150000 *itemCount}</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </div>
     )
 }
 
