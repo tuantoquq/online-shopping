@@ -1,8 +1,6 @@
 import { Routes, Route, Link } from 'react-router-dom';
-
 import UserInformation from '../screens/UserInformation';
 import OrderHistory from '../screens/OrderHistory';
-import Order from '../screens/Cart';
 import Home from '../screens/home';
 import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
