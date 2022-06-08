@@ -32,9 +32,11 @@ function RootRoutes() {
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/admin/register" element={<Register role="admin" />} />
       <Route path="/search" element={<Search searchTerm="" />} />
-      <Route path="/user" element={<UserInformation />} />
+      <Route path="/user/infomation" element={<UserInformation role = "user"/>} />
+      <Route path="/admin/infomation" element={<UserInformation role="admin" />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
+
     </Routes>
   );
 }

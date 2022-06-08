@@ -7,6 +7,7 @@ import clsx from "clsx";
 import Cookies from "js-cookie";
 
 function AccountInformation(props){
+    const role = props.role;
     const [newNickName, setNewNickName] = useState();
     const [newPhone, setNewPhone] = useState();
     const [newBirthday, setNewBirthday] = useState(new Date());
@@ -42,7 +43,12 @@ function AccountInformation(props){
     }
     return (
         <div className={styles.container}>
-            <h2>Thông tin tài khoản</h2>
+            {role === "user"&&(
+                <h2>Thông tin tài khoản khách hàng</h2>
+            )}
+            {role === "admin"&&(
+                <h2>Thông tin tài khoản admin </h2>
+            )}
             <div className={styles.content}>
                 <div className={styles.group}>
                     <div className={styles.infor}>
@@ -225,12 +231,20 @@ function AccountInformation(props){
                         <lable className={styles.column}>
                             Cập nhật thông tin
                         </lable>
-                        <DatePicker  
+                        {/* <DatePicker  
                             className={styles.Column} 
                             selected={newBirthday}
                             onChange={(date) => setNewBirthday(date)} 
+                        /> */}
+                        <input
+                            id="birthday"
+                            name="birthday"
+                            type="date"
+                            value={newBirthday}
+                            onChange={(e) => setNewBirthday(e.target.value)}
+                            className={clsx(styles.midColumn,styles.inputUpdate)}
+                            required
                         />
-                        
                         <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                             onClick={() => {
                                 if(newBirthday == null){

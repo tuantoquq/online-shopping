@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 
-function UserInformation(){
+function UserInformation(navigation,role){
     const [user, setUser] = useState();
     const navigator = useNavigate();
     
@@ -29,21 +29,21 @@ function UserInformation(){
     }
     return (
         <div className={styles.container}>
-            <Header/>
+            <Header navigation={navigation}/>
             <div className={styles.content}>
                 <UserDisplay user_url={user?.avt_url.length === 0 ? "avt_default.png" : user?.avt_url} 
                     user_name={user?.nick_name}
                     user_age ={user?.date_of_birth}
                     user_phone ={user?.phone_number}
                 />
-                <AccountInformation user={user}/>
-                
+                {/* <AccountInformation user={user}/> */}
+                <AccountInformation role={navigation.role}/>
                 <div className = {styles.wrapLogout}>
 
                     <button className = {styles.logout} onClick={handleLogout}>Đăng xuất</button>
                 </div>
             </div>
-            <Footer/>
+            <Footer navigation={navigation}/>
         </div>
     )
 
