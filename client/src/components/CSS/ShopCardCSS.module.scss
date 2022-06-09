@@ -1,0 +1,94 @@
+.shopCard {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: 1px solid #ccc;
+  padding: 4px 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+}
+
+.shopCard:hover {
+  outline: 1px solid #1565c0;
+  box-shadow: 0 1px 8px 0 rgb(21 101 192/ 20%);
+  transform: translateY(-0.125rem);
+}
+
+.shopCardLeft {
+  height: 100%;
+  display: flex;
+  float: left;
+}
+
+.shopCardRight {
+  height: 100%;
+  display: flex;
+  float: right;
+  padding-right: 12px;
+}
+
+.shopImageContainer {
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+}
+.shopImage {
+  padding: 2px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  outline: 1px solid #ccc;
+}
+
+.shopCardTitle {
+  padding: 8px 0px 4px 0px;
+  margin: 8px 0px 0px 0px;
+  font-size: 18px;
+}
+
+.shopCardDescription {
+  display: block;
+  padding: 4px 0px 8px 0px;
+  font-size: 14px;
+  color: rgb(90, 90, 90);
+}
+
+.shopCardLoaction {
+  display: inline-flex;
+  align-items: center;
+  margin: 8px 0px;
+  font-size: 14px;
+  color: #1565c0;
+}
+.shopCardLoactionIcon {
+  width: 16px;
+  margin-right: 2px;
+}
+
+.shopCardRightItem {
+  width: 100px;
+  padding: 12px;
+  border-left: 1px solid #ccc;
+  height: 100%;
+}
+.shopCardItemTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1565c0;
+  padding-bottom: 16px;
+}
+
+.shopCardItemIcon {
+  width: 18px;
+  padding-right: 12px;
+}
+
+.shopCardItemDescription {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: rgb(90, 90, 90);
+}

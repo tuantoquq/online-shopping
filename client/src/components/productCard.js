@@ -1,21 +1,22 @@
-import React from 'react';
-import Card from '@mui/material/Card';
+import React, { useState, useEffect, memo } from 'react';
+import { Link } from 'react-router-dom';
+import axios from '../config/axios';
 import clsx from 'clsx';
 import styles from './CSS/ProductCardCSS.module.scss';
+import Card from '@mui/material/Card';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CardMedia from '@mui/material/CardMedia';
-import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
 import Rating from '@mui/material/Rating';
-import axios from '../config/axios';
 
 //for sample data
-import productSampleImage from '../assets/Product/productSampleImage.jpeg';
+import productSampleImage1 from '../assets/Product/productSampleImage1.jpeg';
+import productSampleImage2 from '../assets/Product/productSampleImage2.jpeg';
 
 function ProductCard(id) {
-  var productId = id;
+  //  console.log('re-render product card', id);
   const GET_PRODUCT_URL = ''; //url to request product info
-  const getProductInfo = async (id) => {
+  const getProductInfo = (productId) => {
+    /* //request for data
     try {
       const response = await axios.post(
         GET_PRODUCT_URL,
@@ -32,20 +33,33 @@ function ProductCard(id) {
       console.log(err);
       return null;
     }
+    */
+    function randomImage() {
+      const index = Math.floor(Math.random() * 2) + 1;
+      if (index === 1) {
+        return productSampleImage1;
+      } else {
+        return productSampleImage2;
+      }
+    }
+    const responsData = {
+      id: productId,
+      image: randomImage(),
+      name: 'Lorem Ipsum is simply dummy text of the printing',
+      price: 600000,
+      selled: 32032,
+      rate: 3,
+      location: 'Hà Nội',
+    };
+    return responsData;
   };
 
-  // const productInfo = getProductInfo(productId);
-  // sample data
-  productId = 1;
-  const productInfo = {
-    id: productId,
-    image: productSampleImage,
-    name: 'Lorem Ipsum is simply dummy text of the printing',
-    price: 600000,
-    selled: 32032,
-    rate: 3,
-    location: 'Hà Nội',
-  };
+  const [productInfo, setProductInfo] = useState((id) => getProductInfo(id));
+
+  useEffect(() => {
+    //Request for new numPage
+    setProductInfo(getProductInfo(id));
+  }, [id]);
 
   return (
     <Link
@@ -61,31 +75,33 @@ function ProductCard(id) {
           image={productInfo.image}
           alt={productInfo.name}
         />
-        <Box className={clsx(styles.cardContent)}>
-          <Box className={clsx(styles.cardHeader)}>
+        <div className={clsx(styles.cardContent)}>
+          <div className={clsx(styles.cardHeader)}>
             <p className={clsx(styles.cardTitle)}>{productInfo.name}</p>
             <strong
               className={clsx(styles.cardPrice)}
             >{`${productInfo.price} đ`}</strong>
-          </Box>
+          </div>
 
-          <Box className={clsx(styles.productContent)}>
-            <Rating
-              className={clsx(styles.rating)}
-              value={productInfo.rate}
-              disabled
-            />
-            <span className={clsx(styles.selledNumber)}>
-              Đã bán: {productInfo.selled}
-            </span>
+          <div className={clsx(styles.productContent)}>
+            <div className={clsx(styles.productRating)}>
+              <Rating
+                className={clsx(styles.rating)}
+                value={productInfo.rate}
+                disabled
+              />
+              <span className={clsx(styles.selledNumber)}>
+                Đã bán: {productInfo.selled}
+              </span>
+            </div>
             <span className={clsx(styles.location)}>
-              <LocationOnIcon />
+              <LocationOnIcon className={clsx(styles.locationIcon)} />
               {productInfo.location}
             </span>
-          </Box>
-        </Box>
+          </div>
+        </div>
       </Card>
     </Link>
   );
 }
-export default ProductCard;
+export default memo(ProductCard);
