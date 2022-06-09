@@ -1,3 +1,4 @@
+import React from 'react';
 import clsx from 'clsx';
 import styles from './CSS/searchCSS.module.scss';
 import { useEffect, useState, useRef } from 'react';
@@ -18,10 +19,25 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Search({ search }) {
   //request data with search term;
-  // console.log('re-render');
+  const [error, setError] = useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setError(false);
+  };
+
+  //console.log(search);
   const allRating = useRef([5, 4, 3, 2, 1]);
   const allSort = useRef([
     {
@@ -47,13 +63,9 @@ function Search({ search }) {
   ]);
 
   //for all data -request once time when component construct
-  const [allCategories, setAllCategories] = useState((search) =>
-    getAllCategories(search)
-  );
-  const [allBrands, setAllBrands] = useState((search) => getAllBrands(search));
-  const [allLocations, setAllLocations] = useState((search) =>
-    getAllLocations(search)
-  );
+  const [allCategories] = useState((search) => getAllCategories(search));
+  const [allBrands] = useState((search) => getAllBrands(search));
+  const [allLocations] = useState((search) => getAllLocations(search));
 
   function getAllLocations(searchTerm) {
     // console.log('re-render');
@@ -89,12 +101,6 @@ function Search({ search }) {
     //console.log(ressponseData);
     return ressponseData;
   }
-
-  useEffect(() => {
-    setAllCategories(getAllLocations(search));
-    setAllBrands(getAllBrands(search));
-    setAllLocations(getAllLocations(search));
-  }, [search]);
 
   //for display filter if all data too long
   const [showedCategories, setShowedCategories] = useState(
@@ -203,15 +209,28 @@ function Search({ search }) {
 
   function handleApply(apply) {
     //console.log('Set apply to', apply);
-    setApply(apply);
     if (apply === true) {
-      setFromPriceApplied(Number(fromPrice));
-      setToPriceApplied(Number(toPrice));
-    }
+      //console.log(fromPrice === '');
+      //console.log(toPrice);
+      const from = Number(fromPrice);
+      const to = Number(toPrice);
 
+      if (fromPrice === '' || toPrice === '') {
+        setFromPriceApplied(fromPrice !== '' ? from : null);
+        setToPriceApplied(toPrice !== '' ? to : null);
+        setApply(apply);
+      } else if (to <= from) {
+        setError(true);
+      } else {
+        setFromPriceApplied(from);
+        setToPriceApplied(to);
+        setApply(apply);
+      }
+    }
     if (apply === false) {
       setFromPriceApplied(null);
       setToPriceApplied(null);
+      setApply(apply);
     }
   }
 
@@ -228,6 +247,9 @@ function Search({ search }) {
     setFromPrice('');
     setToPrice('');
     setApply(false);
+    setFromPriceApplied(null);
+    setToPriceApplied(null);
+    setSort('related');
   }
   function getProductIdList(filter, page) {
     //request
@@ -254,6 +276,7 @@ function Search({ search }) {
     return responseData;
   }
   useEffect(() => {
+    //console.log('filter change');
     const filter = {
       search: search,
       category: categories,
@@ -293,13 +316,23 @@ function Search({ search }) {
       toPrice: toPriceApplied,
       sort: sort,
     };
-    console.log(filter);
+    //console.log('page changed');
     setProductIdList(getProductIdList(filter, page));
     setPage(page);
   }, [page]);
 
   return (
-    <div className="search">
+    <div className={clsx(styles.search)}>
+      <Snackbar
+        className={clsx(styles.errorAlert)}
+        open={error}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Vui lòng điền khoảng giá phù hợp!
+        </Alert>
+      </Snackbar>
       <div className={clsx(styles.searchContainer)}>
         <div className={clsx(styles.searchSidebar)}>
           <h2 className={clsx(styles.sidebarTitle)}>

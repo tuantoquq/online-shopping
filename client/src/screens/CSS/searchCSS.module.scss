@@ -2,8 +2,9 @@ strong {
   color: #1565c0;
 }
 .search {
-  background-color: #ccc;
+  background-color: rgb(245, 245, 245);
 }
+
 .searchContainer {
   padding: 20px;
   background-color: #fff;
@@ -185,9 +186,6 @@ input[type='checkbox']:checked + label {
   padding-top: 20px;
 }
 
-@media (max-width: 739px) {
-}
-
 @media (min-width: 1201px) and (max-width: 1600px) {
   .searchContainer {
     margin: 0px 10%;
@@ -195,6 +193,9 @@ input[type='checkbox']:checked + label {
 }
 
 @media (max-width: 1200px) {
+  .search {
+    padding-right: 12px;
+  }
   .searchContainer {
     margin: 0px 0%;
   }
@@ -204,6 +205,9 @@ input[type='checkbox']:checked + label {
 }
 
 @media (max-width: 939px) {
+  .searchSidebar {
+    padding: 10px 16px 10px 16px;
+  }
   .productContainer {
     grid-template-columns: auto auto;
   }
