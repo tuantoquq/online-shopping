@@ -14,10 +14,15 @@ app.use(authRoutes);
 app.use(customerRoutes);
 app.use(categoryRoutes);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 app.use(productRoutes)
 >>>>>>> fix bug
+=======
+app.use(productRoutes);
+
+>>>>>>> update: product searcher
 const PORT = process.env.SERVER_PORT || 8081;
 
 app.listen(PORT, () => {

@@ -4,10 +4,14 @@ import mongoose from 'mongoose';
 
 const ProductSchema = new mongoose.Schema({
 <<<<<<< HEAD
+<<<<<<< HEAD
     productName: {
 =======
     name: {
 >>>>>>> fix bug
+=======
+    productName: {
+>>>>>>> update: product searcher
         type: String,
         required: true,
     },

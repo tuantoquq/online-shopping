@@ -40,4 +40,9 @@ productRoutes.post(
     productControler.updateProductFromDatabase,
 );
 
+productRoutes.get(
+    '/api/v1/product/search',
+    verifyToken,
+    productControler.search
+)
 export default productRoutes;

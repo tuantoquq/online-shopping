@@ -4,7 +4,13 @@ import { Product } from '../model/index.js';
 import { Category } from '../model/category.js';
 =======
 import { Product, Category } from '../model/index.js';
+<<<<<<< HEAD
 >>>>>>> fix bug
+=======
+import bm25 from 'wink-bm25-text-search';
+import winkNLP from 'wink-nlp';
+import model from 'wink-eng-lite-web-model';
+>>>>>>> update: product searcher
 
 const productControler = {};
 
@@ -12,10 +18,14 @@ productControler.insertProductToDatabase = async (req, res) => {
     try {
         const {
 <<<<<<< HEAD
+<<<<<<< HEAD
             productName,
             longDescription,
 =======
             name,
+=======
+            productName,
+>>>>>>> update: product searcher
             longDescription,
             shortDescription,
 >>>>>>> fix bug
@@ -37,6 +47,7 @@ productControler.insertProductToDatabase = async (req, res) => {
 
         try {
 <<<<<<< HEAD
+<<<<<<< HEAD
             const categorySave = await category.save();
             let product = await Product.findOne({
                 productName: productName,
@@ -45,9 +56,12 @@ productControler.insertProductToDatabase = async (req, res) => {
 
 =======
             console.log(name)
+=======
+            console.log(productName)
+>>>>>>> update: product searcher
             console.log(shopId)
             let product = await Product.findOne({
-                name: name,
+                productName: productName,
                 shopId: shopId,
             });
             const categorySave = await category.save();
@@ -58,7 +72,7 @@ productControler.insertProductToDatabase = async (req, res) => {
                 });
             }
             let newProduct = new Product({
-                name: name,
+                productName: productName,
                 longDescription: longDescription,
                 shortDescription: shortDescription,
                 price: price,
@@ -154,7 +168,7 @@ productControler.updateProductFromDatabase = async (req, res) => {
         var dataUpdate = {};
 >>>>>>> fix bug
         let listPros = [
-            'name',
+            'productName',
             'longDescription',
             'shortDescription',
             'price',
@@ -197,4 +211,53 @@ productControler.updateProductFromDatabase = async (req, res) => {
     }
 };
 
+
+productControler.search = async (req, res) => {
+    try {
+        var engine = bm25();
+        const nlp = winkNLP(model);
+        const its = nlp.its;
+
+        const prepTask = function (text) {
+            const tokens = [];
+            nlp.readDoc(text)
+                .tokens()
+                // Use only words ignoring punctuations etc and from them remove stop words
+                .filter((t) => t.out(its.type) === 'word' && !t.out(its.stopWordFlag))
+                // Handle negation and extract stem of the word
+                .each((t) =>
+                    tokens.push(
+                        t.out(its.negationFlag) ? '!' + t.out(its.stem) : t.out(its.stem),
+                    ),
+                );
+
+            return tokens;
+        };
+        engine.defineConfig({ fldWeights: { productName: 2, shortDescription: 1 } });
+        engine.definePrepTasks([prepTask]);
+
+        for await (const product of Product.find()) {
+            let doc = JSON.parse(JSON.stringify({'productName': product.productName, 'shortDescription': product.shortDescription, tags: product._id}))
+            engine.addDoc(doc, product._id);
+        }
+        engine.consolidate();
+
+        const { query } = req.body
+        var result = engine.search(query)
+        let ids = []
+        for(let i = 0; i<result.length; i++){
+            ids.push(result[i][0])
+        }
+        const documents = await Product.find({'_id': {$in: ids}})
+        return res.status(httpStatus.OK).json({
+            data: documents
+        })
+    } catch(e){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: e.message,
+        });
+    }
+
+}
 export default productControler;

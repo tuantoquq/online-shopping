@@ -17,36 +17,35 @@ client = MongoClient(
 
 database = client['products']
 
-product_collections = database['tiki']
+product_collections = database['Tiki']
 
-categories = [
-    'bach-hoa-online',
-    'nha-cua-doi-song',
-    'dien-tu-dien-lanh',
-    'thiet-bi-kts-phu-kien-so',
-    'dien-thoai-may-tinh-bang',
-    'do-choi-me-be',
-    'lam-dep-suc-khoe',
-    'dien-gia-dung',
-    'thoi-trang-nu',
-    'thoi-trang-nam',
-    'giay-dep-nu',
-    'tui-vi-nu',
-    'giay-dep-nam',
-    'tui-thoi-trang-nam'
-    'balo-va-vali',
-    'phu-kien-thoi-trang',
-    'dong-ho-va-trang-suc',
-    'hang-quoc-te',
-    'laptop-may-vi-tinh-linh-kien',
-    'o-to-xe-may-xe-dap',
-    'nha-sach-tiki'
-    'the-thao-da-ngoai',
-    'may-anh',
-]
+categories = {
+    'bach-hoa-online': 4384,
+    'nha-cua-doi-song': 1883,
+    'dien-tu-dien-lanh': 4221,
+    'thiet-bi-kts-phu-kien-so': 1815,
+    'dien-thoai-may-tinh-bang': 1789,
+    'do-choi-me-be': 2549,
+    'lam-dep-suc-khoe': 1520,
+    'dien-gia-dung': 1882,
+    'thoi-trang-nu': 931,
+    'thoi-trang-nam': 915,
+    'giay-dep-nu': 1703,
+    'tui-vi-nu': 976,
+    'giay-dep-nam': 1686,
+    'tui-thoi-trang-nam': 27616,
+    'balo-va-vali': 6000,
+    'phu-kien-thoi-trang': 27498,
+    'dong-ho-va-trang-suc': 8371,
+    'hang-quoc-te': 17166,
+    'laptop-may-vi-tinh-linh-kien': 1846,
+    'o-to-xe-may-xe-dap': 8594,
+    'nha-sach-tiki': 8322,
+    'the-thao-da-ngoai': 1975,
+    'may-anh': 1801,
+}
 
-api_get_id_product = 'https://tiki.vn/api/personalish/v1/blocks/listings?limit=48&include=advertisement&aggregations' \
-                     '=2&trackity_id=3b437fb6-697c-366d-6f2b-9251936c2036&category=4221&page={}&urlKey={}'
+api_get_id_product = 'https://tiki.vn/api/personalish/v1/blocks/listings?limit=48&include=advertisement&aggregations=2&trackity_id=3b437fb6-697c-366d-6f2b-9251936c2036&category={}&page={}&urlKey={}'
 
 api_product = 'https://tiki.vn/api/v2/products/{}'
 product_field = [
@@ -59,8 +58,7 @@ product_field = [
 
 def get_list_id_product(url):
     response = requests.get(url, headers={
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                      "Chrome/100.0.4896.127 Safari/537.36 "
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36"
     })
     list_ids = []
     if response.status_code == 200:
@@ -88,10 +86,12 @@ def get_information_product(url):
 
 
 if __name__ == '__main__':
+    list_key = list(categories.keys())
     for i in range(args.start, args.end, 1):
-        category = categories[i]
+        category_name = list_key[i]
+        category_id = categories[category_name]
         for page_index in tqdm(range(args.start_page, args.end_page)):
-            category_page_url = api_get_id_product.format(page_index, category)
+            category_page_url = api_get_id_product.format(category_id,page_index, category_name)
             # category_name = re.search('vn\/(.*?)\/', category_page_url).group(1)
             list_product_ids = get_list_id_product(category_page_url)
             if len(list_product_ids) > 0:
