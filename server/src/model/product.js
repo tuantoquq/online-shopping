@@ -11,11 +11,15 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    price: {
-        type: mongoose.Types.Decimal128,
+    shortDescription: {
+        type: String,
         required: true,
     },
-    soldHistory: {
+    price: {
+        type: Number,
+        required: true,
+    },
+    soldHistoty: {
         type: {},
         default: null,
         required: false,
@@ -25,7 +29,7 @@ const ProductSchema = new mongoose.Schema({
         default: null,
         required: true,
     },
-    code: {
+    codes: {
         type: String,
         required: true,
     },
@@ -37,7 +41,7 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    ratingStar: {
+    ratingStart: {
         type: Number,
         default: 0,
         required: true,

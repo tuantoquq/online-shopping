@@ -23,12 +23,7 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
         try {
             const categorySave = await category.save();
             res.status(httpStatus.CREATED).json({
-                data: {
-                    id: categorySave._id,
-                    categoryName: categoryName,
-                    createAt: createAt,
-                    updateAt: updateAt,
-                },
+                data: categorySave
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
@@ -73,7 +68,7 @@ categoryControler.deleteCategoryFromDatabse = async (req, res) => {
             });
         }
 
-        return req.status(httpStatus.OK).json({
+        return res.status(httpStatus.OK).json({
             message: 'Delte category done',
         });
     } catch (e) {
@@ -87,13 +82,10 @@ categoryControler.deleteCategoryFromDatabse = async (req, res) => {
 categoryControler.updateCategoryFromDatabase = async (req, res) => {
     try {
         const { categoryId, categoryName } = req.body;
-        dataUpdate = {};
-        data['categoryName'] = categoryName;
+        var dataUpdate = {};
+        dataUpdate['categoryName'] = categoryName;
         dataUpdate['updateAt'] = Date.now();
-        category = await Category.findOneAndUpdate({
-            _id: categoryId,
-            dataUpdate,
-        });
+        let category = await Category.findByIdAndUpdate(categoryId, dataUpdate)
         if (!category) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find category",

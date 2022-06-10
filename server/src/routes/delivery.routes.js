@@ -23,4 +23,5 @@ deliverRoutes.post(
     verifyToken,
     deliveryControler.updateDeliveryFromDatabase,
 );
+
 export default deliverRoutes;
