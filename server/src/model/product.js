@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 // import Float from mongooseFloat.loadType(mongoose)
 
 const ProductSchema = new mongoose.Schema({
-    name: {
+    productName: {
         type: String,
         required: true,
     },
