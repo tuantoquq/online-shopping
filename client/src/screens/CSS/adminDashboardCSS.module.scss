@@ -1,0 +1,33 @@
+.pageContainer {
+  display: flex;
+  padding: 0px 12px 0 0;
+}
+
+.pageBody {
+  width: calc(100% - 260px);
+}
+.pageRow {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: center;
+  padding: 0px 20px;
+  margin: 12px 0px 12px 12px;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.rowTitle {
+  padding: 24px 0px 0px 12px;
+}
+
+.calendar {
+  padding: 0px;
+  margin: 0px;
+  width: 304px;
+  height: 358px;
+}
+@media (min-width: 1600px) {
+  .pageContainer {
+    padding: 0px 10%;
+  }
+}

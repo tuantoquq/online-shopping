@@ -12,6 +12,7 @@ import DeliveringOrder from '../screens/seller_deliveringOrder';
 import RejectOrder from '../screens/seller_rejectOrder';
 import DeliveredOrder from '../screens/seller_deliveredOrder';
 import StatisticOrder from '../screens/admin_statisticOrder';
+import AdminDashboard from '../screens/adminDashboard';
 
 function RootRoutes() {
   return (
@@ -36,6 +37,8 @@ function RootRoutes() {
       <Route path="/cart" element={<Cart />} />
 
       <Route path="/admin/login" element={<Login role="admin" />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />
     </Routes>
   );
