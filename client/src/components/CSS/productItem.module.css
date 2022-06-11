@@ -1,0 +1,22 @@
+.all{
+    display: flex;
+    /* justify-content: space-between; */
+    margin-bottom: 10px;
+}
+.left_comp{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.image{
+    width:200px;
+    height:150px;
+}
+
+.comp1{
+    margin-left: 5px;
+}
+.product_price{
+    margin-top: 30px;
+    color: red;
+}

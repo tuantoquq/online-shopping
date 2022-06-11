@@ -11,7 +11,6 @@ function CommentProduct(){
                 <button>Trở lại</button>
                 <button>Hoàn thành</button>
             </div>
-
         </div>
     )
 

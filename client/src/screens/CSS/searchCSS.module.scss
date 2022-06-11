@@ -1,0 +1,214 @@
+strong {
+  color: #1565c0;
+}
+.search {
+  background-color: rgb(245, 245, 245);
+}
+
+.searchContainer {
+  padding: 20px;
+  background-color: #fff;
+  display: flex;
+  margin: 0 20%;
+}
+// siderBar begin
+.searchSidebar {
+  width: 220px !important;
+  padding: 10px 16px 10px 32px;
+  border-right: 1px solid #ccc;
+}
+
+.sidebarTitle {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 12px;
+  margin-top: 24px;
+  margin-bottom: 0px;
+}
+
+.searchFilter {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ccc;
+}
+.rowFilter {
+  // padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.viewMore {
+  padding-top: 12px;
+  opacity: 0.5;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rowFilter:hover {
+  cursor: pointer;
+}
+
+.checkBoxLabel {
+  padding: 8px 0px 8px 8px;
+  width: 100%;
+}
+
+.checkBox {
+  width: 20px;
+  height: 20px;
+}
+input[type='checkbox']:checked + label {
+  font-weight: bold;
+  color: #1565c0;
+}
+
+.priceFilter {
+  padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.priceInput {
+  width: 38%;
+  padding: 8px;
+  margin: 0px 0px 4px 0px;
+}
+.buttonGroup {
+  display: inline-flex;
+  justify-content: space-between;
+}
+.buttonGroup .button {
+  width: 48%;
+}
+
+.inputRadio {
+  display: none;
+}
+.rowFilter > input[type='radio']:checked + label {
+  outline: 1px solid #1565c0;
+}
+
+.radioLabel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 4px 4px 4px 12px;
+}
+
+.radioLabel:hover {
+  cursor: pointer;
+  outline: 1px solid #1565c0;
+}
+
+.rating {
+  padding-right: 4px;
+  opacity: 1 !important;
+}
+.button {
+  width: 100%;
+  margin: 16px 0px !important;
+}
+
+.searchBody {
+  padding-left: 12px;
+  width: calc(100% - 220px);
+}
+.searchedTitle {
+  display: flex;
+  align-items: center;
+  padding: 24px 0px 8px 0px;
+  font-weight: 600;
+}
+.searchedIcon {
+  padding-right: 12px;
+}
+
+.productContent {
+  width: 100%;
+  padding: 12px;
+  outline: 1px solid #ccc;
+  border-radius: 4px;
+}
+.productContainer {
+  width: 100%;
+  display: grid;
+  margin-top: 12px;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-between;
+  gap: 12px;
+}
+.productSort {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.productSortTitle {
+  padding-left: 12px;
+  font-size: 14px;
+}
+.productSortNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 120px);
+}
+.productSortItem {
+  width: 19%;
+}
+.productSortBtn {
+  width: 100%;
+  height: 50px;
+  color: #1565c0;
+  font-size: 13px;
+  border: none;
+  background-color: #fff;
+  outline: 1px solid #ccc;
+  border-radius: 4px;
+}
+.productSortBtn:hover {
+  cursor: pointer;
+  outline: 1px solid #1565c0;
+}
+.productSortBtn.selectedItem {
+  background-color: #1565c0;
+  color: #fff;
+}
+
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+@media (min-width: 1201px) and (max-width: 1600px) {
+  .searchContainer {
+    margin: 0px 10%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .search {
+    padding-right: 12px;
+  }
+  .searchContainer {
+    margin: 0px 0%;
+  }
+  .productContainer {
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media (max-width: 939px) {
+  .searchSidebar {
+    padding: 10px 16px 10px 16px;
+  }
+  .productContainer {
+    grid-template-columns: auto auto;
+  }
+}

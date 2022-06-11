@@ -3,7 +3,7 @@ import Footer from '../components/footer';
 import styles from './CSS/seller_acceptOrder.module.css';
 import InformationTab from '../components/informationTab';
 import Search from '../components/search';
-
+import OrderProduct from '../components/orderProduct';
 
 function AcceptOrder({navigation}) {
     return (
@@ -17,6 +17,11 @@ function AcceptOrder({navigation}) {
 
             <div className={styles.tab2} >
               <Search/>
+              <OrderProduct type = {0}/>
+              <OrderProduct type = {1}/>
+              <OrderProduct type = {2}/>
+              <OrderProduct type = {2}/>
+              
             </div>
         </div>
         <Footer navigation={navigation}/>

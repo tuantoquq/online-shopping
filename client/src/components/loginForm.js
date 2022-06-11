@@ -36,9 +36,6 @@ function LoginForm(props) {
 
     setOpen(false);
   };
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
 
   useEffect(() => {
     setErrMsg('');

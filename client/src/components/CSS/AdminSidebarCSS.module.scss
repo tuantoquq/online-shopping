@@ -1,0 +1,56 @@
+.icon {
+  width: 20px;
+  padding: 12px;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  outline: 1px solid #ccc;
+}
+.manageField {
+  display: block;
+  height: 250px;
+}
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+}
+.listItemButton {
+  display: flex;
+  color: #333;
+  align-items: center;
+  text-decoration: none;
+  height: 50px;
+  padding-left: 48px;
+}
+.listItemButton:hover {
+  cursor: pointer;
+  outline: 1px solid rgb(83 138 201);
+  transform: translateY(-0.125rem);
+}
+.listItemButton.selectedItem {
+  color: #fff;
+  background-color: rgb(83 138 201);
+  font-weight: 600;
+  box-shadow: 2px 2px 2px 2px rgba(21, 101, 192, 0.2) inset;
+}
+
+.manageFieldHeader {
+  width: 100%;
+  display: flex;
+  color: #ddd;
+  margin-left: 0px;
+  background-color: #1565c0;
+  align-items: center;
+  font-weight: 600;
+  justify-content: space-between;
+  box-shadow: 0px 5px 5px 0px rgba(83, 138, 201, 0.6);
+}
+.manageHeaderRight {
+  width: 85%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
