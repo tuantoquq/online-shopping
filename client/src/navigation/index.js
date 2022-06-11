@@ -10,6 +10,8 @@ import Register from '../screens/register';
 import Cart from "../screens/Cart";
 import AcceptOrder from "../screens/seller_acceptOrder";
 import ProductInformation from "../components/product";
+import OrderUserManager from "../components/OrderUserManager";
+
 
 function RootRoutes() {
   return (
@@ -27,6 +29,7 @@ function RootRoutes() {
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/ProductTest" element={<ProductInformation/ >} />
+      <Route path="/vay" element={<OrderUserManager/ >} />
     </Routes>
   );
 
