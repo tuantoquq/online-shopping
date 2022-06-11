@@ -28,7 +28,7 @@ function Header() {
   const dayCurr = dictDay[date.getDay()];
 
   const listTopic = [
-    ['Váy', 'váy'],
+    ['Váy', 'vay'],
     ['Túi', 'túi'],
     ['Tai nghe', 'tai nghe'],
     ['Điện thoại', 'điện thoại'],

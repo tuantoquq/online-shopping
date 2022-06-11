@@ -1,0 +1,71 @@
+.Home{
+    background-color: rgb(255, 255, 255);
+}
+.content{
+    margin-right: 2%;
+    margin-left: 2%;
+    background-color: rgb(255, 255, 255);
+}
+.tdisplay{
+    font-size: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    margin-left: 10px;
+    border-bottom: 1px solid;
+    border-color: rgb(0, 0, 0);
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.productImage{
+    display: flex;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-bottom: 1px solid;
+    border-color: rgb(0, 0, 0);
+}
+
+.productTitle{
+    margin-top: -20px;
+    margin-left: 20px;
+    width: 700px;
+}
+
+.item{
+    margin-top: -20px;
+}
+
+.footFake{
+    margin-top: 100px;
+}
+
+.moneyItem{
+    margin-left: 20px;
+    margin-top: 50px;
+}
+
+.wraper{
+    margin-bottom: 20px;
+    background-color: rgb(235, 235, 235);
+}
+
+.statusTitle{
+    margin-right: 15px;
+}
+
+.button{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -20px;
+    margin-right: 10px;
+}
+
+.noProduct{
+    display: flex;
+    width: 600px;
+    height: 300px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}

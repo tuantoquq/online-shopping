@@ -5,10 +5,13 @@ import Home from '../screens/home';
 import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
 import Register from '../screens/register';
+<<<<<<< HEAD
+import Cart from "../screens/Cart";
 import AcceptOrder from "../screens/seller_acceptOrder";
 import ProductInformation from "../components/product";
 import OrderUserManager from "../components/OrderUserManager";
 
+=======
 import Cart from '../screens/Cart';
 import Search from '../screens/search';
 import AcceptOrder from '../screens/seller_acceptOrder';
@@ -17,6 +20,7 @@ import RejectOrder from '../screens/seller_rejectOrder';
 import DeliveredOrder from '../screens/seller_deliveredOrder';
 import StatisticOrder from '../screens/admin_statisticOrder';
 import AdminDashboard from '../screens/adminDashboard';
+>>>>>>> main
 
 function RootRoutes() {
   return (
