@@ -103,3 +103,17 @@
     font-size: 20px;
     color: red;
 }
+.alignleft {
+	float: left;
+    /* below 5px */
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.alignright {
+	float: right;
+}
+.clear{
+    clear: both;
+}

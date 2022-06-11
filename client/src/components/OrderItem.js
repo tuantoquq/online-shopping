@@ -79,7 +79,8 @@ function OrderItem(){
                         </ButtonGroup>
                       </div>
                       <div className={styles.comp2}>
-                              <p className={styles.product_price}>{150000 *itemCount}</p>
+                              <Button className={styles.last}>Xóa</Button>
+                              <p className={styles.product_price}>{150000 *itemCount}</p>  
                       </div>
                   </div>
               </div>

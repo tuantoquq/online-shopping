@@ -7,25 +7,27 @@ function Cart() {
         
         <div >
             <Header/> 
-            <div className="container">
-                <h3 >Giỏ hàng</h3> 
-            </div>       
-            <div className={styles.all}>
-                <OrderItem/>
-                <OrderItem/>
-            </div>
-            
-          <div className={styles.comp1}>
-              <div className={styles.displayMoney}>
-                  <p className={styles.disTotalPrice}>Tổng số tiền:</p>
-                  <p className={styles.totalPrice}>đ 300.000</p>
-              </div>
+                <div>
+                    <div className="container" >
+                        <h3 >Giỏ hàng</h3> 
+                    </div>       
+                    <div >
+                        <OrderItem/>
+                        <OrderItem/>
+                    </div>
 
-          </div>
-            <div >
-                <button>Trở lại</button>
-                <button>Hoàn thành</button>
-            </div>
+                    <div className={styles.comp1}>
+                        <div className={styles.displayMoney}>
+                            <p className={styles.disTotalPrice}>Tổng số tiền:</p>
+                            <p className={styles.totalPrice}>đ 300.000</p>
+                        </div>
+
+                    </div>
+                    <div >
+                        <button>Trở lại</button>
+                        <button>Hoàn thành</button>
+                    </div>
+                </div>
             <Footer/>
         </div>
         

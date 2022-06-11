@@ -64,7 +64,11 @@ function ListOrderedItem(){
     
     return (
     <div>
-        <h3> Đơn hàng </h3>
+        <div>
+            <h2 className={styles.alignleft}> Đơn hàng </h2>
+            <Button className={styles.alignright}>Mua lại</Button>
+        </div>
+        <div className={styles.clear}></div>
         <OrderProduct/>
         {/* <Single_Ordered/>
         <p className={styles.totalprice}>Tổng đơn hàng</p> */}
