@@ -5,10 +5,8 @@ import Home from '../screens/home';
 import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
 import Register from '../screens/register';
-import AcceptOrder from "../screens/seller_acceptOrder";
 import ProductInformation from "../components/product";
 import OrderUserManager from "../components/OrderUserManager";
-
 import Cart from '../screens/Cart';
 import Search from '../screens/search';
 import AcceptOrder from '../screens/seller_acceptOrder';
