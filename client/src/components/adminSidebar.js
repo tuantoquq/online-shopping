@@ -34,11 +34,11 @@ function AdminSidebar({ select }) {
               <span>Thống kê truy cập </span>
             </Link>
             <Link
-              to="/admin"
+              to="/admin/statistic-revenue"
               className={clsx(styles.listItemButton, {
-                [styles.selectedItem]: selected === 8,
+                [styles.selectedItem]: selected === 'statistic-revenue',
               })}
-              onClick={() => setSelected(8)}
+              onClick={() => setSelected('statistic-revenue1')}
             >
               <span>Thống kê doanh thu </span>
             </Link>
