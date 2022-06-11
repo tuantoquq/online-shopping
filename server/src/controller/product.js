@@ -1,14 +1,17 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
-import { Product } from '../model/index.js';
-import { Category } from '../model/category.js';
+import { Product, Category } from '../model/index.js';
+import bm25 from 'wink-bm25-text-search';
+import winkNLP from 'wink-nlp';
+import model from 'wink-eng-lite-web-model';
 
 const productControler = {};
 
 productControler.insertProductToDatabase = async (req, res) => {
     try {
         const {
-            productName,
+            name,
             longDescription,
+            shortDescription,
             price,
             codes,
             count,
@@ -17,25 +20,27 @@ productControler.insertProductToDatabase = async (req, res) => {
             shopId,
         } = req.body;
 
-        category = new Category({
+        let category = new Category({
             categoryName: categoryName,
         });
 
         try {
-            const categorySave = await category.save();
+            console.log(name)
+            console.log(shopId)
             let product = await Product.findOne({
                 productName: productName,
                 shopId: shopId,
             });
-
+            const categorySave = await category.save();
             if (product) {
                 return res.status(httpStatus.BAD_REQUEST).json({
                     message: 'Product has been exist in this Shop',
                 });
             }
-            product = new Product({
+            let newProduct = new Product({
                 productName: productName,
                 longDescription: longDescription,
+                shortDescription: shortDescription,
                 price: price,
                 codes: codes,
                 count: count,
@@ -43,10 +48,11 @@ productControler.insertProductToDatabase = async (req, res) => {
                 sizes: sizes,
                 catergoryId: categorySave._id,
             });
+            console.log(newProduct)
 
-            const productSave = product.save();
-            return res.status(httpStatus.OK).json({
-                data: productSave,
+            const productSave = await newProduct.save();
+            return res.status(httpStatus.CREATED).json({
+                data: productSave
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
@@ -91,8 +97,8 @@ productControler.deleteProductFromDatabse = async (req, res) => {
             });
         }
 
-        return req.status(httpStatus.OK).json({
-            message: 'Delte product done',
+        return res.status(httpStatus.OK).json({
+            message: 'Delete product done',
         });
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -104,11 +110,12 @@ productControler.deleteProductFromDatabse = async (req, res) => {
 
 productControler.updateProductFromDatabase = async (req, res) => {
     try {
-        let productId = req.productId;
-        const dataUpdate = {};
+        let productId = req.query.productId;
+        var dataUpdate = {};
         let listPros = [
             'productName',
             'longDescription',
+            'shortDescription',
             'price',
             'codes',
             'count',
@@ -118,12 +125,13 @@ productControler.updateProductFromDatabase = async (req, res) => {
         ];
 
         for (let i = 0; i < listPros.length; i++) {
-            if (req.body.hasOwnProperty(pro)) {
-                dataUpdate[pro] = req.body[pro];
+            let pros = listPros[i]
+            if (req.body.hasOwnProperty(pros)) {
+                dataUpdate[pros] = req.body[pros];
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        product = await Product.findOneAndUpdate({ _id: productId }, dataUpdate);
+        let product = await Product.findOneAndUpdate({ _id: productId }, dataUpdate);
         if (!product) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find product",
@@ -138,5 +146,54 @@ productControler.updateProductFromDatabase = async (req, res) => {
         });
     }
 };
+
+productControler.search = async (req, res) => {
+    try {
+        var engine = bm25();
+        const nlp = winkNLP(model);
+        const its = nlp.its;
+
+        const prepTask = function (text) {
+            const tokens = [];
+            nlp.readDoc(text)
+                .tokens()
+                // Use only words ignoring punctuations etc and from them remove stop words
+                .filter((t) => t.out(its.type) === 'word' && !t.out(its.stopWordFlag))
+                // Handle negation and extract stem of the word
+                .each((t) =>
+                    tokens.push(
+                        t.out(its.negationFlag) ? '!' + t.out(its.stem) : t.out(its.stem),
+                    ),
+                );
+
+            return tokens;
+        };
+        engine.defineConfig({ fldWeights: { productName: 2, shortDescription: 1 } });
+        engine.definePrepTasks([prepTask]);
+
+        for await (const product of Product.find()) {
+            let doc = JSON.parse(JSON.stringify({'productName': product.productName, 'shortDescription': product.shortDescription, tags: product._id}))
+            engine.addDoc(doc, product._id);
+        }
+        engine.consolidate();
+
+        const { query } = req.body
+        var result = engine.search(query)
+        let ids = []
+        for(let i = 0; i<result.length; i++){
+            ids.push(result[i][0])
+        }
+        const documents = await Product.find({'_id': {$in: ids}})
+        return res.status(httpStatus.OK).json({
+            data: documents
+        })
+    } catch(e){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: e.message,
+        });
+    }
+
+}
 
 export default productControler;
