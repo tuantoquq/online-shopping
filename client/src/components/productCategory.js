@@ -6,9 +6,8 @@ import { CardActionArea } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-
 import { Grid } from '@mui/material';
-
+import LinkToProduct from '../components/inforProduct';
 
 function ProductCategory(){
     return (
@@ -25,7 +24,10 @@ function ProductCategory(){
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                          Lizard
+                          <LinkToProduct
+                            urlProduct="ProductTest"
+                            productName="Test Product"
+                          ></LinkToProduct>
                         </Typography>
                       </CardContent>
                     </CardActionArea>

@@ -5,13 +5,18 @@ import Home from '../screens/home';
 import CommentProduct from '../screens/commentProduct';
 import Login from '../screens/login';
 import Register from '../screens/register';
+import ProductInformation from "../components/product";
+import OrderUserManager from "../components/OrderUserManager";
 import Cart from '../screens/Cart';
 import Search from '../screens/search';
-import AcceptOrder from '../screens/seller_acceptOrder';
-import DeliveringOrder from '../screens/seller_deliveringOrder';
-import RejectOrder from '../screens/seller_rejectOrder';
-import DeliveredOrder from '../screens/seller_deliveredOrder';
-import StatisticOrder from '../screens/admin_statisticOrder';
+import AcceptOrder from '../screens/sellerAcceptOrder';
+import DeliveringOrder from '../screens/sellerDeliveringOrder';
+import RejectOrder from '../screens/sellerRejectOrder';
+import DeliveredOrder from '../screens/sellerDeliveredOrder';
+
+import StatisticOrder from '../screens/adminStatisticOrder';
+import AdminDashboard from '../screens/adminDashboard';
+import StatisticRevenue from '../screens/adminStatisticRevenue';
 
 function RootRoutes() {
   return (
@@ -38,8 +43,15 @@ function RootRoutes() {
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
 
+      <Route path="/ProductTest" element={<ProductInformation/ >} />
+      <Route path="/vay" element={<OrderUserManager/ >} />
+
       <Route path="/admin/login" element={<Login role="admin" />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />
+      <Route path="/admin/statistic-revenue" element={<StatisticRevenue />} />
+
     </Routes>
   );
 }

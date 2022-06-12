@@ -1,0 +1,95 @@
+.productImage{
+    display: flex;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.productTitle{
+    margin-top: -20px;
+    margin-left: 20px;
+}
+.ratingScore{
+    margin-top: -5px;
+    margin-left: 40px;
+}
+.ratingInfo{
+    margin-top: 20px;
+    display: flex;
+}
+.ratingInfo{
+    margin-top: 20px;
+    display: flex;
+}
+
+.ratingUser{
+    margin-top: -17px;
+    display: flex;
+}
+
+.soldInfo{
+    display: flex;
+    margin-top: -30px;
+}
+.tap{
+    margin-left: 4px;
+}
+.selldisplay{
+    margin-top: -50px;
+    background-color: rgb(250, 230, 230);
+    color: rgb(222, 62, 62);
+    font-size: 45px;
+}
+.button{
+    text-align: center;
+    margin-top: 50px;
+    max-height: 30px;
+    max-width: 50px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.button1{
+    text-align: center;
+    margin-top: 50px;
+    max-height: 25px;
+    max-width: 50px;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
+.button2{
+    text-align: center;
+    margin-top: 33px;
+    max-height: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 25px;
+    background-color: rgb(216, 11, 11);
+}
+
+.numberProduct{
+    margin-top: 50px;
+    margin-left: 10px;
+}
+
+.footFake{
+    min-height: 3px;
+}
+
+.colInformation{
+    display: flex;
+    padding-top: -5px;
+    padding-bottom: 10px;
+}
+
+.colInformation_1{
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 200px;
+}
+
+.colInformation_2{
+    margin-left: 1px;
+    margin-right: 20px;
+    width: 100px;
+}
