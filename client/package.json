@@ -9,7 +9,7 @@
     "@material-ui/core": "^4.12.4",
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.2",
-    "@mui/x-date-pickers": "^5.0.0-alpha.5",
+    "@mui/x-date-pickers": "^5.0.0-alpha.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
