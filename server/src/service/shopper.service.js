@@ -31,7 +31,12 @@ ShopperService.findShopperByEmail = async (email) => {
 
 ShopperService.addShopper = async (shopper) => {
     await shopper.save((err, shopper) => {
-        if (err) throw Error;
+        if (err)
+            throw new CustomError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                apiStatus.DATABASE_ERROR,
+                `Error when save shopper: ${err.message}`,
+            );
         else return shopper;
     });
 };

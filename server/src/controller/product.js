@@ -25,8 +25,8 @@ productControler.insertProductToDatabase = async (req, res) => {
         });
 
         try {
-            console.log(name)
-            console.log(shopId)
+            console.log(name);
+            console.log(shopId);
             let product = await Product.findOne({
                 productName: productName,
                 shopId: shopId,
@@ -48,11 +48,11 @@ productControler.insertProductToDatabase = async (req, res) => {
                 sizes: sizes,
                 catergoryId: categorySave._id,
             });
-            console.log(newProduct)
+            console.log(newProduct);
 
             const productSave = await newProduct.save();
             return res.status(httpStatus.CREATED).json({
-                data: productSave
+                data: productSave,
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
@@ -125,7 +125,7 @@ productControler.updateProductFromDatabase = async (req, res) => {
         ];
 
         for (let i = 0; i < listPros.length; i++) {
-            let pros = listPros[i]
+            let pros = listPros[i];
             if (req.body.hasOwnProperty(pros)) {
                 dataUpdate[pros] = req.body[pros];
             }
@@ -172,28 +172,33 @@ productControler.search = async (req, res) => {
         engine.definePrepTasks([prepTask]);
 
         for await (const product of Product.find()) {
-            let doc = JSON.parse(JSON.stringify({'productName': product.productName, 'shortDescription': product.shortDescription, tags: product._id}))
+            let doc = JSON.parse(
+                JSON.stringify({
+                    productName: product.productName,
+                    shortDescription: product.shortDescription,
+                    tags: product._id,
+                }),
+            );
             engine.addDoc(doc, product._id);
         }
         engine.consolidate();
 
-        const { query } = req.body
-        var result = engine.search(query)
-        let ids = []
-        for(let i = 0; i<result.length; i++){
-            ids.push(result[i][0])
+        const { query } = req.body;
+        var result = engine.search(query);
+        let ids = [];
+        for (let i = 0; i < result.length; i++) {
+            ids.push(result[i][0]);
         }
-        const documents = await Product.find({'_id': {$in: ids}})
+        const documents = await Product.find({ _id: { $in: ids } });
         return res.status(httpStatus.OK).json({
-            data: documents
-        })
-    } catch(e){
+            data: documents,
+        });
+    } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,
             message: e.message,
         });
     }
-
-}
+};
 
 export default productControler;

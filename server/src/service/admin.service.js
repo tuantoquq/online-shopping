@@ -31,7 +31,12 @@ AdminService.findAdminByUsername = async (username) => {
 
 AdminService.addAdmin = async (admin) => {
     await admin.save((err, admin) => {
-        if (err) throw Error;
+        if (err)
+            throw new CustomError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                apiStatus.DATABASE_ERROR,
+                `Error when save admin: ${err.message}`,
+            );
         else return admin;
     });
 };

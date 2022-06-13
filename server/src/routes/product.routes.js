@@ -24,9 +24,6 @@ productRoutes.post(
     productControler.updateProductFromDatabase,
 );
 
-productRoutes.get(
-    '/api/v1/product/search',
-    productControler.search
-)
+productRoutes.get('/api/v1/product/search', productControler.search);
 
 export default productRoutes;

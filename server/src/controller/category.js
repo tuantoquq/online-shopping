@@ -23,7 +23,7 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
         try {
             const categorySave = await category.save();
             res.status(httpStatus.CREATED).json({
-                data: categorySave
+                data: categorySave,
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
@@ -85,7 +85,7 @@ categoryControler.updateCategoryFromDatabase = async (req, res) => {
         var dataUpdate = {};
         dataUpdate['categoryName'] = categoryName;
         dataUpdate['updateAt'] = Date.now();
-        let category = await Category.findByIdAndUpdate(categoryId, dataUpdate)
+        let category = await Category.findByIdAndUpdate(categoryId, dataUpdate);
         if (!category) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find category",
