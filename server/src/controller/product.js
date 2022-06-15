@@ -4,12 +4,12 @@ import bm25 from 'wink-bm25-text-search';
 import winkNLP from 'wink-nlp';
 import model from 'wink-eng-lite-web-model';
 
-const productControler = {};
+const productController = {};
 
-productControler.insertProductToDatabase = async (req, res) => {
+productController.insertProductToDatabase = async (req, res) => {
     try {
         const {
-            name,
+            productName,
             longDescription,
             shortDescription,
             price,
@@ -25,7 +25,7 @@ productControler.insertProductToDatabase = async (req, res) => {
         });
 
         try {
-            console.log(name);
+            console.log(productName);
             console.log(shopId);
             let product = await Product.findOne({
                 productName: productName,
@@ -46,7 +46,7 @@ productControler.insertProductToDatabase = async (req, res) => {
                 count: count,
                 shopId: shopId,
                 sizes: sizes,
-                catergoryId: categorySave._id,
+                categoryId: categorySave._id,
             });
             console.log(newProduct);
 
@@ -67,7 +67,7 @@ productControler.insertProductToDatabase = async (req, res) => {
     }
 };
 
-productControler.getProductFromDatabase = async (req, res) => {
+productController.getProductFromDatabase = async (req, res) => {
     try {
         let productId = req.query.productId;
         let productFind = await Product.findById(productId);
@@ -88,7 +88,7 @@ productControler.getProductFromDatabase = async (req, res) => {
     }
 };
 
-productControler.deleteProductFromDatabse = async (req, res) => {
+productController.deleteProductFromDatabase = async (req, res) => {
     try {
         let product = await Product.findByIdAndRemove(req.query.productId);
         if (product == null) {
@@ -108,7 +108,7 @@ productControler.deleteProductFromDatabse = async (req, res) => {
     }
 };
 
-productControler.updateProductFromDatabase = async (req, res) => {
+productController.updateProductFromDatabase = async (req, res) => {
     try {
         let productId = req.query.productId;
         var dataUpdate = {};
@@ -126,6 +126,7 @@ productControler.updateProductFromDatabase = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let pros = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (req.body.hasOwnProperty(pros)) {
                 dataUpdate[pros] = req.body[pros];
             }
@@ -147,7 +148,7 @@ productControler.updateProductFromDatabase = async (req, res) => {
     }
 };
 
-productControler.search = async (req, res) => {
+productController.search = async (req, res) => {
     try {
         var engine = bm25();
         const nlp = winkNLP(model);
@@ -201,4 +202,4 @@ productControler.search = async (req, res) => {
     }
 };
 
-export default productControler;
+export default productController;
