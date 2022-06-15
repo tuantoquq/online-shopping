@@ -1,9 +1,9 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import { Category } from '../model/index.js';
 
-const categoryControler = {};
+const categoryController = {};
 
-categoryControler.insertCategoryToDatabase = async (req, res) => {
+categoryController.insertCategoryToDatabase = async (req, res) => {
     try {
         const { categoryName } = req.body;
 
@@ -38,7 +38,7 @@ categoryControler.insertCategoryToDatabase = async (req, res) => {
     }
 };
 
-categoryControler.getCategoryFromDatabase = async (req, res) => {
+categoryController.getCategoryFromDatabase = async (req, res) => {
     try {
         let categoryId = req.query.categoryId;
         let categoryFind = await Category.findById(categoryId);
@@ -59,7 +59,7 @@ categoryControler.getCategoryFromDatabase = async (req, res) => {
     }
 };
 
-categoryControler.deleteCategoryFromDatabse = async (req, res) => {
+categoryController.deleteCategoryFromDatabase = async (req, res) => {
     try {
         let category = await Category.findByIdAndRemove(req.query.categoryId);
         if (category == null) {
@@ -69,7 +69,7 @@ categoryControler.deleteCategoryFromDatabse = async (req, res) => {
         }
 
         return res.status(httpStatus.OK).json({
-            message: 'Delte category done',
+            message: 'Delete category done',
         });
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -79,7 +79,7 @@ categoryControler.deleteCategoryFromDatabse = async (req, res) => {
     }
 };
 
-categoryControler.updateCategoryFromDatabase = async (req, res) => {
+categoryController.updateCategoryFromDatabase = async (req, res) => {
     try {
         const { categoryId, categoryName } = req.body;
         var dataUpdate = {};
@@ -101,4 +101,4 @@ categoryControler.updateCategoryFromDatabase = async (req, res) => {
     }
 };
 
-export default categoryControler;
+export default categoryController;
