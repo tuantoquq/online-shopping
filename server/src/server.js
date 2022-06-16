@@ -6,6 +6,7 @@ import {
     customerRoutes,
     categoryRoutes,
     productRoutes,
+    cartItemsRoutes,
 } from './routes/index.js';
 import cors from 'cors';
 
@@ -19,6 +20,7 @@ app.use(authRoutes);
 app.use(customerRoutes);
 app.use(categoryRoutes);
 app.use(productRoutes);
+app.use(cartItemsRoutes);
 const PORT = process.env.SERVER_PORT || 8081;
 
 app.listen(PORT, () => {

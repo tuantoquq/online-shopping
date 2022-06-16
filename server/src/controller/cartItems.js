@@ -38,3 +38,64 @@ export const addCartItems = async (req, res) => {
         });
     }
 };
+
+export const updateCartItems = async (req, res) => {
+    try {
+        let cartItemsId = req.body.cartItemsId;
+        let userId = req.userId;
+        let quantity = req.body.quantity;
+
+        //check exist cart items
+        let cartItems = await CartItemsService.findCartItemsById(cartItemsId, userId);
+
+        //update quantity of cartItems
+        cartItems.count = quantity;
+        let updateCartItems = await CartItemsService.updateCartItems(cartItems);
+
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'update cartItems successfully',
+            data: updateCartItems,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+export const deleteCartItems = async (req, res) => {
+    try {
+        let cartItemsId = req.params.cartItemsId;
+        let userId = req.userId;
+
+        //check exist cart
+        let cartItems = await CartItemsService.findCartItemsById(cartItemsId, userId);
+
+        //delete cartItems
+        const deleteCartItems = await CartItemsService.deleteCartItemsById(cartItems._id);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'delete cartItems successfully',
+            data: deleteCartItems,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
