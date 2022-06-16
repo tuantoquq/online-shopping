@@ -3,7 +3,6 @@ import { Product, Category } from '../model/index.js';
 import bm25 from 'wink-bm25-text-search';
 import winkNLP from 'wink-nlp';
 import model from 'wink-eng-lite-web-model';
-import mongoose from 'mongoose';
 
 const productController = {};
 
@@ -207,49 +206,41 @@ productController.search = async (req, res) => {
 
 productController.filter = async (req, res) => {
     try{
-        let filterBy = req.body.filterBy
         let currentPage = req.body.currentPage ? req.body.currentPage :1
         let maxItem = req.body.maxItem? req.body.maxItem : 20
         let skip = (currentPage - 1) * maxItem
 
-        if(filterBy == 'category'){
-            let categoryName = req.body.categoryName
-            console.log(categoryName)
-            let category = await Category.findOne({'categoryName': categoryName})
-            if (!category){
-                return res.status(httpStatus.OK).json({
-                    message: "Category not found"
-                })
-            }
-            else{
-                console.log(category._id.toString())
-                console.log(skip)
-                console.log(maxItem)
-                // var id = new mongoose.Types.ObjectId(category._id)
-                let products = await Product.find({'categoryId': category._id}).skip(skip).limit(maxItem)
-                if(!products){
-                    return res.status(httpStatus.OK).json({
-                        message: "We don't have any product belong to this category"
-                    })
-                }
-                return res.status(httpStatus.OK).json({
-                    data: products
-                })
-            }
+        let categoryName = req.body.categoryName
+        let category = await Category.findOne({'categoryName': categoryName})
+        if (!category){
+            return res.status(httpStatus.OK).json({
+                message: "Category not found"
+            })
         }
         else{
-            let orderBy = req.body.orderBy == 'desc' ? -1 : 1 
+            let sortBy = req.body.sortBy? req.body.sortBy : null
             let products = null
-            if(filterBy == 'price'){
-                products = await Product.find({}).sort({'price': orderBy}).skip(skip).limit(maxItem)
+            console.log(sortBy)
+            if(sortBy == null){
+                products = await Product.find({'categoryId': category._id}).skip(skip).limit(maxItem)
             }
-            else if(filterBy == 'pho bien'){
-                products = await Product.find({}).sort({'soldHistory': orderBy}).skip(skip).limit(maxItem)
+            else{
+                let orderBy = req.body.orderBy == 'desc' ? -1 : 1 
+                if(sortBy == 'price'){
+                    products = await Product.find({}).sort({'price': orderBy}).skip(skip).limit(maxItem)
+                }
+                else if(sortBy == 'pho bien'){
+                    products = await Product.find({}).sort({'soldHistory': orderBy}).skip(skip).limit(maxItem)
+                }
+                else if(sortBy == 'moi nhat'){
+                    products = await Product.find({}).sort({'createAt': -1}).skip(skip).limit(maxItem)
+                }
             }
-            else if(filterBy == 'moi nhat'){
-                products = await Product.find({}).sort({'createAt': -1}).skip(skip).limit(maxItem)
+            if(!products){
+                return res.status(httpStatus.OK).json({
+                    message: "We don't have any product belong to this category"
+                })
             }
-            
             return res.status(httpStatus.OK).json({
                 data: products
             })
