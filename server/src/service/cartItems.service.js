@@ -22,7 +22,12 @@ CartItemsService.getAllCartItemsByCustomerId = async (customerId) => {
 };
 
 CartItemsService.deleteCartItemsById = async (cartItemsId) => {
-    let cartItems = await CartItems.findById(cartItemsId);
+    let cartItems = await CartItems.deleteOne({ _id: cartItemsId });
+    return cartItems;
+};
+
+CartItemsService.findCartItemsById = async (cartItemsId, userId) => {
+    let cartItems = await CartItems.findOne({ _id: cartItemsId, customerId: userId });
     if (!cartItems) {
         throw new CustomError(
             httpStatus.NOT_FOUND,
@@ -30,10 +35,23 @@ CartItemsService.deleteCartItemsById = async (cartItemsId) => {
             `Cart items not found with id ${cartItemsId}`,
         );
     }
-
-    //if exist => delete
-    await CartItems.deleteOne({ _id: cartItemsId });
     return cartItems;
+};
+
+CartItemsService.updateCartItems = async (cartItems) => {
+    let rsCartItems = await CartItems.findOneAndUpdate(
+        { _id: cartItems._id },
+        cartItems,
+        { returnOriginal: false },
+    );
+    if (!rsCartItems) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `CartItems not found with id: ${cartItems._id}`,
+        );
+    }
+    return rsCartItems;
 };
 
 export default CartItemsService;
