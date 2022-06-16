@@ -18,6 +18,7 @@ productRoutes.post(
     verifyToken,
     productController.deleteProductFromDatabase,
 );
+
 productRoutes.post(
     '/api/v1/product/update',
     verifyToken,
@@ -25,5 +26,6 @@ productRoutes.post(
 );
 
 productRoutes.get('/api/v1/product/search', productController.search);
+productRoutes.get('/api/v1/product/filter', productController.filter)
 
 export default productRoutes;
