@@ -56,6 +56,53 @@ export const registerCustomer = async (req, res) => {
     }
 };
 
+export const updateInforCustomer = async (req, res) => {
+    try {
+        let shopId = req.query.shopId
+        var dataUpdate = {}
+        let listPros = [
+            'email',
+            'password',
+            'phone',
+            'firstName',
+            'lastName',
+            'dateOfBirth',
+            'gender',
+        ]
+
+        for(let i=0; i< listPros.length; i++){
+            let property = listPros[i]
+            if (property != 'password' && req.body.hasOwnProperty(property)){
+                dataUpdate[property] = req.body[property]
+            }
+            else if(property == 'password' && req.body.hasOwnProperty('password')){
+                var customerCheck = await Customer.findById(shopId)
+                var passwordIsValid = compareSync(req.body['password'], customerCheck.password)
+                if (!passwordIsValid){
+                    return res.status(httpStatus.OK).json({
+                        message: "Password isn't match"
+                    })
+                }
+            }
+        }
+        dataUpdate['updateAt'] = Date.now()
+        let customer = await Customer.findOneAndUpdate({ _id: shopId }, dataUpdate);
+        if (!customer) {
+            return res.status(httpStatus.NOT_FOUND).json({
+                message: "Can't find shopper",
+            });
+        }
+        return res.status(httpStatus.OK).json({
+            data: customer,
+        });
+
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            message: e.message,
+        });
+    }
+}
+
 export const loginCustomer = async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -258,6 +305,56 @@ export const loginShopper = async (req, res) => {
         });
     }
 };
+
+export const updateInforShopper = async (req, res) => {
+    try {
+        let shopId = req.query.shopId
+        var dataUpdate = {}
+        let listPros = [
+            'email',
+            'password',
+            'firstName',
+            'lastName',
+            'phoneNumber',
+            'gender',
+            'cccd',
+            'issueDate',
+            'issuePlace',
+        ]
+
+        for(let i=0; i< listPros.length; i++){
+            let property = listPros[i]
+            if (property != 'password' && req.body.hasOwnProperty(property)){
+                dataUpdate[property] = req.body[property]
+            }
+            else if(property == 'password' && req.body.hasOwnProperty('password')){
+                var shopper = await Shopper.findById(shopId)
+                var passwordIsValid = compareSync(req.body['password'], shopper.password)
+                if (!passwordIsValid){
+                    return res.status(httpStatus.OK).json({
+                        message: "Password isn't match"
+                    })
+                }
+            }
+        }
+
+        let shop = await Shopper.findOneAndUpdate({ _id: shopId }, dataUpdate);
+        if (!shop) {
+            return res.status(httpStatus.NOT_FOUND).json({
+                message: "Can't find shopper",
+            });
+        }
+        return res.status(httpStatus.OK).json({
+            data: shop,
+        });
+
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            message: e.message,
+        });
+    }
+}
+
 export const refreshTokenForShopper = async (req, res) => {
     let refreshToken = req.headers.authorization.split(' ')[1];
     if (refreshToken && refreshToken in refreshTokensShopper) {
