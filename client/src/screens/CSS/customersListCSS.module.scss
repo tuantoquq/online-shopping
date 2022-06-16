@@ -1,0 +1,14 @@
+.pageContainer {
+  display: flex;
+  padding: 0px 12px 0 0;
+}
+
+.pageBody {
+  width: calc(100% - 260px);
+  padding: 12px;
+}
+@media (min-width: 1600px) {
+  .pageContainer {
+    padding: 0px 10%;
+  }
+}
