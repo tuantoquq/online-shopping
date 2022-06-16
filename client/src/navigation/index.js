@@ -8,6 +8,7 @@ import Register from '../screens/register';
 import ProductInformation from '../components/product';
 import OrderUserManager from '../components/OrderUserManager';
 import Cart from '../screens/Cart';
+import Checkout from '../screens/Checkout';
 import Search from '../screens/search';
 import AcceptOrder from '../screens/sellerAcceptOrder';
 import DeliveringOrder from '../screens/sellerDeliveringOrder';
@@ -52,6 +53,7 @@ function RootRoutes() {
       <Route path="/user" element={<UserInformation />} />
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout/>} />
 
       <Route path="/ProductTest/:teamId" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
