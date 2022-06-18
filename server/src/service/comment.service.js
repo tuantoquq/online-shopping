@@ -17,8 +17,8 @@ CommentService.findById = async (commentId) => {
     return comment;
 };
 
-CommentService.findAllCommentByCustomerId = async (customerId) => {
-    let listComments = await Comment.find({ customerId: customerId });
+CommentService.findAllCommentForProduct = async (productId) => {
+    let listComments = await Comment.find({ productId: productId });
     return listComments;
 };
 
@@ -32,6 +32,11 @@ CommentService.addComment = async (comment) => {
             );
         else return comment;
     });
+};
+
+CommentService.findCommentByCustomerAndProduct = async (customerId, productId) => {
+    let comment = await Comment.findOne({ customerId: customerId, productId: productId });
+    return comment;
 };
 
 export default CommentService;
