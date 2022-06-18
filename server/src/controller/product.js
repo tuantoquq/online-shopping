@@ -91,7 +91,7 @@ productController.getProductFromDatabase = async (req, res) => {
 
 productController.deleteProductFromDatabase = async (req, res) => {
     try {
-        console.log(req.body.productId)
+        console.log(req.body.productId);
         let product = await Product.findByIdAndRemove(req.query.productId);
         if (product == null) {
             return res.status(httpStatus.NOT_FOUND).json({
@@ -204,87 +204,92 @@ productController.search = async (req, res) => {
     }
 };
 
-
 productController.filter = async (req, res) => {
-    try{
-        let currentPage = req.body.currentPage ? req.body.currentPage :1
-        let maxItem = req.body.maxItem? req.body.maxItem : 20
-        let skip = (currentPage - 1) * maxItem
+    try {
+        let currentPage = req.body.currentPage ? req.body.currentPage : 1;
+        let maxItem = req.body.maxItem ? req.body.maxItem : 20;
+        let skip = (currentPage - 1) * maxItem;
 
-        let categoryName = req.body.categoryName
-        let category = await Category.findOne({'categoryName': categoryName})
-        if (!category){
+        let categoryName = req.body.categoryName;
+        let category = await Category.findOne({ categoryName: categoryName });
+        if (!category) {
             return res.status(httpStatus.OK).json({
-                message: "Category not found"
-            })
-        }
-        else{
-            let sortBy = req.body.sortBy? req.body.sortBy : null
-            let products = null
-            console.log(sortBy)
-            if(sortBy == null){
-                products = await Product.find({'categoryId': category._id}).skip(skip).limit(maxItem)
+                message: 'Category not found',
+            });
+        } else {
+            let sortBy = req.body.sortBy ? req.body.sortBy : null;
+            let products = null;
+            console.log(sortBy);
+            if (sortBy == null) {
+                products = await Product.find({ categoryId: category._id })
+                    .skip(skip)
+                    .limit(maxItem);
+            } else {
+                let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
+                if (sortBy == 'price') {
+                    products = await Product.find({})
+                        .sort({ price: orderBy })
+                        .skip(skip)
+                        .limit(maxItem);
+                } else if (sortBy == 'pho bien') {
+                    products = await Product.find({})
+                        .sort({ soldHistory: orderBy })
+                        .skip(skip)
+                        .limit(maxItem);
+                } else if (sortBy == 'moi nhat') {
+                    products = await Product.find({})
+                        .sort({ createAt: -1 })
+                        .skip(skip)
+                        .limit(maxItem);
+                }
             }
-            else{
-                let orderBy = req.body.orderBy == 'desc' ? -1 : 1 
-                if(sortBy == 'price'){
-                    products = await Product.find({}).sort({'price': orderBy}).skip(skip).limit(maxItem)
-                }
-                else if(sortBy == 'pho bien'){
-                    products = await Product.find({}).sort({'soldHistory': orderBy}).skip(skip).limit(maxItem)
-                }
-                else if(sortBy == 'moi nhat'){
-                    products = await Product.find({}).sort({'createAt': -1}).skip(skip).limit(maxItem)
-                }
-            }
-            if(!products){
+            if (!products) {
                 return res.status(httpStatus.OK).json({
-                    message: "We don't have any product belong to this category"
-                })
+                    message: "We don't have any product belong to this category",
+                });
             }
             return res.status(httpStatus.OK).json({
-                data: products
-            })
+                data: products,
+            });
         }
-    }
-    catch (e) {
+    } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,
             message: e.message,
         });
     }
-}
+};
 
 productController.getTop6SellingProduct = async (req, res) => {
-    try{
+    try {
         let top6Products = await ProductService.getTop6Selling();
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "get top 6 selling product successfully",
-            data: top6Products
+            message: 'get top 6 selling product successfully',
+            data: top6Products,
         });
-    }catch(err){
+    } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
         });
     }
-}
+};
 
 productController.getTop30RecommendProducts = async (req, res) => {
-    try{
+    try {
         let top30RecommendProducts = await ProductService.getTop30RecommendProducts();
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "get top 30 recommend products successfully",
-            data: top30RecommendProducts
+            message: 'get top 30 recommend products successfully',
+            data: top30RecommendProducts,
         });
-    }catch(err){
+    } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
         });
     }
-}
+};
 
 export default productController;

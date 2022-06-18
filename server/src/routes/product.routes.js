@@ -27,7 +27,13 @@ productRoutes.post(
 
 productRoutes.get('/api/v1/product/search', productController.search);
 productRoutes.get('/api/v1/product/filter', productController.filter);
-productRoutes.get('/api/v1/product/top-6-selling', productController.getTop6SellingProduct);
-productRoutes.get('/api/v1/product/top-30-recommend', productController.getTop30RecommendProducts);
+productRoutes.get(
+    '/api/v1/product/top-6-selling',
+    productController.getTop6SellingProduct,
+);
+productRoutes.get(
+    '/api/v1/product/top-30-recommend',
+    productController.getTop30RecommendProducts,
+);
 
 export default productRoutes;
