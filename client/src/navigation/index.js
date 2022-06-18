@@ -49,7 +49,7 @@ function RootRoutes() {
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
 
-      <Route path="/ProductTest" element={<ProductInformation />} />
+      <Route path="/ProductTest:productId" element={<ProductInformation />} />
       <Route path="/vay" element={<OrderUserManager />} />
 
       <Route path="/admin/login" element={<Login role="admin" />} />
