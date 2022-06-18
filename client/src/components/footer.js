@@ -12,7 +12,7 @@ function Footer() {
     <div className={clsx(styles.footer, styles.textColor)}>
       <div className={styles.footerCol_1}>
         <h3>About Us</h3>
-        <p>Tổng biên tập: Nguyễn Hoàng Anh Tuấn</p>
+        <p>Giám đỐc: Nguyễn Hoàng Anh Tuấn</p>
         <p>+84376180160</p>
         <p>Địa chỉ: Số 1, Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
       </div>
@@ -31,7 +31,7 @@ function Footer() {
 
       <div className={styles.footerCol_3}>
         <img src={logoImage} className={styles.col_3_logo} alt="" />
-        <p>Tờ báo uy tín số một Việt Nam</p>
+        <p>Trang thương mại điện tử số một Việt Nam</p>
       </div>
 
       <div className={styles.footerCol_4}>
