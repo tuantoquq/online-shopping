@@ -134,7 +134,7 @@ productController.updateProductFromDatabase = async (req, res) => {
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        let product = await Product.findOneAndUpdate({ _id: productId }, dataUpdate);
+        let product = await Product.findByIdAndUpdate(productId, dataUpdate)
         if (!product) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find product",
