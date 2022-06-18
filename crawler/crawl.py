@@ -67,7 +67,7 @@ urls = [
     'https://cf.shopee.vn/file/c3f3edfaa9f6dafc4825b77d8449999d_tn',
     'https://cf.shopee.vn/file/3fb459e3449905545701b418e8220334_tn',
     'https://cf.shopee.vn/file/36013311815c55d303b0e6c62d6a8139_tn',
-    '',
+    'http://www.hanoimoi.com.vn/Uploads/images/phananh/2020/12/31/xedap1.jpg',
     'https://cf.shopee.vn/file/ec14dd4fc238e676e43be2a911414d4d_tn'
 ]
 
