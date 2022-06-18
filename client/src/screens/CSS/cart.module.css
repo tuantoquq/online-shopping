@@ -1,5 +1,6 @@
 .all{
-    padding: 25px;
+    margin-right: 15%;
+    margin-left: 15%;
 }
 .space{
     white-space: nowrap;
@@ -10,4 +11,17 @@
     right: 170px;  
     border: 3px solid red;
     white-space: nowrap;
+}
+.displayMoney{
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid rgb(233, 223, 223) 1px;
+}
+.disTotalPrice{
+    margin-left: 80%;
+}
+.totalPrice{
+    position: absolute;
+    right: 5%;
+    color: red;
 }

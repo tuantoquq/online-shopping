@@ -33,6 +33,7 @@ const OrderProductSchema = new mongoose.Schema(
     },
     {
         versionKey: false,
+        collection: 'order_products',
     },
 );
 

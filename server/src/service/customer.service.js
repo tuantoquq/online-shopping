@@ -30,7 +30,12 @@ CustomerService.findCustomerByEmail = async (email) => {
 
 CustomerService.addCustomer = async (customer) => {
     await customer.save((err, customer) => {
-        if (err) throw Error;
+        if (err)
+            throw new CustomError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                apiStatus.DATABASE_ERROR,
+                `Error when save customer: ${err.message}`,
+            );
         else return customer;
     });
 };

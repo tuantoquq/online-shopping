@@ -1,13 +1,13 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import { DeliveryAddress } from '../model/deliveryAddress.js';
 
-const deliveryControler = {};
+const deliveryController = {};
 
-deliveryControler.insertToDatabase = async (req, res) => {
+deliveryController.insertToDatabase = async (req, res) => {
     try {
         const {
             customerId,
-            recevierName,
+            receiverName,
             phone,
             city,
             district,
@@ -31,7 +31,7 @@ deliveryControler.insertToDatabase = async (req, res) => {
         }
 
         address = new DeliveryAddress({
-            recevierName: recevierName,
+            receiverName: receiverName,
             phone: phone,
             city: city,
             district: district,
@@ -70,7 +70,7 @@ deliveryControler.insertToDatabase = async (req, res) => {
     }
 };
 
-deliveryControler.getDeliveryFromDatabase = async (req, res) => {
+deliveryController.getDeliveryFromDatabase = async (req, res) => {
     try {
         let deliveryId = res.query.deliveryId;
         let deliveryFind = await DeliveryAddress.findById(deliveryId);
@@ -91,7 +91,7 @@ deliveryControler.getDeliveryFromDatabase = async (req, res) => {
     }
 };
 
-deliveryControler.deleteDeliveryFromDatabse = async (req, res) => {
+deliveryController.deleteDeliveryFromDatabase = async (req, res) => {
     try {
         let delivery = await DeliveryAddress.findByIdAndRemove(req.query.id);
         if (delivery == null) {
@@ -101,7 +101,7 @@ deliveryControler.deleteDeliveryFromDatabse = async (req, res) => {
         }
 
         return req.status(httpStatus.OK).json({
-            message: 'Delte delivery done',
+            message: 'Delete delivery done',
         });
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -111,12 +111,12 @@ deliveryControler.deleteDeliveryFromDatabse = async (req, res) => {
     }
 };
 
-deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
+deliveryController.updateDeliveryFromDatabase = async (req, res) => {
     try {
-        let deliveryId = req.deliveryId;
+        let deliveryId = req.query.deliveryId;
         const dataUpdate = {};
         const listPros = [
-            'reciverName',
+            'receiverName',
             'phone',
             'city',
             'district',
@@ -127,16 +127,14 @@ deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let pro = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (req.body.hasOwnProperty(pro)) {
                 dataUpdate[pro] = req.body[pro];
             }
         }
         dataUpdate['updateAt'] = Date.now();
 
-        let delivery = await DeliveryAddress.findOneAndUpdate(
-            { _id: deliveryId },
-            dataUpdate,
-        );
+        let delivery = await DeliveryAddress.findByIdAndUpdate(deliveryId, dataUpdate);
 
         if (!delivery) {
             return res
@@ -154,4 +152,4 @@ deliveryControler.updateDeliveryFromDatabase = async (req, res) => {
     }
 };
 
-export default deliveryControler;
+export default deliveryController;

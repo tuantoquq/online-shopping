@@ -6,13 +6,8 @@ const OrderSchema = new mongoose.Schema({
         ref: 'Customer',
         required: true,
     },
-    shopId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Shop',
-        required: true,
-    },
     orderStatus: {
-        type: Number, // 0: created, 1: accepted, 2: finished,
+        type: Number, // 0: created, 1: accepted, 2: finished, -1: canceled
         required: true,
         default: 0,
     },
@@ -24,9 +19,8 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    deliveryAddressId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'DeliveryAddress',
+    deliveryAddress: {
+        type: String,
         required: true,
     },
     createdAt: {

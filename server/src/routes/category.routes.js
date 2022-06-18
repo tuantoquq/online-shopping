@@ -1,27 +1,27 @@
 import express from 'express';
-import categoryControler from '../controller/category.js';
+import categoryController from '../controller/category.js';
 import { verifyToken } from '../middleware/authJwt.js';
 
 const categoryRoutes = express.Router();
 categoryRoutes.post(
     '/api/v1/category/insert',
     verifyToken,
-    categoryControler.insertCategoryToDatabase,
+    categoryController.insertCategoryToDatabase,
 );
 categoryRoutes.get(
     '/api/v1/category/get',
     verifyToken,
-    categoryControler.getCategoryFromDatabase,
+    categoryController.getCategoryFromDatabase,
 );
 categoryRoutes.post(
     '/api/v1/category/delete',
     verifyToken,
-    categoryControler.deleteCategoryFromDatabse,
+    categoryController.deleteCategoryFromDatabase,
 );
 categoryRoutes.post(
     '/api/v1/category/update',
     verifyToken,
-    categoryControler.updateCategoryFromDatabase,
+    categoryController.updateCategoryFromDatabase,
 );
 
 export default categoryRoutes;

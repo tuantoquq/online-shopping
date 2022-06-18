@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import styles from './CSS/AdminSidebarCSS.module.scss';
@@ -34,11 +34,11 @@ function AdminSidebar({ select }) {
               <span>Thống kê truy cập </span>
             </Link>
             <Link
-              to="/admin"
+              to="/admin/statistic-revenue"
               className={clsx(styles.listItemButton, {
-                [styles.selectedItem]: selected === 8,
+                [styles.selectedItem]: selected === 'statistic-revenue',
               })}
-              onClick={() => setSelected(8)}
+              onClick={() => setSelected('statistic-revenue1')}
             >
               <span>Thống kê doanh thu </span>
             </Link>
@@ -65,11 +65,11 @@ function AdminSidebar({ select }) {
         <div>
           <div className={clsx(styles.listItem)}>
             <Link
-              to="/admin"
+              to="/admin/customers"
               className={clsx(styles.listItemButton, {
-                [styles.selectedItem]: selected === 1,
+                [styles.selectedItem]: selected === 'customers',
               })}
-              onClick={() => setSelected(1)}
+              onClick={() => setSelected('customers')}
             >
               <span>Danh sách khách hàng </span>
             </Link>
@@ -142,4 +142,4 @@ function AdminSidebar({ select }) {
   );
 }
 
-export default AdminSidebar;
+export default memo(AdminSidebar);

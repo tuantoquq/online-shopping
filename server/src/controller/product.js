@@ -3,13 +3,14 @@ import { Product, Category } from '../model/index.js';
 import bm25 from 'wink-bm25-text-search';
 import winkNLP from 'wink-nlp';
 import model from 'wink-eng-lite-web-model';
+import ProductService from '../service/product.service.js';
 
-const productControler = {};
+const productController = {};
 
-productControler.insertProductToDatabase = async (req, res) => {
+productController.insertProductToDatabase = async (req, res) => {
     try {
         const {
-            name,
+            productName,
             longDescription,
             shortDescription,
             price,
@@ -25,8 +26,8 @@ productControler.insertProductToDatabase = async (req, res) => {
         });
 
         try {
-            console.log(name)
-            console.log(shopId)
+            console.log(productName);
+            console.log(shopId);
             let product = await Product.findOne({
                 productName: productName,
                 shopId: shopId,
@@ -46,13 +47,13 @@ productControler.insertProductToDatabase = async (req, res) => {
                 count: count,
                 shopId: shopId,
                 sizes: sizes,
-                catergoryId: categorySave._id,
+                categoryId: categorySave._id,
             });
-            console.log(newProduct)
+            console.log(newProduct);
 
             const productSave = await newProduct.save();
             return res.status(httpStatus.CREATED).json({
-                data: productSave
+                data: productSave,
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
@@ -67,7 +68,7 @@ productControler.insertProductToDatabase = async (req, res) => {
     }
 };
 
-productControler.getProductFromDatabase = async (req, res) => {
+productController.getProductFromDatabase = async (req, res) => {
     try {
         let productId = req.query.productId;
         let productFind = await Product.findById(productId);
@@ -88,8 +89,9 @@ productControler.getProductFromDatabase = async (req, res) => {
     }
 };
 
-productControler.deleteProductFromDatabse = async (req, res) => {
+productController.deleteProductFromDatabase = async (req, res) => {
     try {
+        console.log(req.body.productId);
         let product = await Product.findByIdAndRemove(req.query.productId);
         if (product == null) {
             return res.status(httpStatus.NOT_FOUND).json({
@@ -108,7 +110,7 @@ productControler.deleteProductFromDatabse = async (req, res) => {
     }
 };
 
-productControler.updateProductFromDatabase = async (req, res) => {
+productController.updateProductFromDatabase = async (req, res) => {
     try {
         let productId = req.query.productId;
         var dataUpdate = {};
@@ -125,13 +127,14 @@ productControler.updateProductFromDatabase = async (req, res) => {
         ];
 
         for (let i = 0; i < listPros.length; i++) {
-            let pros = listPros[i]
+            let pros = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (req.body.hasOwnProperty(pros)) {
                 dataUpdate[pros] = req.body[pros];
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        let product = await Product.findOneAndUpdate({ _id: productId }, dataUpdate);
+        let product = await Product.findByIdAndUpdate(productId, dataUpdate);
         if (!product) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find product",
@@ -147,7 +150,7 @@ productControler.updateProductFromDatabase = async (req, res) => {
     }
 };
 
-productControler.search = async (req, res) => {
+productController.search = async (req, res) => {
     try {
         var engine = bm25();
         const nlp = winkNLP(model);
@@ -172,28 +175,121 @@ productControler.search = async (req, res) => {
         engine.definePrepTasks([prepTask]);
 
         for await (const product of Product.find()) {
-            let doc = JSON.parse(JSON.stringify({'productName': product.productName, 'shortDescription': product.shortDescription, tags: product._id}))
+            let doc = JSON.parse(
+                JSON.stringify({
+                    productName: product.productName,
+                    shortDescription: product.shortDescription,
+                    tags: product._id,
+                }),
+            );
             engine.addDoc(doc, product._id);
         }
         engine.consolidate();
 
-        const { query } = req.body
-        var result = engine.search(query)
-        let ids = []
-        for(let i = 0; i<result.length; i++){
-            ids.push(result[i][0])
+        const { query } = req.body;
+        var result = engine.search(query);
+        let ids = [];
+        for (let i = 0; i < result.length; i++) {
+            ids.push(result[i][0]);
         }
-        const documents = await Product.find({'_id': {$in: ids}})
+        const documents = await Product.find({ _id: { $in: ids } });
         return res.status(httpStatus.OK).json({
-            data: documents
-        })
-    } catch(e){
+            data: documents,
+        });
+    } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,
             message: e.message,
         });
     }
+};
 
-}
+productController.filter = async (req, res) => {
+    try {
+        let currentPage = req.body.currentPage ? req.body.currentPage : 1;
+        let maxItem = req.body.maxItem ? req.body.maxItem : 20;
+        let skip = (currentPage - 1) * maxItem;
 
-export default productControler;
+        let categoryName = req.body.categoryName;
+        let category = await Category.findOne({ categoryName: categoryName });
+        if (!category) {
+            return res.status(httpStatus.OK).json({
+                message: 'Category not found',
+            });
+        } else {
+            let sortBy = req.body.sortBy ? req.body.sortBy : null;
+            let products = null;
+            console.log(sortBy);
+            if (sortBy == null) {
+                products = await Product.find({ categoryId: category._id })
+                    .skip(skip)
+                    .limit(maxItem);
+            } else {
+                let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
+                if (sortBy == 'price') {
+                    products = await Product.find({})
+                        .sort({ price: orderBy })
+                        .skip(skip)
+                        .limit(maxItem);
+                } else if (sortBy == 'pho bien') {
+                    products = await Product.find({})
+                        .sort({ soldHistory: orderBy })
+                        .skip(skip)
+                        .limit(maxItem);
+                } else if (sortBy == 'moi nhat') {
+                    products = await Product.find({})
+                        .sort({ createAt: -1 })
+                        .skip(skip)
+                        .limit(maxItem);
+                }
+            }
+            if (!products) {
+                return res.status(httpStatus.OK).json({
+                    message: "We don't have any product belong to this category",
+                });
+            }
+            return res.status(httpStatus.OK).json({
+                data: products,
+            });
+        }
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: e.message,
+        });
+    }
+};
+
+productController.getTop6SellingProduct = async (req, res) => {
+    try {
+        let top6Products = await ProductService.getTop6Selling();
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'get top 6 selling product successfully',
+            data: top6Products,
+        });
+    } catch (err) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+productController.getTop30RecommendProducts = async (req, res) => {
+    try {
+        let top30RecommendProducts = await ProductService.getTop30RecommendProducts();
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'get top 30 recommend products successfully',
+            data: top30RecommendProducts,
+        });
+    } catch (err) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+export default productController;

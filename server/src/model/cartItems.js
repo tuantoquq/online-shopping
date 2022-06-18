@@ -34,6 +34,7 @@ const CartItemsSchema = new mongoose.Schema(
     },
     {
         versionKey: false,
+        collection: 'cart_items',
     },
 );
 

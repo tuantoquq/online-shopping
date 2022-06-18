@@ -10,7 +10,7 @@
 }
 .manageField {
   display: block;
-  height: 250px;
+  min-height: calc(30vh - 40px);
 }
 
 .listItem {

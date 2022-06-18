@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-// import mongooseFloat from 'mongoose-float'
-// import Float from mongooseFloat.loadType(mongoose)
 
 const ProductSchema = new mongoose.Schema({
     productName: {
@@ -19,7 +17,7 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    soldHistoty: {
+    soldHistory: {
         type: {},
         default: null,
         required: false,
