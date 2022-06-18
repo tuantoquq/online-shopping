@@ -31,10 +31,10 @@ function RootRoutes() {
 
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
+      <Route path="/admin/login" element={<Register role="admin" />} />
 
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
-      <Route path="/admin/register" element={<Register role="admin" />} />
       <Route path="/search" element={<Search searchTerm="" />} />
       <Route
         path="/user/infomation"

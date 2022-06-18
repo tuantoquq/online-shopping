@@ -3,7 +3,7 @@ import Footer from '../components/footer';
 import RegisterForm from '../components/registerForm';
 
 function Register(navigation, role) {
-  console.log(role);
+  //console.log(role);
   return (
     <div className="Register">
       <Header navigation={navigation} />

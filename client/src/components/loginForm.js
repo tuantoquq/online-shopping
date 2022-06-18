@@ -17,7 +17,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function LoginForm(props) {
   const role = props.role;
   //console.log(role);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const LOGIN_URL = `/api/v1/${role}/login`;
   const { setAuth } = useContext(AuthContext);
@@ -40,6 +40,25 @@ function LoginForm(props) {
   useEffect(() => {
     setErrMsg('');
   }, [user, pwd]);
+
+  useEffect(() => {
+    let r = '';
+    if (role === 'customer') {
+      r = 'khách hàng';
+    }
+    if (role === 'shopper') {
+      r = 'người bán hàng';
+    }
+    if (role === 'admin') {
+      r = 'admin';
+    }
+
+    setErrMsg(`Bạn đang đăng nhập với vai trò ${r}`);
+  }, [role]);
+
+  useEffect(() => {
+    if (errMsg !== '') setOpen(true);
+  }, [errMsg]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,9 +90,9 @@ function LoginForm(props) {
         setErrMsg('No Server Response');
         setOpen(true);
       } else if (err.response?.status === 400) {
-        setErrMsg('Missing Username or Password');
+        setErrMsg('Missing email or Password');
       } else if (err.response?.status === 401) {
-        setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
+        setErrMsg('Email hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
         setErrMsg('Đăng nhập thất bại.');
@@ -87,6 +106,22 @@ function LoginForm(props) {
     <h2>Return home </h2>
   ) : (
     <div className={clsx(styles.loginContainer, styles.row)}>
+      <div
+        ref={errRef}
+        className={
+          errMsg
+            ? clsx(styles.snackbar, styles.show)
+            : clsx(styles.snackbar, styles.offscreen)
+        }
+        aria-live="assertive"
+      >
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+            {errMsg}
+          </Alert>
+        </Snackbar>
+      </div>
+
       <div className={clsx(styles.loginLogo, styles.col)}>
         <div className={clsx(styles.imgContainer)}>
           <img className={styles.logo} src={logoImage} alt="logo" />
@@ -99,26 +134,6 @@ function LoginForm(props) {
       </div>
 
       <div className={clsx(styles.col, styles.loginForm)}>
-        <div
-          ref={errRef}
-          className={
-            errMsg
-              ? clsx(styles.snackbar, styles.show)
-              : clsx(styles.snackbar, styles.offscreen)
-          }
-          aria-live="assertive"
-        >
-          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="error"
-              sx={{ width: '100%' }}
-            >
-              {errMsg}
-            </Alert>
-          </Snackbar>
-        </div>
-
         <form className={clsx(styles.row)} onSubmit={handleSubmit}>
           <div className={clsx(styles.formTitle, styles.row)}>
             <h2 className={clsx(styles.title)}> Đăng nhập </h2>
@@ -131,13 +146,13 @@ function LoginForm(props) {
           </div>
           <div className={clsx(styles.formField, styles.row)}>
             <label
-              htmlFor="username"
+              htmlFor="email"
               className={clsx(styles.formLabel, styles.row)}
             >
-              Tên đăng nhập:
+              Email:
             </label>
             <input
-              id="username"
+              id="email"
               ref={userRef}
               autoComplete="off"
               onChange={(e) => setUser(e.target.value)}
