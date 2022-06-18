@@ -3,6 +3,7 @@ import { Product, Category } from '../model/index.js';
 import bm25 from 'wink-bm25-text-search';
 import winkNLP from 'wink-nlp';
 import model from 'wink-eng-lite-web-model';
+import ProductService from '../service/product.service.js';
 
 const productController = {};
 
@@ -250,6 +251,38 @@ productController.filter = async (req, res) => {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,
             message: e.message,
+        });
+    }
+}
+
+productController.getTop6SellingProduct = async (req, res) => {
+    try{
+        let top6Products = await ProductService.getTop6Selling();
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get top 6 selling product successfully",
+            data: top6Products
+        });
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
+
+productController.getTop30RecommendProducts = async (req, res) => {
+    try{
+        let top30RecommendProducts = await ProductService.getTop30RecommendProducts();
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get top 30 recommend products successfully",
+            data: top30RecommendProducts
+        });
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
         });
     }
 }

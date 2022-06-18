@@ -31,4 +31,14 @@ ProductService.deleteById = async (productId) => {
     return product;
 };
 
+ProductService.getTop6Selling = async () => {
+    let listTop6Product = await Product.find().sort({soldHistory: -1}).limit(6);
+    return listTop6Product;
+};
+
+ProductService.getTop30RecommendProducts = async () => {
+    let listProduct = await Product.find().sort({ratingCount: -1, ratingStar: -1}).limit(30);
+    return listProduct;
+}
+
 export default ProductService;
