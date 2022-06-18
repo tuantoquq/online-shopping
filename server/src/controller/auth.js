@@ -72,12 +72,9 @@ export const updateInforCustomer = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
-            // eslint-disable-next-line no-prototype-builtins
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
-            }
-            // eslint-disable-next-line no-prototype-builtins
-            else if (property == 'password' && req.body.hasOwnProperty('password')) {
+            } else if (property == 'password' && req.body.hasOwnProperty('password')) {
                 var customerCheck = await Customer.findById(shopId);
                 var passwordIsValid = compareSync(
                     req.body['password'],
@@ -328,12 +325,9 @@ export const updateInforShopper = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
-            // eslint-disable-next-line no-prototype-builtins
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
-            }
-            // eslint-disable-next-line no-prototype-builtins
-            else if (property == 'password' && req.body.hasOwnProperty('password')) {
+            } else if (property == 'password' && req.body.hasOwnProperty('password')) {
                 var shopper = await Shopper.findById(shopId);
                 var passwordIsValid = compareSync(req.body['password'], shopper.password);
                 if (!passwordIsValid) {

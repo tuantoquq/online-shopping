@@ -134,7 +134,7 @@ deliveryController.updateDeliveryFromDatabase = async (req, res) => {
         }
         dataUpdate['updateAt'] = Date.now();
 
-        let delivery = await DeliveryAddress.findByIdAndUpdate(deliveryId, dataUpdate)
+        let delivery = await DeliveryAddress.findByIdAndUpdate(deliveryId, dataUpdate);
 
         if (!delivery) {
             return res
