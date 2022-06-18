@@ -40,6 +40,13 @@ categoryController.insertCategoryToDatabase = async (req, res) => {
 
 categoryController.getCategoryFromDatabase = async (req, res) => {
     try {
+        console.log(req.query)
+        if(req.query.all == 'true'){
+            let categories = await Category.find({})
+            return res.status(httpStatus.OK).json({
+                data: categories
+            })
+        }
         let categoryId = req.query.categoryId;
         let categoryFind = await Category.findById(categoryId);
 
