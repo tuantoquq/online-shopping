@@ -1,0 +1,58 @@
+.Home{
+    background-color: rgb(245, 242, 242);
+}
+.content{
+    margin-right: 15%;
+    margin-left: 15%;
+    background-color: rgb(245, 242, 242);
+}
+.tdisplay{
+    font-size: 25px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid;
+    border-color: rgb(197, 180, 180);
+    padding: 10px;
+
+}
+.item{
+    margin-top: 10px;
+}
+.wraper{
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+.subwraper{
+    width: 300px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(233, 186, 186);
+}
+.avatarshop{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.nameshop{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.colInformation{
+    display: flex;
+    margin-top: 20px;
+}
+
+.colInformation_1{
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 300px;
+}
+
+.inforshop{
+    display: flex;
+    margin-left: 20px;
+}

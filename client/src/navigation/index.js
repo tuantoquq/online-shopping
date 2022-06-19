@@ -17,6 +17,8 @@ import StatisticOrder from '../screens/adminStatisticOrder';
 import AdminDashboard from '../screens/adminDashboard';
 import CustomersList from '../screens/customersList';
 import StatisticRevenue from '../screens/adminStatisticRevenue';
+import ShopHome from '../components/shopHome';
+import ProductManager from '../components/productManager';
 
 function RootRoutes() {
   return (
@@ -49,8 +51,10 @@ function RootRoutes() {
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
 
-      <Route path="/ProductTest:productId" element={<ProductInformation />} />
+      <Route path="/ProductTest" element={<ProductInformation />} />
+      <Route path="/testShop" element={<ShopHome />} />
       <Route path="/vay" element={<OrderUserManager />} />
+      <Route path="/ProductManager" element={<ProductInformation />} />
 
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin" element={<AdminDashboard />} />
