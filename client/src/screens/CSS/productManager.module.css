@@ -60,12 +60,24 @@
 
 .formRow{
     display: flex;
-    min-width: 20px;
+    min-width: 50px;
     padding-top: 5px;
 }
 
 .row{
     width: 100%;
+}
+
+.row1{
+    width: 20%;
+}
+
+.row11{
+    width: 41%;
+}
+
+.row2{
+    width: 60%;
 }
 
 .formLabel {
@@ -75,7 +87,7 @@
 
 .formInput {
     font-size: 1em;
-    width: 100%;
+    width: 80%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -84,8 +96,10 @@
 }
 
 .avatarInput {
+    padding-top: 1px;
+    padding-left: 80px;
     width: 20%;
-    display: flex;
+    display:  inline-block;
     justify-content: center;
     align-items: center;
 }
@@ -95,4 +109,8 @@
     padding-right: 10%;
     display: flex;
     justify-content: space-between;
+}
+
+.flex{
+    display: flex;
 }
