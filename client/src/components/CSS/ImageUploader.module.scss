@@ -1,0 +1,16 @@
+.avatarContainer {
+  width: 100%;
+  color: transparent;
+  outline: 1px solid #ccc;
+  &:hover {
+    outline: 1px solid #2196f3;
+  }
+  border-radius: 4px;
+}
+
+.avatarImg {
+  padding: 4px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border-radius: 4px;
+}

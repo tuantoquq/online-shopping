@@ -5,6 +5,7 @@ import isFuture from 'date-fns/isFuture';
 import clsx from 'clsx';
 import styles from './CSS/adminDashboardCSS.module.scss';
 import AdminSidebar from '../components/adminSidebar';
+import AdminHeader from '../components/adminHeader';
 import LineGraph from '../components/lineGraph';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
@@ -55,6 +56,7 @@ function AdminDashboard(props) {
 
   return (
     <div className={clsx(styles.pageContainer)}>
+      <AdminHeader />
       <AdminSidebar select="statstic_visits" />
       <div className={clsx(styles.pageBody)}>
         <div>

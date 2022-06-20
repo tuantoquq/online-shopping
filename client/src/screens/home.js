@@ -8,8 +8,8 @@ import RecommendProduct from '../components/recommendProduct';
 
 
 
-
 function Home({navigation}) {
+
     return (
       <div className={styles.Home}>
         <Header navigation={navigation}/>

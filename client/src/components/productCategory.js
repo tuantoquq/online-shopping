@@ -14,7 +14,7 @@ function ProductCategory(){
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}  style={{padding:'5px'}}>
               {Array.from(Array(24)).map((_, index) => (
                 <Grid item xs={2} sm={1} md={1} key={index}>
-                  <Card sx={{ maxWidth: 345 }}>
+                  <Card sx={{ maxWidth: 345,height:200 }}>
                     <CardActionArea>
                       <CardMedia
                         component="img"

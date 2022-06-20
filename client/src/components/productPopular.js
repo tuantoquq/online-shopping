@@ -8,31 +8,52 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 
 import { Grid } from '@mui/material';
-
+import axiosConfig from '../config/axios';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function ProductPopular(){
+    
+    const [productData,setProductData] = useState()
 
+    useEffect(()=>{
+      axiosConfig.get('/product/top-6-selling').then(res=>{
+        setProductData(res.data.data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+
+    },[])
     return (
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} style={{padding:'10px'}}>
-              {Array.from(Array(6)).map((_, index) => (
-                <Grid item xs={2} sm={1} md={2} key={index}>
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="100"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+              {productData?.map((product, index) => {
+                let product_name = product?.productName.split(' ').slice(0, 5).join(' ');
+                return (
+                  <Grid item xs={2} sm={1} md={2} key={index}>
+                    <Link to = {'/ProductTest'+ product?.productId} style={{'text-decoration': 'none'}}>
+                      <Card sx={{ maxWidth: 345 }}>
+                        <CardActionArea>
+                          <CardMedia
+                            component="img"
+                            height="100"
+                            image={product?.imageUrls[0]?.base_url}
+                            alt="green iguana"
+                          />
+                          <CardContent>
+                            <Typography gutterBottom variant="p" component="div">
+                              {product_name}
+                            </Typography>
+                            <Typography gutterBottom variant="p" component="div" color='red'>
+                              đ {product?.price}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Link>
+                  </Grid>
+                )
+              })}
           </Grid>
 
     )

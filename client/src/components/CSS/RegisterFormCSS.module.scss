@@ -9,6 +9,10 @@
   align-items: center;
 }
 
+.registerContainer.success {
+  background-color: #fff;
+}
+
 .registerForm {
   width: 100%;
   padding: 40px;
@@ -78,18 +82,12 @@
   align-items: center;
 }
 .imgContainer {
+  position: relative;
   width: 100%;
   border: solid #ccc 1px;
   border-radius: 4px;
 }
-.imgInput {
-  display: none;
-}
 
-.avatarImg {
-  width: calc(100% - 8px);
-  padding: 4px;
-}
 .btn {
   float: right;
   font-size: 16px;

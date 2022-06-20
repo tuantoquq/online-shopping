@@ -20,7 +20,7 @@ database = client['products']
 product_collections = database['Tiki']
 
 categories = {
-    'bach-hoa-online': 4384,
+    'bach-hoa-online': 4384, # 
     'nha-cua-doi-song': 1883,
     'dien-tu-dien-lanh': 4221,
     'thiet-bi-kts-phu-kien-so': 1815,
@@ -44,6 +44,32 @@ categories = {
     'the-thao-da-ngoai': 1975,
     'may-anh': 1801,
 }
+
+urls = [
+    'https://cf.shopee.vn/file/c432168ee788f903f1ea024487f2c889_tn',
+    'https://cf.shopee.vn/file/24b194a695ea59d384768b7b471d563f_tn',
+    'https://tietkiemdiennang.net/wp-content/uploads/2020/09/dien-lanh-la-gi-1-scaled.jpg',
+    'https://cf.shopee.vn/file/978b9e4cb61c611aaaf58664fae133c5_tn',
+    'https://cf.shopee.vn/file/31234a27876fb89cd522d7e3db1ba5ca_tn',
+    'https://cf.shopee.vn/file/ce8f8abc726cafff671d0e5311caa684_tn',
+    'https://cf.shopee.vn/file/ef1f336ecc6f97b790d5aae9916dcb72_tn',
+    'https://cf.shopee.vn/file/7abfbfee3c4844652b4a8245e473d857_tn',
+    'https://cf.shopee.vn/file/75ea42f9eca124e9cb3cde744c060e4d_tn',
+    'https://cf.shopee.vn/file/687f3967b7c2fe6a134a2c11894eea4b_tn',
+    'https://cf.shopee.vn/file/48630b7c76a7b62bc070c9e227097847_tn',
+    'https://cf.shopee.vn/file/fa6ada2555e8e51f369718bbc92ccc52_tn',
+    'https://cf.shopee.vn/file/74ca517e1fa74dc4d974e5d03c3139de_tn',
+    'https://cf.shopee.vn/file/18fd9d878ad946db2f1bf4e33760c86f_tn',
+    'https://product.hstatic.net/200000117085/product/den_trung6526_1_14bd1eb33e1f44d99375d65e1e87dca5_master.jpg',
+    'https://cf.shopee.vn/file/8e71245b9659ea72c1b4e737be5cf42e_tn',
+    'https://cf.shopee.vn/file/86c294aae72ca1db5f541790f7796260_tn',
+    'https://static.tapchitaichinh.vn/800x450/images/upload/tranhuyentrang/2016_10_10/chuyen-phat-nhanh-di-binh-duong_SVAV.jpg',
+    'https://cf.shopee.vn/file/c3f3edfaa9f6dafc4825b77d8449999d_tn',
+    'https://cf.shopee.vn/file/3fb459e3449905545701b418e8220334_tn',
+    'https://cf.shopee.vn/file/36013311815c55d303b0e6c62d6a8139_tn',
+    'http://www.hanoimoi.com.vn/Uploads/images/phananh/2020/12/31/xedap1.jpg',
+    'https://cf.shopee.vn/file/ec14dd4fc238e676e43be2a911414d4d_tn'
+]
 
 api_get_id_product = 'https://tiki.vn/api/personalish/v1/blocks/listings?limit=48&include=advertisement&aggregations=2&trackity_id=3b437fb6-697c-366d-6f2b-9251936c2036&category={}&page={}&urlKey={}'
 

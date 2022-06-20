@@ -47,5 +47,5 @@ const DeliveryAddressSchema = new mongoose.Schema(
     },
 );
 
-const DeliveryAddress = mongoose.Model('DeliveryAddress', DeliveryAddressSchema);
+const DeliveryAddress = mongoose.model('DeliveryAddress', DeliveryAddressSchema);
 export default DeliveryAddress;

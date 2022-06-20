@@ -10,7 +10,6 @@ categoryRoutes.post(
 );
 categoryRoutes.get(
     '/api/v1/category/get',
-    verifyToken,
     categoryController.getCategoryFromDatabase,
 );
 categoryRoutes.post(

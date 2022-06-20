@@ -58,7 +58,7 @@ function Header() {
     <div className={styles.Header}>
       <div className={styles.toolBar}>
         <label className={styles.namePaper} onClick={() => navigatePath('/')}>
-          Time News
+          Tipi Shop
         </label>
         <label
           className={`${styles.textColor} ${styles.textDate}`}

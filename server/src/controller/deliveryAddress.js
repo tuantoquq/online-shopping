@@ -113,7 +113,7 @@ deliveryController.deleteDeliveryFromDatabase = async (req, res) => {
 
 deliveryController.updateDeliveryFromDatabase = async (req, res) => {
     try {
-        let deliveryId = req.deliveryId;
+        let deliveryId = req.query.deliveryId;
         const dataUpdate = {};
         const listPros = [
             'receiverName',
@@ -134,10 +134,7 @@ deliveryController.updateDeliveryFromDatabase = async (req, res) => {
         }
         dataUpdate['updateAt'] = Date.now();
 
-        let delivery = await DeliveryAddress.findOneAndUpdate(
-            { _id: deliveryId },
-            dataUpdate,
-        );
+        let delivery = await DeliveryAddress.findByIdAndUpdate(deliveryId, dataUpdate);
 
         if (!delivery) {
             return res
