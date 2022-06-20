@@ -179,106 +179,99 @@ function ProductManager(products) {
             </div>
 
             <div className={stylesProductManger.row}>
-              { openInforProduct && (
-                <div className={clsx(stylesProductManger.formRow)}>
-                  <label
-                    htmlFor="id"
-                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
-                  >
-                    ID:
-                  </label>
-                  <input
-                    id="id"
-                    name="id"
-                    value={id}
-                    type="text"
-                    className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                    required
-                    readOnly
-                  />
+                <div className={stylesProductManger.flex}>
+                  <div className={stylesProductManger.row2}>
+                    { openInforProduct && (
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="id"
+                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                      >
+                        ID:
+                      </label>
+                      <input
+                        id="id"
+                        name="id"
+                        value={id}
+                        type="text"
+                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        required
+                        readOnly
+                      />
+                    </div>
+                    )}
+                  
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="name"
+                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                      >
+                        Tên sản phẩm:
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        type="text"
+                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        placeholder="Tên sản phẩm..."
+                        required
+                      />
+                    </div>
+
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="count"
+                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                      >
+                        Số lượng:
+                      </label>
+                      <input
+                        id="count"
+                        name="count"
+                        type="number"
+                        min="1"
+                        value={count}
+                        onChange={(e) => setCount(e.target.value)}
+                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        required
+                      />
+                    </div>
+
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="cost"
+                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                      >
+                        Giá tiền:
+                      </label>
+                      <input
+                        id="cost"
+                        name="cost"
+                        type="number"
+                        min="0"
+                        value={cost}
+                        onChange={(e) => setCost(e.target.value)}
+                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className={clsx(stylesProductManger.avatarInput, stylesProductManger.col)}>
+                    <ImageUploader
+                      avatarImg={avatarImg}
+                      onAvatarChange={setAvatarImg}
+                    />
+                  </div>
+
                 </div>
-              )}
               
               <div className={clsx(stylesProductManger.formRow)}>
                 <label
-                  htmlFor="name"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
-                >
-                  Tên sản phẩm:
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  placeholder="Tên sản phẩm..."
-                  required
-                />
-              </div>
-
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
-                  htmlFor="detail"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
-                >
-                  Mô tả:
-                </label>
-                <input
-                  id="detail"
-                  name="detail"
-                  type="detail"
-                  value={detail}
-                  onChange={(e) => setDetail(e.target.value)}
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  placeholder="Mô tả..."
-                  required
-                />
-              </div>
-
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
-                  htmlFor="count"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
-                >
-                  Số lượng:
-                </label>
-                <input
-                  id="count"
-                  name="count"
-                  type="number"
-                  min="1"
-                  value={count}
-                  onChange={(e) => setCount(e.target.value)}
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  required
-                />
-              </div>
-
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
-                  htmlFor="cost"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
-                >
-                  Giá tiền:
-                </label>
-                <input
-                  id="cost"
-                  name="cost"
-                  type="number"
-                  min="0"
-                  value={cost}
-                  onChange={(e) => setCost(e.target.value)}
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  required
-                />
-              </div>
-
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
                   htmlFor="type"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
+                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
                 >
                   Loại sản phẩm:
                 </label>
@@ -298,7 +291,7 @@ function ProductManager(products) {
                   <div className={clsx(stylesProductManger.formRow)}>
                     <label
                       htmlFor="rating"
-                      className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
+                      className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
                     >
                       Đánh giá:
                     </label>
@@ -316,7 +309,7 @@ function ProductManager(products) {
                   <div className={clsx(stylesProductManger.formRow)}>
                   <label
                     htmlFor="solded"
-                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row)}
+                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
                   >
                     Đã bán:
                   </label>
@@ -333,11 +326,23 @@ function ProductManager(products) {
                 </div>
               )}
 
-              <div className={clsx(stylesProductManger.avatarInput, stylesProductManger.col)}>
-                <ImageUploader
-                  avatarImg={avatarImg}
-                  onAvatarChange={setAvatarImg}
-                />
+              <div className={clsx(stylesProductManger.formRow)}>
+                  <label
+                    htmlFor="detail"
+                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
+                  >
+                    Mô tả:
+                  </label>
+                  <input
+                    id="detail"
+                    name="detail"
+                    type="detail"
+                    value={detail}
+                    onChange={(e) => setDetail(e.target.value)}
+                    className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                    placeholder="Mô tả..."
+                    required
+                  />
               </div>
             </div>
 
