@@ -8,10 +8,7 @@ categoryRoutes.post(
     verifyToken,
     categoryController.insertCategoryToDatabase,
 );
-categoryRoutes.get(
-    '/api/v1/category/get',
-    categoryController.getCategoryFromDatabase,
-);
+categoryRoutes.get('/api/v1/category/get', categoryController.getCategoryFromDatabase);
 categoryRoutes.post(
     '/api/v1/category/delete',
     verifyToken,

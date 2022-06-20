@@ -40,22 +40,26 @@ categoryController.insertCategoryToDatabase = async (req, res) => {
 
 categoryController.getCategoryFromDatabase = async (req, res) => {
     try {
-        console.log(req.query)
-        if(req.query.all == 'true'){
-            let categories = await Category.find({})
+        if (req.query.all == 'true') {
+            let categories = await Category.find({});
             return res.status(httpStatus.OK).json({
-                data: categories
-            })
+                status: apiStatus.SUCCESS,
+                message: 'get all category successfully',
+                data: categories,
+            });
         }
         let categoryId = req.query.categoryId;
         let categoryFind = await Category.findById(categoryId);
 
         if (categoryFind == null) {
             return res.status(httpStatus.NOT_FOUND).json({
+                status: apiStatus.INVALID_PARAM,
                 message: 'Category not found',
             });
         }
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: 'get category successfully',
             data: categoryFind,
         });
     } catch (e) {
