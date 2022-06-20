@@ -54,7 +54,7 @@ function RootRoutes() {
       <Route path="/ProductTest" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
       <Route path="/vay" element={<OrderUserManager />} />
-      <Route path="/ProductManager" element={<ProductInformation />} />
+      <Route path="/ProductManager" element={<ProductManager />} />
 
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin" element={<AdminDashboard />} />
