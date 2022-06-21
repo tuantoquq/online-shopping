@@ -99,3 +99,20 @@ export const deleteCartItems = async (req, res) => {
         });
     }
 };
+
+export const getAllCartItemsByCustomerId = async (req, res) => {
+    try{
+        const customerId = req.userId;
+        let listCartItems = await CartItemsService.getAllCartItemsByCustomerId(customerId);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get list cart items by customer successfully!",
+            data: listCartItems
+        })
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}

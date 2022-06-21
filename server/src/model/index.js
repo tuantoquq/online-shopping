@@ -4,5 +4,6 @@ import Customer from './customer.js';
 import Category from './category.js';
 import Product from './product.js';
 import Comment from './comment.js';
+import DeliveryAddress from './deliveryAddress.js';
 
-export { Admin, Shopper, Customer, Category, Product, Comment };
+export { Admin, Shopper, Customer, Category, Product, Comment, DeliveryAddress };
