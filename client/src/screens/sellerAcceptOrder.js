@@ -18,9 +18,9 @@ function AcceptOrder({navigation}) {
             <div className={styles.tab2} >
               <Search/>
               <OrderProduct type = {0}/>
-              <OrderProduct type = {1}/>
+              {/* <OrderProduct type = {1}/>
               <OrderProduct type = {2}/>
-              <OrderProduct type = {2}/>
+              <OrderProduct type = {2}/> */}
               
             </div>
         </div>
