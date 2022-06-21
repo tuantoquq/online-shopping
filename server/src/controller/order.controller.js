@@ -32,9 +32,9 @@ export const addOrder = async (req, res) => {
 
         //create order products
         let listOrderProduct = [];
-        listCartItems.map(async (cartItemsId) => {
+        for(let i = 0; i< listCartItems.length; i++){
             //get cartItems from id
-            let cartItems = await CartItemsService.findCartItemsById(cartItemsId, userId);
+            let cartItems = await CartItemsService.findCartItemsById(listCartItems[i], userId);
 
             //get current product
             let product = await ProductService.findProductById(cartItems.productId);
@@ -43,16 +43,23 @@ export const addOrder = async (req, res) => {
             let newOrderProduct = new OrderProduct({
                 orderId: order._id,
                 productId: product._id,
-                productName: product.name,
+                productName: product.productName,
                 size: cartItems.size,
                 count: cartItems.count,
                 currentPrice: product.price,
-                productImageUrl: product.imageUrls[0],
+                productImageUrl: product.imageUrls[0].base_url,
             });
 
             let orderProduct = await OrderProductService.addOrderProduct(newOrderProduct);
             listOrderProduct.push(orderProduct);
+        }
+        console.log(listOrderProduct);
+
+        //delete cart items from carts
+        listCartItems.map(async (cartItemsId) => {
+            await CartItemsService.deleteCartItemsById(cartItemsId);
         });
+
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'order successfully',
@@ -74,3 +81,28 @@ export const addOrder = async (req, res) => {
         });
     }
 };
+
+export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
+    try{
+        let status = req.query.status;
+        let customerId = req.userId;
+        let listOrder;
+        if(status != null && status != undefined  && status != ""){
+            listOrder = await OrderService.getListOrderByCustomerAndStatus(customerId, status);
+        }else {
+            console.log("aaaa");
+            listOrder = await OrderService.getListOrderByCustomer(customerId);
+        }
+
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get list order successfully",
+            data: listOrder
+        });
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
