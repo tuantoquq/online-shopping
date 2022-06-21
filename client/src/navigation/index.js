@@ -51,9 +51,9 @@ function RootRoutes() {
       />
       <Route path="/search" element={<Search />} />
       <Route path="/user" element={<UserInformation />} />
-      <Route path="/orderhistory" element={<OrderHistory />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout/>} />
+      <Route path="/user/orderhistory" element={<OrderHistory />} />
+      <Route path="/user/cart" element={<Cart />} />
+      <Route path="/user/checkout" element={<Checkout/>} />
 
       <Route path="/ProductTest/:teamId" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
