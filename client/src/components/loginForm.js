@@ -1,33 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import clsx from 'clsx';
 import styles from './CSS/LoginFormCSS.module.scss';
 import logoImage from '../assets/logo-design.png';
-import AuthContext from './authProvider';
 
 import axios from '../config/axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+
+import TokenService from '../service/TokenService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function LoginForm(props) {
+  const navigate = useNavigate();
   const role = props.role;
+  //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
   const [open, setOpen] = useState(false);
 
-  const LOGIN_URL = `/api/v1/${role}/login`;
-  const { setAuth } = useContext(AuthContext);
+  const LOGIN_URL = `/${role}/login`;
+  const [accessToken, setAccessToken] = useState('');
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(() => {
+    return window.localStorage.token !== '';
+  });
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -36,6 +43,25 @@ function LoginForm(props) {
 
     setOpen(false);
   };
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [user, pwd]);
+
+  useEffect(() => {
+    TokenService.setLocalAccessToken(accessToken);
+    console.log(accessToken);
+    //setAuth({ user, pwd, role, accessToken });
+    if (accessToken) {
+      setSuccess(true);
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (success === true) {
+      navigate('/');
+    }
+  }, [success]);
 
   useEffect(() => {
     setErrMsg('');
@@ -79,11 +105,13 @@ function LoginForm(props) {
         setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
-        const accessToken = response?.data?.token;
-        setAuth({ user, pwd, role, accessToken });
+        const token = response?.data?.data?.token;
+        setAccessToken(token);
+        //setAuth({ user, pwd, role, accessToken });
+        //console.log(accessToken);
         setUser('');
         setPwd('');
-        setSuccess(true);
+        //setSuccess(true);
       }
     } catch (err) {
       if (!err?.response) {
@@ -103,7 +131,7 @@ function LoginForm(props) {
   };
 
   return success ? (
-    <h2>Return home </h2>
+    <div></div>
   ) : (
     <div className={clsx(styles.loginContainer, styles.row)}>
       <div
