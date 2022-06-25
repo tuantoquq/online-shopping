@@ -30,7 +30,7 @@ function RecommendProduct(){
                 return (
                   <Grid item xs={2} sm={1} md={2} key={index}>
                     <Link
-                      to={"/ProductTest/" + product?.productId}
+                      to={"/ProductTest/" + product?._id}
                       style={{ "text-decoration": "none" }}
                     >
                       <Card sx={{ maxWidth: 345, height: 200 }}>
