@@ -33,7 +33,7 @@ function LoginForm(props) {
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(() => {
-    return window.localStorage.token !== '';
+    return window.localStorage[`${role}_access_token`] !== '';
   });
 
   const handleClose = (event, reason) => {
@@ -49,7 +49,7 @@ function LoginForm(props) {
   }, [user, pwd]);
 
   useEffect(() => {
-    TokenService.setLocalAccessToken(accessToken);
+    TokenService.setLocalAccessToken(role, accessToken);
     console.log(accessToken);
     //setAuth({ user, pwd, role, accessToken });
     if (accessToken) {
@@ -131,7 +131,7 @@ function LoginForm(props) {
   };
 
   return success ? (
-    <div></div>
+    <div className={clsx(styles.loginContainer, styles.row)}></div>
   ) : (
     <div className={clsx(styles.loginContainer, styles.row)}>
       <div
