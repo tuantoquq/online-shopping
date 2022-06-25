@@ -13,9 +13,11 @@ import commentRoutes from './routes/comment.routes.js';
 import uploadFileRoutes from './routes/uploadFile.routes.js';
 import deliverAddressRoutes from './routes/deliveryAddress.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import morgan from 'morgan';
 
 const app = express();
 app.use(cors());
+app.use(morgan('combined'));
 
 app.use(express.json());
 
