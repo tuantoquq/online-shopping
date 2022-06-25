@@ -5,8 +5,8 @@ import OrderProduct from '../model/orderProduct.js';
 
 const OrderProductService = {};
 
-OrderProductService.addOrderProduct = async (orderProduct) => {
-    await orderProduct.save((err, orderProduct) => {
+OrderProductService.addOrderProduct = async (orderProductRequest) => {
+    await orderProductRequest.save((err, orderProduct) => {
         if (err)
             throw new CustomError(
                 httpStatus.INTERNAL_SERVER_ERROR,
@@ -15,6 +15,7 @@ OrderProductService.addOrderProduct = async (orderProduct) => {
             );
         else return orderProduct;
     });
+    return orderProductRequest;
 };
 
 OrderProductService.findById = async (orderProductId) => {
