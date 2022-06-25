@@ -257,6 +257,7 @@ function Search() {
   }
   function getProductIdList(filter, page) {
     //request
+
     function randomId() {
       return Math.floor(Math.random() * 12 + 1);
     }

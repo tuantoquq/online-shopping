@@ -29,8 +29,11 @@ function RecommendProduct(){
                 let product_name = product?.productName.split(' ').slice(0, 5).join(' ');
                 return (
                   <Grid item xs={2} sm={1} md={2} key={index}>
-                    <Link to = {'/ProductTest'+ product?.productId} style={{'text-decoration': 'none'}}>
-                      <Card sx={{ maxWidth: 345 ,height:200}}>
+                    <Link
+                      to={"/ProductTest/" + product?.productId}
+                      style={{ "text-decoration": "none" }}
+                    >
+                      <Card sx={{ maxWidth: 345, height: 200 }}>
                         <CardActionArea>
                           <CardMedia
                             component="img"
@@ -39,10 +42,19 @@ function RecommendProduct(){
                             alt="green iguana"
                           />
                           <CardContent>
-                            <Typography gutterBottom variant="p" component="div">
+                            <Typography
+                              gutterBottom
+                              variant="p"
+                              component="div"
+                            >
                               {product_name}
                             </Typography>
-                            <Typography gutterBottom variant="p" component="div" color='red'>
+                            <Typography
+                              gutterBottom
+                              variant="p"
+                              component="div"
+                              color="red"
+                            >
                               đ {product?.price}
                             </Typography>
                           </CardContent>
@@ -50,7 +62,7 @@ function RecommendProduct(){
                       </Card>
                     </Link>
                   </Grid>
-                )
+                );
               })}
         </Grid>
 
