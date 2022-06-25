@@ -10,8 +10,24 @@ import { Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
 import ButtonChangeValue from './buttonChangeValue';
 import UserRating from './userRating';
+import { useEffect, useState } from 'react';
+import axiosConfig from '../config/axios';
 
 function ProductInformation({navigation}) {
+    const [productData,setProductData] = useState()
+    let s = window.location.href.split('/')
+    useEffect(()=>{
+      axiosConfig.get('/product/get?productId=62b72242f88c3936a9b1dd7f').then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+        console.log("loi")
+      })
+
+    },[])
+
+
     return (
       <div className={styles.Home}>
         <Header navigation={navigation}/>
