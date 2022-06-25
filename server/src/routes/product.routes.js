@@ -10,7 +10,6 @@ productRoutes.post(
 );
 productRoutes.get(
     '/api/v1/product/get',
-    verifyToken,
     productController.getProductFromDatabase,
 );
 productRoutes.post(
