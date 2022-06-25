@@ -35,6 +35,7 @@ productController.insertProductToDatabase = async (req, res) => {
             const categorySave = await category.save();
             if (product) {
                 return res.status(httpStatus.BAD_REQUEST).json({
+                    status: apiStatus.INVALID_PARAM,
                     message: 'Product has been exist in this Shop',
                 });
             }
@@ -53,10 +54,13 @@ productController.insertProductToDatabase = async (req, res) => {
 
             const productSave = await newProduct.save();
             return res.status(httpStatus.CREATED).json({
+                status: apiStatus.SUCCESS,
+                message: "add product successfully!",
                 data: productSave,
             });
         } catch (e) {
             return res.status(httpStatus.BAD_REQUEST).json({
+                status: apiStatus.OTHER_ERROR,
                 message: e.message,
             });
         }
@@ -75,10 +79,13 @@ productController.getProductFromDatabase = async (req, res) => {
 
         if (productFind == null) {
             return res.status(httpStatus.NOT_FOUND).json({
+                status: apiStatus.INVALID_PARAM,
                 message: 'Product not found',
             });
         }
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "get products successfully",
             data: productFind,
         });
     } catch (e) {
@@ -95,11 +102,13 @@ productController.deleteProductFromDatabase = async (req, res) => {
         let product = await Product.findByIdAndRemove(req.query.productId);
         if (product == null) {
             return res.status(httpStatus.NOT_FOUND).json({
+                status: apiStatus.INVALID_PARAM,
                 message: "Can't find product",
             });
         }
 
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
             message: 'Delete product done',
         });
     } catch (e) {
@@ -137,10 +146,13 @@ productController.updateProductFromDatabase = async (req, res) => {
         let product = await Product.findByIdAndUpdate(productId, dataUpdate);
         if (!product) {
             return res.status(httpStatus.NOT_FOUND).json({
+                status: apiStatus.INVALID_PARAM,
                 message: "Can't find product",
             });
         }
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "update product successfully",
             data: product,
         });
     } catch (e) {
@@ -194,6 +206,8 @@ productController.search = async (req, res) => {
         }
         const documents = await Product.find({ _id: { $in: ids } });
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "search product successfully",
             data: documents,
         });
     } catch (e) {
@@ -214,6 +228,7 @@ productController.filter = async (req, res) => {
         let category = await Category.findOne({ categoryName: categoryName });
         if (!category) {
             return res.status(httpStatus.OK).json({
+                status: apiStatus.INVALID_PARAM,
                 message: 'Category not found',
             });
         } else {
@@ -245,10 +260,13 @@ productController.filter = async (req, res) => {
             }
             if (!products) {
                 return res.status(httpStatus.OK).json({
+                    status: apiStatus.INVALID_PARAM,
                     message: "We don't have any product belong to this category",
                 });
             }
             return res.status(httpStatus.OK).json({
+                status: apiStatus.SUCCESS,
+                message: "filter products successfully",
                 data: products,
             });
         }
