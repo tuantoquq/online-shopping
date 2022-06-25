@@ -13,54 +13,19 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import stylesProduct from '../screens/CSS/productInfor.module.css';
 import imageTest from '../assets/testproduct.jpg'
+import { Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import clsx from 'clsx';
+import ButtonChangeValue from './buttonChangeValue';
+import UserRating from './userRating';
+import LinkToProduct from './inforProduct';
 
-function ButtonOrder({post, st}){
-    return (
-        <div >
-            {post.map((p) => {
-                return(
-                    <div >
-                        {p.status === st && (
-                            <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>           
-                                <Button variant="outlined"> {p.button1} </Button>
-                                {p.button2 === "Danh gia shop" && (
-                                    <Link to="/TestShop" >
-                                        <Button variant="outlined"> {p.button2} </Button>
-                                    </Link>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )
-            })
-        }
-        </div>
-      );
-
-}
-
-function OrderUserItem({productOrder}){
-    const posts = [
-        {status: "Cho lay hang", button1: "Huy don hang", button2: ""},
-        {status: "Da xac nhan", button1: "Huy don hang", button2: ""},
-        {status: "Dang giao", button1: "Huy don hang", button2: ""},
-        {status: "Da giao", button1: "Mua Lai", button2: "Danh gia shop"},
-        {status: "Da huy", button1: "Mua Lai", button2: ""}
-      ];
+function ProductManagerItem({productItem}){
     return(
         <div className={styleOrderUser.Home}>
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>  
-                        <Link to='/testShop' >
-                            <h2>
-                                Shop Mo Hinh
-                            </h2>
-                        </Link> 
-                        <h3 className={styleOrderUser.statusTitle}> {productOrder.status} </h3>
+                        <h3 className={styleOrderUser.statusTitle}> {productItem.id} </h3>
                     </div>
                     <div className={styleOrderUser.productImage}>
                         <Link to="/ProductTest">
@@ -79,25 +44,17 @@ function OrderUserItem({productOrder}){
                         
                         <div className={styleOrderUser.productTitle}>
                             <h5> 
-                                {productOrder.name}
+                                {productItem.name}
                             </h5>
-                            <h5 className={styleOrderUser.item}> Loai hang: {productOrder.type} </h5>
-                            <h5 className={styleOrderUser.item}> So luong: {productOrder.count} </h5>
+                            <h5 className={styleOrderUser.item}> Loai hang: {productItem.type} </h5>
+                            <h5 className={styleOrderUser.item}> So luong: {productItem.count} </h5>
                         </div>
                         <div className={styleOrderUser.moneyItem}>
-                            {productOrder.cost}
+                            {productItem.cost}
                         </div>
                         <div className={styleOrderUser.footFake}>
                             <p>  </p>
                         </div>
-                    </div>
-                    <div className={styleOrderUser.button}>
-                        <h2>
-                            Tong tien: {productOrder.cost * productOrder.count}
-                        </h2>
-                    </div>
-                    <div className={styleOrderUser.button}>
-                        <ButtonOrder post = {posts} st = {productOrder.status} />                
                     </div>
                     <div className={stylesProduct.footFake}>
                             <p>  </p>
@@ -108,4 +65,4 @@ function OrderUserItem({productOrder}){
     );
 }
 
-export default OrderUserItem;
+export default ProductManagerItem;

@@ -1,0 +1,116 @@
+.tdisplay{
+    font-size: 25px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    margin-left: 10px;
+    border-bottom: 1px solid;
+    border-color: rgb(0, 0, 0);
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: #fff;
+    border: '2px solid #000';
+    box-shadow: 24;
+    padding: 4px;
+}
+
+.deletebox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    background-color: #fff;
+    border: '2px solid #000';
+    box-shadow: 24;
+    padding: 4px;
+}
+
+.formdelete{
+    font-size: 20px;
+    color: rgb(45, 45, 255);
+    text-align: center;
+}
+
+.tdisplaybox{
+    font-size: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    margin-left: 10px;
+    border-bottom: 10px solid;
+    border-color: rgb(121, 5, 5);
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+.wraper{
+    margin-top: -30px;
+    background-color: rgb(246, 240, 255);
+    text-align: center;
+    font-size: 30px;
+}
+
+.formRow{
+    display: flex;
+    min-width: 50px;
+    padding-top: 5px;
+}
+
+.row{
+    width: 100%;
+}
+
+.row1{
+    width: 20%;
+}
+
+.row11{
+    width: 41%;
+}
+
+.row2{
+    width: 60%;
+}
+
+.formLabel {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+.formInput {
+    font-size: 1em;
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.avatarInput {
+    padding-top: 1px;
+    padding-left: 80px;
+    width: 20%;
+    display:  inline-block;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    padding-left: 10%;
+    padding-right: 10%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex{
+    display: flex;
+}

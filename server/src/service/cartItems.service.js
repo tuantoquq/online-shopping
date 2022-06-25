@@ -22,7 +22,14 @@ CartItemsService.getAllCartItemsByCustomerId = async (customerId) => {
 };
 
 CartItemsService.deleteCartItemsById = async (cartItemsId) => {
-    let cartItems = await CartItems.deleteOne({ _id: cartItemsId });
+    let cartItems = await CartItems.findByIdAndDelete(cartItemsId);
+    if(!cartItems){
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.DATABASE_ERROR,
+            `CartItems not found with id: ${cartItemsId}`,
+        );
+    }
     return cartItems;
 };
 
