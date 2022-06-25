@@ -44,24 +44,24 @@ function ShopHome({navigation}) {
             <div>
                 <div className={styleShop.colInformation}>
                     <div className={styleShop.colInformation_1}>
-                        <h3>San pham: 300</h3>
+                        <h3>Sản phẩm: 300</h3>
                     </div>
                     <div>
-                        <h3>Danh gia: 4.5 (189 danh gia)</h3>
+                        <h3>Đánh giá: 4.5 (189 danh gia)</h3>
                     </div>
                 </div>
                 <div className={styleShop.colInformation}>
                     <div className={styleShop.colInformation_1}>
-                        <h3>Gui tu: Ha Noi</h3>
+                        <h3>Địa chỉ: Ha Noi</h3>
                     </div>
                     <div>
-                        <h3>Da tham gia: 4 nam truoc</h3>
+                        <h3>Đã tham gia: 4 nam truoc</h3>
                     </div>
                 </div>
             </div>
           </div>
           <div className={styles.wraper}>
-            <p className={styles.tdisplay}> Thong tin shop </p>
+            <p className={styles.tdisplay}> Thông tin shop </p>
             <div className={styleShop.inforshop}>
               <div>
                 <div>Yuki có rất nhiều các mặt hàng Anime/Manga: mô hình chính hãng, móc khóa, nhồi bông, postcard, standee, sổ tay,...</div>
@@ -81,7 +81,7 @@ function ShopHome({navigation}) {
           </div>     
 
           <div className={styles.wraper}>
-            <p className={styles.tdisplay}>Tat ca san pham</p>
+            <p className={styles.tdisplay}>Tất cả sản phẩm</p>
             <ProductCategory/>
           </div>
 
