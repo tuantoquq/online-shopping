@@ -1,0 +1,150 @@
+.row {
+    width: 100%;
+  }
+  
+  .registerContainer {
+    display: flex;
+    min-height: 500px;
+    background-color: #2196f3;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .registerContainerPassWorld {
+    display: flex;
+    min-width: 924px;
+    background-color: #2196f3;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .registerContainer.success {
+    background-color: #fff;
+  }
+  
+  .registerForm {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    border: solid #ccc 2px;
+    border-radius: 6px;
+    background-color: #fff;
+    align-items: center;
+  }
+
+  .formTitle {
+    margin-bottom: 12px;
+  }
+  
+  .formTitle .title {
+    font-size: 2em;
+  }
+  
+  .formLeft {
+    width: 75%;
+  }
+  .formRow {
+    display: flex;
+    justify-content: space-between;
+  }
+  .formField {
+    width: 30%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  
+  /* Style inputs, select elements and textareas */
+  .formInput {
+    font-size: 1em;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+  }
+  
+  /* Style the label to display next to the inputs */
+  .formLabel {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+  }
+  
+  .formFooter {
+    align-items: baseline;
+  }
+  
+  .formGender {
+    justify-content: space-around;
+    align-items: center;
+  }
+  .genderSelection {
+    padding-left: 8px;
+  }
+  
+  .avatarInput {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .imgContainer {
+    position: relative;
+    width: 100%;
+    border: solid #ccc 1px;
+    border-radius: 4px;
+  }
+  
+  .btn {
+    float: right;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    border: none;
+    /* Remove borders */
+    border-radius: 4px;
+    color: white;
+    /* Add a text color */
+    padding: 14px 28px;
+    /* Add some padding */
+    cursor: pointer;
+    /* Add a pointer cursor on mouse-over */
+  }
+  
+  .btn.primary {
+    background-color: #2196f3;
+  }
+  
+  /* Blue */
+  .btn.primary:hover {
+    background: #0b7dda;
+  }
+  
+  .col4{
+    margin-right: 360px;
+  }
+
+  .content{
+    margin-right: 15%;
+    margin-left: 15%;
+    background-color: rgb(245, 242, 242);
+}
+.tdisplay{
+    font-size: 25px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid;
+    border-color: rgb(197, 180, 180);
+    padding: 10px;
+
+}
+.item{
+    margin-top: 10px;
+}
+.wraper{
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+  
