@@ -4,36 +4,33 @@ import styles from './CSS/home.module.css';
 import ProductCategory from '../components/productCategory';
 import ProductPopular from '../components/productPopular';
 import RecommendProduct from '../components/recommendProduct';
+import { useEffect, useState } from "react";
+import axiosConfig from "../config/axios";
 
+function Home({ navigation }) {
 
-
-
-function Home({navigation}) {
-
-    return (
-      <div className={styles.Home}>
-        <Header navigation={navigation}/>
-        <div className={styles.content} >
-          <div className={styles.wraper}>
-            <p className={styles.tdisplay}>Danh mục</p>
-            <ProductCategory/>
-          </div>
-
-          <div className={styles.wraper}>
-            <p className={styles.tdisplay}>Sản phẩm bán chạy</p>
-            <ProductPopular/>
-          </div>
-
-          <div className={styles.wraper}>
-            <p className={styles.tdisplay}>Gợi ý hôm nay</p>
-            <RecommendProduct/>
-          </div>
-           
+  return (
+    <div className={styles.Home}>
+      <Header navigation={navigation} />
+      <div className={styles.content}>
+        <div className={styles.wraper}>
+          <p className={styles.tdisplay}>Danh mục</p>
+          <ProductCategory />
         </div>
-        <Footer navigation={navigation}/>
-        
+
+        <div className={styles.wraper}>
+          <p className={styles.tdisplay}>Sản phẩm bán chạy</p>
+          <ProductPopular />
+        </div>
+
+        <div className={styles.wraper}>
+          <p className={styles.tdisplay}>Gợi ý hôm nay</p>
+          <RecommendProduct />
+        </div>
       </div>
-    );
-  }
+      <Footer navigation={navigation} />
+    </div>
+  );
+}
   
   export default Home;
