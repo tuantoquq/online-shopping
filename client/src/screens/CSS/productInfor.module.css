@@ -59,12 +59,11 @@
 
 .button2{
     text-align: center;
-    margin-top: 33px;
+    margin-top: 10px;
     max-height: 35px;
     margin-left: 5px;
     margin-right: 5px;
     font-size: 25px;
-    background-color: rgb(216, 11, 11);
 }
 
 .numberProduct{

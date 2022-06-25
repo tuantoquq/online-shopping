@@ -13,11 +13,9 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import stylesProduct from '../screens/CSS/productInfor.module.css';
 import imageTest from '../assets/testproduct.jpg'
-import { Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
-import ButtonChangeValue from './buttonChangeValue';
-import UserRating from './userRating';
-import LinkToProduct from './inforProduct';
+import Button from '@mui/material/Button';
+import clsx from 'clsx';
 
 function ButtonOrder({post, st}){
     return (
@@ -26,11 +24,11 @@ function ButtonOrder({post, st}){
                 return(
                     <div >
                         {p.status === st && (
-                            <div className={stylesProduct.soldInfo}>           
-                                <button className={stylesProduct.button2}> {p.button1} </button>
+                            <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>           
+                                <Button variant="outlined"> {p.button1} </Button>
                                 {p.button2 === "Danh gia shop" && (
-                                    <Link to="/TestShop">
-                                        <button className={stylesProduct.button2}> {p.button2} </button>
+                                    <Link to="/TestShop" >
+                                        <Button variant="outlined"> {p.button2} </Button>
                                     </Link>
                                 )}
                             </div>
