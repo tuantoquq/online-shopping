@@ -35,16 +35,6 @@ function Header({ navigation }) {
     ["Sạc iphone", "sạc iphone"],
   ];
 
-  const topicThoiSu = [
-    ["Chính trị", "thoi-su/chinh-tri"],
-    ["Dân sinh", "thoi-su/dan-sinh"],
-    ["Giao thông", "thoisu-dan-sinh"],
-  ];
-  const toppicGocNhin = [
-    ["Bình luận nhiều", "goc-nhin/nhieu-binh-luan"],
-    ["Covid-19", "goc-nhin/covid-19"],
-    ["Kinh doanh", "goc-nhin/kinh-doanh"],
-  ];
 
   const [username, setUsername] = useState("");
   const [query, setQuery] = useState("");
@@ -112,7 +102,15 @@ function Header({ navigation }) {
           <ul className={`${styles.textColor} ${styles.narMenu}`}>
             {listTopic.map((topic) => (
               <li>
-                <Link to={`/${topic[1]}`}>{topic[0]}</Link>
+                <p
+                  onClick={() =>
+                    navigate("/search", {
+                      state: { search: topic[0] },
+                    })
+                  }
+                >
+                  {topic[0]}
+                </p>
               </li>
             ))}
             <li>
