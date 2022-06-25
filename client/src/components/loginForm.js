@@ -19,7 +19,7 @@ function LoginForm(props) {
   //console.log(role);
   const [open, setOpen] = useState(false);
 
-  const LOGIN_URL = `/api/v1/${role}/login`;
+  const LOGIN_URL = `/${role}/login`;
   const { setAuth } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();

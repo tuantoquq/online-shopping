@@ -48,7 +48,7 @@ function RegisterForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const REGISTER_URL = `/api/v1/${role}/register`;
+    const REGISTER_URL = `/${role}/register`;
     if (password !== confirmPassword) {
       setErrMsg('Mật khẩu không khớp!');
     }
