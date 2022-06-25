@@ -10,19 +10,10 @@ import { Grid } from '@mui/material';
 import LinkToProduct from '../components/inforProduct';
 import { useEffect, useState } from "react";
 import axiosConfig from "../config/axios";
+import { useNavigate } from "react-router-dom";
 
-function ProductCategory() {
-  const [category, setCategory] = useState();
-  useEffect(() => {
-    axiosConfig
-      .get("/category/get?all=true")
-      .then((res) => {
-        setCategory(res.data.data.slice(0, 12));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+function ProductCategory({ category }) {
+  const navigate = useNavigate();
   return (
     <Grid
       container
@@ -31,7 +22,18 @@ function ProductCategory() {
       style={{ padding: "5px" }}
     >
       {category?.map((item, index) => (
-        <Grid item xs={2} sm={1} md={2} key={index}>
+        <Grid
+          item
+          xs={2}
+          sm={1}
+          md={2}
+          key={index}
+          onClick={() =>
+            navigate("/search", {
+              state: { search: item.categoryName },
+            })
+          }
+        >
           <Card sx={{ maxWidth: 345, height: 200 }}>
             <CardActionArea>
               <CardMedia
@@ -42,10 +44,7 @@ function ProductCategory() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  <LinkToProduct
-                    urlProduct="ProductTest"
-                    productName={item.categoryName}
-                  ></LinkToProduct>
+                  {item.categoryName}
                 </Typography>
               </CardContent>
             </CardActionArea>
