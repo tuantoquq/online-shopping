@@ -43,6 +43,7 @@ export const registerCustomer = async (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 dateOfBirth: req.body.dateOfBirth,
                 gender: req.body.gender,
+                avatarUrl: req.body.avatarUrl
             });
             let customer = await CustomerService.addCustomer(newCustomer);
             return res.status(httpStatus.OK).send({
@@ -60,7 +61,7 @@ export const registerCustomer = async (req, res) => {
 
 export const updateInforCustomer = async (req, res) => {
     try {
-        let shopId = req.query.shopId;
+        let customerId = req.userId;
         var dataUpdate = {};
         let listPros = [
             'email',
@@ -77,30 +78,35 @@ export const updateInforCustomer = async (req, res) => {
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
             } else if (property == 'password' && req.body.hasOwnProperty('password')) {
-                var customerCheck = await Customer.findById(shopId);
+                var customerCheck = await Customer.findById(customerId);
                 var passwordIsValid = compareSync(
                     req.body['password'],
                     customerCheck.password,
                 );
                 if (!passwordIsValid) {
                     return res.status(httpStatus.OK).json({
+                        status: apiStatus.INVALID_PARAM,
                         message: "Password isn't match",
                     });
                 }
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        let customer = await Customer.findOneAndUpdate({ _id: shopId }, dataUpdate);
+        let customer = await Customer.findOneAndUpdate({ _id: customerId }, dataUpdate, {new: true});
         if (!customer) {
             return res.status(httpStatus.NOT_FOUND).json({
-                message: "Can't find shopper",
+                status: apiStatus.DATABASE_ERROR,
+                message: "Can't find customer",
             });
         }
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "update customer profile successfully",
             data: customer,
         });
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
             message: e.message,
         });
     }
@@ -229,6 +235,7 @@ export const registerShopper = async (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 dateOfBirth: req.body.dateOfBirth,
                 gender: req.body.gender,
+                avatarUrl: req.body.avatarUrl,
                 cccd: req.body.cccd,
                 issueDate: req.body.issueDate,
                 issuePlace: req.body.issuePlace,
@@ -312,7 +319,7 @@ export const loginShopper = async (req, res) => {
 
 export const updateInforShopper = async (req, res) => {
     try {
-        let shopId = req.query.shopId;
+        let shopperId = req.userId;
         var dataUpdate = {};
         let listPros = [
             'email',
@@ -331,27 +338,32 @@ export const updateInforShopper = async (req, res) => {
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
             } else if (property == 'password' && req.body.hasOwnProperty('password')) {
-                var shopper = await Shopper.findById(shopId);
+                var shopper = await Shopper.findById(shopperId);
                 var passwordIsValid = compareSync(req.body['password'], shopper.password);
                 if (!passwordIsValid) {
                     return res.status(httpStatus.OK).json({
+                        status: apiStatus.INVALID_PARAM,
                         message: "Password isn't match",
                     });
                 }
             }
         }
 
-        let shop = await Shopper.findOneAndUpdate({ _id: shopId }, dataUpdate);
+        let shop = await Shopper.findOneAndUpdate({ _id: shopperId }, dataUpdate, {new: true});
         if (!shop) {
             return res.status(httpStatus.NOT_FOUND).json({
+                status: apiStatus.DATABASE_ERROR,
                 message: "Can't find shopper",
             });
         }
         return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "update shopper profile successfully",
             data: shop,
         });
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
             message: e.message,
         });
     }
