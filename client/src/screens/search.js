@@ -30,7 +30,7 @@ function Search() {
   const search = location.state.search;
   console.log(search);
   //request data with search term;
-  const PRODUCT_SEARCH_URL = '/product/search';
+  const PRODUCT_SEARCH_URL = '/product/filter';
 
   const [error, setError] = useState(false);
   const handleClose = (event, reason) => {
@@ -45,15 +45,15 @@ function Search() {
   const allRating = useRef([5, 4, 3, 2, 1]);
   const allSort = useRef([
     {
-      value: 'related',
-      showed: 'Liên quan',
+      value: 'rating',
+      showed: 'Đánh giá',
     },
     {
-      value: 'newer',
+      value: 'moi nhat',
       showed: 'Mới nhất',
     },
     {
-      value: 'bestseller',
+      value: 'pho bien',
       showed: 'Bán chạy',
     },
     {
@@ -104,7 +104,7 @@ function Search() {
   const [apply, setApply] = useState(false);
   const [rating, setRating] = useState(0);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState('related');
+  const [sort, setSort] = useState('pho bien');
 
   //Categories
   const handleCategories = (category) => {
@@ -264,14 +264,16 @@ function Search() {
   useEffect(() => {
     //console.log('filter change');
     const filter = {
-      search: search,
-      category: categories,
+      query: search,
+      categoryName: categories,
       // location: locations,
       // brand: brands,
       rating: rating,
-      fromPrice: fromPriceApplied,
-      toPrice: toPriceApplied,
-      sort: sort,
+      startPrice: fromPriceApplied,
+      endPrice: toPriceApplied,
+      sortBy: sort,
+      orderBy: sort,
+      currentPage: 1,
     };
     async function searchProduct() {
       console.log(filter);
@@ -280,7 +282,7 @@ function Search() {
       try {
         const response = await axios.get(
           PRODUCT_SEARCH_URL,
-          JSON.stringify({ query: filter.search }),
+          JSON.stringify(filter),
           {
             headers: {
               'Content-Type': 'application/json',
@@ -289,13 +291,13 @@ function Search() {
           }
         );
         console.log(response);
+        setProductIdList(response.data.data);
+        setNumPages(response.data.maxPage); //numPages was responsed
       } catch (err) {
         console.log(err);
       }
     }
-    // searchProduct();
-    setProductIdList([1, 2, 3, 4]);
-    setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
+    searchProduct();
     setPage(1);
   }, [
     search,
@@ -311,17 +313,41 @@ function Search() {
   useEffect(() => {
     //Request for new data
     const filter = {
-      search: search,
-      category: categories,
+      query: search,
+      categoryName: categories,
       // location: locations,
       // brand: brands,
       rating: rating,
-      fromPrice: fromPriceApplied,
-      toPrice: toPriceApplied,
-      sort: sort,
+      startPrice: fromPriceApplied,
+      endPrice: toPriceApplied,
+      sortBy: sort,
+      orderBy: sort,
+      currentPage: page,
     };
-    //console.log('page changed');
-    setProductIdList(getProductIdList(filter, page));
+    console.log(filter);
+    async function searchProduct() {
+      console.log(filter);
+      //console.log('Filter changed');
+      //request for new data +numPages
+      try {
+        const response = await axios.get(
+          PRODUCT_SEARCH_URL,
+          JSON.stringify(filter),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+        console.log(response);
+        setProductIdList(response.data.data);
+        setNumPages(response.data.maxPage); //numPages was responsed
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    searchProduct();
     setPage(page);
   }, [page]);
 
@@ -615,7 +641,7 @@ function Search() {
               <div className={clsx(styles.productContainer)}>
                 {productIdList.map((value, index) => (
                   <Grid item xs={1} sm={1} md={1} key={index}>
-                    <ProductCard id={value} />
+                    <ProductCard productId={value} />
                   </Grid>
                 ))}
               </div>

@@ -8,10 +8,7 @@ productRoutes.post(
     verifyToken,
     productController.insertProductToDatabase,
 );
-productRoutes.get(
-    '/api/v1/product/get',
-    productController.getProductFromDatabase,
-);
+productRoutes.get('/api/v1/product/get', productController.getProductFromDatabase);
 productRoutes.post(
     '/api/v1/product/delete',
     verifyToken,
@@ -24,7 +21,7 @@ productRoutes.post(
     productController.updateProductFromDatabase,
 );
 
-productRoutes.get('/api/v1/product/search', productController.search);
+// productRoutes.get('/api/v1/product/search', productController.search);
 productRoutes.get('/api/v1/product/filter', productController.filter);
 productRoutes.get(
     '/api/v1/product/top-6-selling',

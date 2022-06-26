@@ -58,7 +58,7 @@ export const registerCustomer = async (req, res) => {
 
 export const updateInforCustomer = async (req, res) => {
     try {
-        let shopId = req.query.shopId;
+        let customerId = req.query.customerId;
         var dataUpdate = {};
         let listPros = [
             'email',
@@ -88,7 +88,7 @@ export const updateInforCustomer = async (req, res) => {
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        let customer = await Customer.findOneAndUpdate({ _id: shopId }, dataUpdate);
+        let customer = await Customer.findOneAndUpdate({ _id: customerId }, dataUpdate);
         if (!customer) {
             return res.status(httpStatus.NOT_FOUND).json({
                 message: "Can't find shopper",
