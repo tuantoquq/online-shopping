@@ -35,8 +35,8 @@ function UserRating({imageAvatar, userName, ratingScore, timeRate, comment, imag
           <div className={stylesProduct.ratingUser}>                  
             <p>{comment}</p>
           </div>
-          {imageProduct.length > 0 && (
-            <div>
+          {imageProduct?.length > 0 && (
+            <div style={{marginTop: "-50px"}}>
               <ImageList images={imageProduct}/>
             </div>
           )}

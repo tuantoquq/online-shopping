@@ -16,20 +16,20 @@ import axiosConfig from '../config/axios';
 
 function ProductInformation({navigation}) {
     const navigate = useNavigate();
-    const [productData,setProductData] = useState(null)
-    const [productCategory,setProductCategory] = useState(null)
-    const [comment,setComment] = useState(null)
+    const [productData,setProductData] = useState()
+    const [productCategory,setProductCategory] = useState()
+    const [comments,setComment] = useState()
 
 
     let s = window.location.href.split('/')
     let path = `/product/get?productId=${s[s.length-1]}`
     // '/product/get?productId=629e172caf24631642b441ee'
     useEffect(()=>{
-      axiosConfig.get(path).then(res=>{
+      axiosConfig.get(path).then(async res=>{
         setProductData(res.data.data)
         console.log(res.data.data?.categoryId)
         let pathCategory = `/category/get?categoryId=${res.data.data?.categoryId}`
-        axiosConfig.get(pathCategory).then(res=>{
+        await axiosConfig.get(pathCategory).then(res=>{
           setProductCategory(res.data.data)
         })
         .catch(err=>{
@@ -37,9 +37,10 @@ function ProductInformation({navigation}) {
         })
 
         let pathComment = '/comments?productId=629e16a6af24631642b44151'
-        axiosConfig.get(pathComment).then(res=>{
+        await axiosConfig.get(pathComment).then(res=>{
           setComment(res.data.data)
           console.log(res.data.data)
+          // comments?.map((comment) => {console.log(comment)})
         })
         .catch(err=>{
           console.log(err)
@@ -60,7 +61,7 @@ function ProductInformation({navigation}) {
         navigate(path);
       }
     };
-
+  
     return (
       <div className={styles.Home}>
         <Header navigation={navigation}/>
@@ -204,7 +205,21 @@ function ProductInformation({navigation}) {
               </div>      
             </div>
             
-            <UserRating
+            {comments?.map((comment) => {
+              return(
+                <UserRating
+                  imageTest={imageTest}
+                  userName="Kito"
+                  ratingScore={comment?.ratingStar}
+                  timeRate={comment?.createdAt}
+                  comment={comment?.content}
+                  imageProduct={comment?.images}
+                />
+              )
+            })
+            }
+            
+            {/* <UserRating
               imageTest={imageTest}
               userName="Kito"
               ratingScore={5}
@@ -226,7 +241,7 @@ function ProductInformation({navigation}) {
               ratingScore={4}
               timeRate="14:30:00 05/05/2022"
               comment="Nino is the best"
-            />
+            /> */}
 
           </div>
         </div>
