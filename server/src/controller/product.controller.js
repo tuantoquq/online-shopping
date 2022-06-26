@@ -161,33 +161,36 @@ productController.updateProductFromDatabase = async (req, res) => {
         });
     }
 };
+// productController.search = async (req, res) => {
+//     try{
+//         const { query } = req.body
+//         const documents = await Product.find({
+//             $or: [{productName: {$regex: query, $options: 'i'}}, {shortDescription: {$regex: query, $options: 'i'}}]
+//         })
+//         if(!documents){
+//             return res.status(httpStatus.OK).json({
+//                 status: apiStatus.SUCCESS,
+//                 message: "Not found documents",
+//                 data: []
+//             })
+//         }
+//         var listIds = []
+//         for(let i =0; i< documents.length; i++){
+//             listIds.push(documents[i]._id)
+//         }
+//         return res.status(httpStatus.OK).json({
+//             status: apiStatus.SUCCESS,
+//             data: listIds
+//         })
 
-productController.search = async (req, res) => {
-    try{
-        const { query } = req.body
-        const documents = await Product.find({
-            $or: [{productName: {$regex: query, $options: 'i'}}, {shortDescription: {$regex: query, $options: 'i'}}]
-        })
-        if(!documents){
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.SUCCESS,
-                message: "Not found documents",
-                data: []
-            })
-        }
-        return res.status(httpStatus.OK).json({
-            status: apiStatus.SUCCESS,
-            data: documents
-        })
-
-    }
-    catch (e) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            status: apiStatus.OTHER_ERROR,
-            message: e.message,
-        });
-    }
-}
+//     }
+//     catch (e) {
+//         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+//             status: apiStatus.OTHER_ERROR,
+//             message: e.message,
+//         });
+//     }
+// }
 
 // productController.search = async (req, res) => {
 //     try {
@@ -251,52 +254,153 @@ productController.filter = async (req, res) => {
         let maxItem = req.body.maxItem ? req.body.maxItem : 20;
         let skip = (currentPage - 1) * maxItem;
 
-        let categoryName = req.body.categoryName;
-        let category = await Category.findOne({ categoryName: categoryName });
-        if (!category) {
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.INVALID_PARAM,
-                message: 'Category not found',
-            });
-        } else {
-            let sortBy = req.body.sortBy ? req.body.sortBy : null;
-            let products = null;
-            console.log(sortBy);
-            if (sortBy == null) {
-                products = await Product.find({ categoryId: category._id })
-                    .skip(skip)
-                    .limit(maxItem);
-            } else {
-                let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
-                if (sortBy == 'price') {
-                    products = await Product.find({})
-                        .sort({ price: orderBy })
-                        .skip(skip)
-                        .limit(maxItem);
-                } else if (sortBy == 'pho bien') {
-                    products = await Product.find({})
-                        .sort({ soldHistory: orderBy })
-                        .skip(skip)
-                        .limit(maxItem);
-                } else if (sortBy == 'moi nhat') {
-                    products = await Product.find({})
-                        .sort({ createAt: -1 })
-                        .skip(skip)
-                        .limit(maxItem);
+        let listPros = [
+            'query',
+            'categoryName',
+            'startPrice',
+            'endPrice',
+            "minRating",
+            "orderBy",
+            "sortBy"
+        ]
+        console.log(req.body['categoryName'])
+        let query = []
+        for(let i = 0; i < listPros.length; i++){
+            let property = listPros[i]
+            if(req.body.hasOwnProperty(property)){
+                if(property == 'query'){
+                    query.push({
+                        $match: { $or: [{productName: {$regex: req.body[property], $options: 'i'}}, {shortDescription: {$regex: req.body[property], $options: 'i'}}]}
+                    })
+                }
+                else if(property == 'categoryName'){
+                    query.push({
+                        $lookup: {
+                            from: "Category",
+                            localField: "categoryId",
+                            foreignField: "_id",
+                            pipeline: [
+                                // {$match: {$expr: {$in: ["$categoryName", req.body['categoryName']]}}}
+                                {$match: { categoryName : {$in: req.body['categoryName']}}}
+                            ],
+                            as: "matches"
+                        }
+                    })
+                }
+                else if(property == 'startPrice'){
+                    query.push({
+                        $match: { price: {$lte: req.body['endPrice'], $gte: req.body['startPrice']}}
+                    })
+                }
+                else if (property == 'minRating'){
+                    query.push({
+                        $match: {ratingStar: {$gte: req.body['minRating']}}
+                    })
+                }
+                else if(property == 'orderBy'){
+                    let sortby = req.body.sortBy == 'desc'? -1: 1
+                    if (req.body[property] == 'price'){
+                        query.push({
+                            $sort: {price: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'pho bien'){
+                        query.push({
+                            $sort: {soldHistory: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'moi nhat'){
+                        query.push({
+                            $sort: {createAt: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'rating'){
+                        query.push({
+                            $sort: {ratingStar: sortby}
+                        })
+                    }
+                    else{
+                        return res.status(httpStatus.OK).json({
+                            message: "order by " + req.body['orderBy'] + " isn't support",
+                            status: apiStatus.OTHER_ERROR
+                        })
+                    }
                 }
             }
-            if (!products) {
-                return res.status(httpStatus.OK).json({
-                    status: apiStatus.INVALID_PARAM,
-                    message: "We don't have any product belong to this category",
-                });
-            }
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.SUCCESS,
-                message: "filter products successfully",
-                data: products,
-            });
         }
+
+        // query.push({
+        //     "$facet": {
+        //         "data": [
+        //           { "$skip": skip },
+        //           { "$limit": maxItem }
+        //         ],
+        //         "pagination": [
+        //           { "$count": "total" }
+        //         ]
+        //       }
+        // })
+        console.log(query)
+        const maxDocuments = await Product.aggregate(query).length
+        console.log(maxDocuments)
+
+        let countPage = 0
+        if (maxDocuments % maxItem == 0){
+            countPage = maxDocuments/maxItem
+        }
+        else{
+            countPage = ~~(maxDocuments / maxItem) + 1
+        }
+        let products = await Product.aggregate(query).skip(skip).limit(maxItem)
+        console.log(products.length)
+        return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "filter products successfully",
+            data: products,
+            maxPage: countPage
+        });
+
+        // let categoryName = req.body.categoryName;
+        // let category = await Category.findOne({ categoryName: categoryName });
+        // if (!category) {
+        //     return res.status(httpStatus.OK).json({
+        //         status: apiStatus.INVALID_PARAM,
+        //         message: 'Category not found',
+        //     });
+        // } else {
+        //     let sortBy = req.body.sortBy ? req.body.sortBy : null;
+        //     let products = null;
+        //     console.log(sortBy);
+        //     if (sortBy == null) {
+        //         products = await Product.find({ categoryId: category._id })
+        //             .skip(skip)
+        //             .limit(maxItem);
+        //     } else {
+        //         let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
+        //         if (sortBy == 'price') {
+        //             products = await Product.find({})
+        //                 .sort({ price: orderBy })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         } else if (sortBy == 'pho bien') {
+        //             products = await Product.find({})
+        //                 .sort({ soldHistory: orderBy })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         } else if (sortBy == 'moi nhat') {
+        //             products = await Product.find({})
+        //                 .sort({ createAt: -1 })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         }
+        //     }
+        //     if (!products) {
+        //         return res.status(httpStatus.OK).json({
+        //             status: apiStatus.INVALID_PARAM,
+        //             message: "We don't have any product belong to this category",
+        //         });
+        //     }
+        // }
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,

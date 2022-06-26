@@ -24,7 +24,7 @@ productRoutes.post(
     productController.updateProductFromDatabase,
 );
 
-productRoutes.get('/api/v1/product/search', productController.search);
+// productRoutes.get('/api/v1/product/search', productController.search);
 productRoutes.get('/api/v1/product/filter', productController.filter);
 productRoutes.get(
     '/api/v1/product/top-6-selling',
