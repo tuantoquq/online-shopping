@@ -13,10 +13,17 @@ function ProductCard(props) {
   const id = props.productId;
   const GET_PRODUCT_URL = '/product/get?productId=' + id._id; //url to request product info
 
-  const [productInfo, setProductInfo] = useState({});
+  const [productInfo, setProductInfo] = useState({
+    name: '',
+    rate: 0,
+    selled: 0,
+    price: 0,
+    image:
+      'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png',
+  });
 
   useEffect(() => {
-    console.log(JSON.stringify({ productId: id._id }));
+    //console.log(JSON.stringify({ productId: id._id }));
     async function getProduct() {
       try {
         const response = await axios.get(
@@ -29,9 +36,9 @@ function ProductCard(props) {
             // withCredentials: true,
           }
         );
-        console.log(response);
+        //console.log(response);
         const data = response.data.data;
-        console.log(Math.floor(data.ratingStar));
+        //console.log(Math.floor(data.ratingStar));
         let name = '';
         if (data.productName.length <= 53) {
           name = data.productName;
@@ -40,7 +47,7 @@ function ProductCard(props) {
         }
         const product = {
           name: name,
-          rate: Math.floor(data.ratingStar),
+          rate: data.ratingStar,
           selled: data.soldHistory,
           price: data.price,
           image: data.imageUrls[0].base_url,
@@ -61,12 +68,14 @@ function ProductCard(props) {
       }
     >
       <Card className={clsx(styles.cardBody)}>
-        <CardMedia
-          className={clsx(styles.productImage)}
-          component="img"
-          image={productInfo.image}
-          alt={productInfo.name}
-        />
+        <div className={clsx(styles.productImage)}>
+          <CardMedia
+            // className={clsx(styles.productImage)}
+            component="img"
+            image={productInfo.image}
+            alt={productInfo.name}
+          />
+        </div>
         <div className={clsx(styles.cardContent)}>
           <div className={clsx(styles.cardHeader)}>
             <p className={clsx(styles.cardTitle)}>{productInfo.name}</p>
@@ -80,7 +89,8 @@ function ProductCard(props) {
               <Rating
                 className={clsx(styles.rating)}
                 value={productInfo.rate}
-                disabled
+                precision={0.1}
+                readOnly
               />
               <span className={clsx(styles.selledNumber)}>
                 Đã bán: {productInfo.selled}
