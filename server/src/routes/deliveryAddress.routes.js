@@ -18,7 +18,15 @@ deliverAddressRoutes.get(
     verifyToken,
     getDeliveryAddressById,
 );
-deliverAddressRoutes.delete('/api/v1/customer/auth/delivery-address/:addressId', verifyToken, deleteDeliveryAddress);
-deliverAddressRoutes.put('/api/v1/customer/auth/delivery-address/:addressId', verifyToken, updateDeliveryAddress);
+deliverAddressRoutes.delete(
+    '/api/v1/customer/auth/delivery-address/:addressId',
+    verifyToken,
+    deleteDeliveryAddress,
+);
+deliverAddressRoutes.put(
+    '/api/v1/customer/auth/delivery-address/:addressId',
+    verifyToken,
+    updateDeliveryAddress,
+);
 
 export default deliverAddressRoutes;

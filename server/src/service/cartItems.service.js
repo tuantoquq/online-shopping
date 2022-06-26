@@ -23,7 +23,7 @@ CartItemsService.getAllCartItemsByCustomerId = async (customerId) => {
 
 CartItemsService.deleteCartItemsById = async (cartItemsId) => {
     let cartItems = await CartItems.findByIdAndDelete(cartItemsId);
-    if(!cartItems){
+    if (!cartItems) {
         throw new CustomError(
             httpStatus.INTERNAL_SERVER_ERROR,
             apiStatus.DATABASE_ERROR,

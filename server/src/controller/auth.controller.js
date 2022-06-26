@@ -41,6 +41,8 @@ export const registerCustomer = async (req, res) => {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 phoneNumber: req.body.phoneNumber,
+                dateOfBirth: req.body.dateOfBirth,
+                gender: req.body.gender,
             });
             let customer = await CustomerService.addCustomer(newCustomer);
             return res.status(httpStatus.OK).send({
@@ -225,6 +227,7 @@ export const registerShopper = async (req, res) => {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 phoneNumber: req.body.phoneNumber,
+                dateOfBirth: req.body.dateOfBirth,
                 gender: req.body.gender,
                 cccd: req.body.cccd,
                 issueDate: req.body.issueDate,
