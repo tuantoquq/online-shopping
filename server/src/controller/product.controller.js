@@ -1,8 +1,8 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import { Product, Category } from '../model/index.js';
-import bm25 from 'wink-bm25-text-search';
-import winkNLP from 'wink-nlp';
-import model from 'wink-eng-lite-web-model';
+// import bm25 from 'wink-bm25-text-search';
+// import winkNLP from 'wink-nlp';
+// import model from 'wink-eng-lite-web-model';
 import ProductService from '../service/product.service.js';
 
 const productController = {};
@@ -161,62 +161,92 @@ productController.updateProductFromDatabase = async (req, res) => {
         });
     }
 };
+// productController.search = async (req, res) => {
+//     try{
+//         const { query } = req.body
+//         const documents = await Product.find({
+//             $or: [{productName: {$regex: query, $options: 'i'}}, {shortDescription: {$regex: query, $options: 'i'}}]
+//         })
+//         if(!documents){
+//             return res.status(httpStatus.OK).json({
+//                 status: apiStatus.SUCCESS,
+//                 message: "Not found documents",
+//                 data: []
+//             })
+//         }
+//         var listIds = []
+//         for(let i =0; i< documents.length; i++){
+//             listIds.push(documents[i]._id)
+//         }
+//         return res.status(httpStatus.OK).json({
+//             status: apiStatus.SUCCESS,
+//             data: listIds
+//         })
 
-productController.search = async (req, res) => {
-    try {
-        var engine = bm25();
-        const nlp = winkNLP(model);
-        const its = nlp.its;
+//     }
+//     catch (e) {
+//         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+//             status: apiStatus.OTHER_ERROR,
+//             message: e.message,
+//         });
+//     }
+// }
 
-        const prepTask = function (text) {
-            const tokens = [];
-            nlp.readDoc(text)
-                .tokens()
-                // Use only words ignoring punctuations etc and from them remove stop words
-                .filter((t) => t.out(its.type) === 'word' && !t.out(its.stopWordFlag))
-                // Handle negation and extract stem of the word
-                .each((t) =>
-                    tokens.push(
-                        t.out(its.negationFlag) ? '!' + t.out(its.stem) : t.out(its.stem),
-                    ),
-                );
+// productController.search = async (req, res) => {
+//     try {
+//         var engine = bm25();
+//         const nlp = winkNLP(model);
+//         const its = nlp.its;
 
-            return tokens;
-        };
-        engine.defineConfig({ fldWeights: { productName: 2, shortDescription: 1 } });
-        engine.definePrepTasks([prepTask]);
+//         const prepTask = function (text) {
+//             const tokens = [];
+//             nlp.readDoc(text)
+//                 .tokens()
+//                 // Use only words ignoring punctuations etc and from them remove stop words
+//                 .filter((t) => t.out(its.type) === 'word' && !t.out(its.stopWordFlag))
+//                 // Handle negation and extract stem of the word
+//                 .each((t) =>
+//                     tokens.push(
+//                         t.out(its.negationFlag) ? '!' + t.out(its.stem) : t.out(its.stem),
+//                     ),
+//                 );
 
-        for await (const product of Product.find()) {
-            let doc = JSON.parse(
-                JSON.stringify({
-                    productName: product.productName,
-                    shortDescription: product.shortDescription,
-                    tags: product._id,
-                }),
-            );
-            engine.addDoc(doc, product._id);
-        }
-        engine.consolidate();
+//             return tokens;
+//         };
+//         engine.defineConfig({ fldWeights: { productName: 2, shortDescription: 1 } });
+//         engine.definePrepTasks([prepTask]);
 
-        const { query } = req.body;
-        var result = engine.search(query);
-        let ids = [];
-        for (let i = 0; i < result.length; i++) {
-            ids.push(result[i][0]);
-        }
-        const documents = await Product.find({ _id: { $in: ids } });
-        return res.status(httpStatus.OK).json({
-            status: apiStatus.SUCCESS,
-            message: 'search product successfully',
-            data: documents,
-        });
-    } catch (e) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            status: apiStatus.OTHER_ERROR,
-            message: e.message,
-        });
-    }
-};
+//         for await (const product of Product.find()) {
+//             let doc = JSON.parse(
+//                 JSON.stringify({
+//                     productName: product.productName,
+//                     shortDescription: product.shortDescription,
+//                     tags: product._id,
+//                 }),
+//             );
+//             engine.addDoc(doc, product._id);
+//         }
+//         engine.consolidate();
+
+//         const { query } = req.body;
+//         var result = engine.search(query);
+//         let ids = [];
+//         for (let i = 0; i < result.length; i++) {
+//             ids.push(result[i][0]);
+//         }
+//         const documents = await Product.find({ _id: { $in: ids } });
+//         return res.status(httpStatus.OK).json({
+//             status: apiStatus.SUCCESS,
+//             message: "search product successfully",
+//             data: documents,
+//         });
+//     } catch (e) {
+//         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+//             status: apiStatus.OTHER_ERROR,
+//             message: e.message,
+//         });
+//     }
+// };
 
 productController.filter = async (req, res) => {
     try {
@@ -224,52 +254,147 @@ productController.filter = async (req, res) => {
         let maxItem = req.body.maxItem ? req.body.maxItem : 20;
         let skip = (currentPage - 1) * maxItem;
 
-        let categoryName = req.body.categoryName;
-        let category = await Category.findOne({ categoryName: categoryName });
-        if (!category) {
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.INVALID_PARAM,
-                message: 'Category not found',
-            });
-        } else {
-            let sortBy = req.body.sortBy ? req.body.sortBy : null;
-            let products = null;
-            console.log(sortBy);
-            if (sortBy == null) {
-                products = await Product.find({ categoryId: category._id })
-                    .skip(skip)
-                    .limit(maxItem);
-            } else {
-                let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
-                if (sortBy == 'price') {
-                    products = await Product.find({})
-                        .sort({ price: orderBy })
-                        .skip(skip)
-                        .limit(maxItem);
-                } else if (sortBy == 'pho bien') {
-                    products = await Product.find({})
-                        .sort({ soldHistory: orderBy })
-                        .skip(skip)
-                        .limit(maxItem);
-                } else if (sortBy == 'moi nhat') {
-                    products = await Product.find({})
-                        .sort({ createAt: -1 })
-                        .skip(skip)
-                        .limit(maxItem);
+        let listPros = [
+            'query',
+            'categoryName',
+            'startPrice',
+            'endPrice',
+            "minRating",
+            "orderBy",
+            "sortBy"
+        ]
+        console.log(req.body['categoryName'])
+        let query = []
+        for(let i = 0; i < listPros.length; i++){
+            let property = listPros[i]
+            if(req.body.hasOwnProperty(property)){
+                if(property == 'query'){
+                    query.push({
+                        $match: { $or: [{productName: {$regex: req.body[property], $options: 'i'}}, {shortDescription: {$regex: req.body[property], $options: 'i'}}]}
+                    })
+                }
+                else if(property == 'categoryName'){
+                    var categories = await Category.find({categoryName: {$in: req.body['categoryName']}})
+                    if(!categories){
+                        return res.status(httpStatus.OK).json({
+                            status: apiStatus.OTHER_ERROR,
+                            message: "Not found category"
+                        })
+                    }
+                    let categoriIds = []
+                    for(let i =0;i < categories.length; i++){
+                        categoriIds.push(categories[i]._id)
+                    }
+                    console.log(categoriIds)
+                    query.push({
+                        $match: { categoryId: {$in: categoriIds}}
+                    })
+                }
+                else if(property == 'startPrice'){
+                    query.push({
+                        $match: { price: {$lte: req.body['endPrice'], $gte: req.body['startPrice']}}
+                    })
+                }
+                else if (property == 'minRating'){
+                    query.push({
+                        $match: {ratingStar: {$gte: req.body['minRating']}}
+                    })
+                }
+                else if(property == 'orderBy'){
+                    let sortby = req.body.sortBy == 'desc'? -1: 1
+                    if (req.body[property] == 'price'){
+                        query.push({
+                            $sort: {price: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'pho bien'){
+                        query.push({
+                            $sort: {soldHistory: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'moi nhat'){
+                        query.push({
+                            $sort: {createAt: sortby}
+                        })
+                    }
+                    else if(req.body[property] == 'rating'){
+                        query.push({
+                            $sort: {ratingStar: sortby}
+                        })
+                    }
+                    else{
+                        return res.status(httpStatus.OK).json({
+                            message: "order by " + req.body['orderBy'] + " isn't support",
+                            status: apiStatus.OTHER_ERROR
+                        })
+                    }
                 }
             }
-            if (!products) {
-                return res.status(httpStatus.OK).json({
-                    status: apiStatus.INVALID_PARAM,
-                    message: "We don't have any product belong to this category",
-                });
-            }
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.SUCCESS,
-                message: 'filter products successfully',
-                data: products,
-            });
         }
+
+        
+        console.log(query)
+        const maxDocuments = await Product.aggregate(query).length
+        console.log(maxDocuments)
+
+        let countPage = 0
+        if (maxDocuments % maxItem == 0){
+            countPage = maxDocuments/maxItem
+        }
+        else{
+            countPage = ~~(maxDocuments / maxItem) + 1
+        }
+        let productIds = await Product.aggregate(query).skip(skip).limit(maxItem).project({
+            _id: 1 // By default
+        })
+        return res.status(httpStatus.OK).json({
+            status: apiStatus.SUCCESS,
+            message: "filter products successfully",
+            data: productIds,
+            maxPage: countPage
+        });
+
+        // let categoryName = req.body.categoryName;
+        // let category = await Category.findOne({ categoryName: categoryName });
+        // if (!category) {
+        //     return res.status(httpStatus.OK).json({
+        //         status: apiStatus.INVALID_PARAM,
+        //         message: 'Category not found',
+        //     });
+        // } else {
+        //     let sortBy = req.body.sortBy ? req.body.sortBy : null;
+        //     let products = null;
+        //     console.log(sortBy);
+        //     if (sortBy == null) {
+        //         products = await Product.find({ categoryId: category._id })
+        //             .skip(skip)
+        //             .limit(maxItem);
+        //     } else {
+        //         let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
+        //         if (sortBy == 'price') {
+        //             products = await Product.find({})
+        //                 .sort({ price: orderBy })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         } else if (sortBy == 'pho bien') {
+        //             products = await Product.find({})
+        //                 .sort({ soldHistory: orderBy })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         } else if (sortBy == 'moi nhat') {
+        //             products = await Product.find({})
+        //                 .sort({ createAt: -1 })
+        //                 .skip(skip)
+        //                 .limit(maxItem);
+        //         }
+        //     }
+        //     if (!products) {
+        //         return res.status(httpStatus.OK).json({
+        //             status: apiStatus.INVALID_PARAM,
+        //             message: "We don't have any product belong to this category",
+        //         });
+        //     }
+        // }
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,

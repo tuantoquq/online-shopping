@@ -4,8 +4,9 @@ import { CardActionArea } from '@mui/material';
 import stylesProduct from '../screens/CSS/productInfor.module.css';
 import { Rating } from '@mui/material';
 import { Link } from 'react-router-dom';
+import ImageList from './ImageList';
 
-function UserRating({imageTest, userName, ratingScore, timeRate, comment}){
+function UserRating({imageAvatar, userName, ratingScore, timeRate, comment, imageProduct}){
     return(
         <div className={stylesProduct.productImage}>
         <div className="image">
@@ -13,7 +14,7 @@ function UserRating({imageTest, userName, ratingScore, timeRate, comment}){
             <CardActionArea>
               <CardMedia
                 component="img"
-                image={imageTest}
+                image={imageAvatar}
                 alt="green iguana"
               />
             </CardActionArea>
@@ -34,6 +35,11 @@ function UserRating({imageTest, userName, ratingScore, timeRate, comment}){
           <div className={stylesProduct.ratingUser}>                  
             <p>{comment}</p>
           </div>
+          {imageProduct?.length > 0 && (
+            <div style={{marginTop: "-50px"}}>
+              <ImageList images={imageProduct}/>
+            </div>
+          )}
 
         </div>
       </div>
