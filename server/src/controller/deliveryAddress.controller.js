@@ -84,12 +84,12 @@ export const getDeliveryAddressById = async (req, res) => {
 
 export const deleteDeliveryAddress = async (req, res) => {
     try {
-        let addressId = req.params.addressId
+        let addressId = req.params.addressId;
         let delivery = await DeliveryAddressService.deleteDeliveryAddressById(addressId);
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'Delete delivery successfully!',
-            data: delivery
+            data: delivery,
         });
     } catch (err) {
         if (err instanceof CustomError) {
@@ -109,14 +109,7 @@ export const updateDeliveryAddress = async (req, res) => {
     try {
         let addressId = req.params.addressId;
         const dataUpdate = {};
-        const listPros = [
-            'receiverName',
-            'phone',
-            'city',
-            'district',
-            'ward',
-            'details',
-        ];
+        const listPros = ['receiverName', 'phone', 'city', 'district', 'ward', 'details'];
 
         for (let i = 0; i < listPros.length; i++) {
             let pro = listPros[i];
@@ -127,11 +120,14 @@ export const updateDeliveryAddress = async (req, res) => {
         }
         dataUpdate['updateAt'] = Date.now();
 
-        let delivery = await DeliveryAddressService.updateDeliveryAddress(addressId, dataUpdate);
+        let delivery = await DeliveryAddressService.updateDeliveryAddress(
+            addressId,
+            dataUpdate,
+        );
 
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "update delivery address successfully!",
+            message: 'update delivery address successfully!',
             data: delivery,
         });
     } catch (err) {

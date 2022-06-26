@@ -1,5 +1,5 @@
 import express from 'express';
-import categoryController from '../controller/category.js';
+import categoryController from '../controller/category.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 
 const categoryRoutes = express.Router();

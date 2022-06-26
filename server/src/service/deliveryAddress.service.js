@@ -54,8 +54,10 @@ DeliveryAddressService.checkExistAddress = async (addressInfo) => {
 };
 
 DeliveryAddressService.updateDeliveryAddress = async (addressId, updateInfo) => {
-    let address = await DeliveryAddress.findByIdAndUpdate(addressId, updateInfo, {new: true});
-    if(!address){
+    let address = await DeliveryAddress.findByIdAndUpdate(addressId, updateInfo, {
+        new: true,
+    });
+    if (!address) {
         throw new CustomError(
             httpStatus.NOT_FOUND,
             apiStatus.DATABASE_ERROR,
@@ -63,5 +65,5 @@ DeliveryAddressService.updateDeliveryAddress = async (addressId, updateInfo) => 
         );
     }
     return address;
-}
+};
 export default DeliveryAddressService;
