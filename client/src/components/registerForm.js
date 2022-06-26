@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, memo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useLayoutEffect, memo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import styles from './CSS/RegisterFormCSS.module.scss';
 import Axios from 'axios';
@@ -8,6 +8,7 @@ import axios from '../config/axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import ImageUploader from '../components/imageUploader';
+import TokenService from '../service/TokenService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -18,6 +19,22 @@ const defautlAvatar =
 
 function RegisterForm(props) {
   const role = props.role;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (TokenService.getLocalAccessToken(role)) {
+      if (role === 'customer') {
+        navigate('/');
+      }
+      if (role === 'shopper') {
+        navigate('/shopper/accept-order');
+      }
+      if (role === 'admin') {
+        navigate('/admin');
+      }
+    }
+  }, []);
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -48,7 +65,7 @@ function RegisterForm(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const REGISTER_URL = `/api/v1/${role}/register`;
+    const REGISTER_URL = `/${role}/register`;
     if (password !== confirmPassword) {
       setErrMsg('Mật khẩu không khớp!');
     }
@@ -59,7 +76,7 @@ function RegisterForm(props) {
     if (errMsg === '') {
       //console.log(avatarImg);
       let data = {};
-      console.log('submit');
+      // console.log('submit');
       const bday = new Date(birthday);
       if (role === 'customer') {
         data = {
@@ -90,7 +107,7 @@ function RegisterForm(props) {
           issuePlace: noiCap,
         };
       }
-      console.log(data);
+      //console.log(data);
       try {
         const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
           headers: {
@@ -98,16 +115,20 @@ function RegisterForm(props) {
           },
           // withCredentials: true,
         });
-        console.log(JSON.stringify(response?.data));
-        console.log(JSON.stringify(response));
+        // console.log(JSON.stringify(response?.data));
+        // console.log(JSON.stringify(response));
         setSuccess(true);
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
           setOpen(true);
+        } else if (err.response?.data?.message) {
+          setErrMsg(err.response.data.message);
+          //console.log(err);
+          setOpen(true);
         } else {
           setErrMsg('Đăng kí thất bại.');
-          console.log(err);
+          //console.log(err);
           setOpen(true);
         }
       }

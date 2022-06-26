@@ -34,11 +34,12 @@ function RootRoutes() {
 
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
-      <Route path="/admin/login" element={<Register role="admin" />} />
+      <Route path="/admin/login" element={<Login role="admin" />} />
 
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/search" element={<Search searchTerm="" />} />
+
       <Route
         path="/user/infomation"
         element={<UserInformation role="user" />}
@@ -58,7 +59,6 @@ function RootRoutes() {
       <Route path="/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
-      <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin" element={<AdminDashboard />} />
 
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />

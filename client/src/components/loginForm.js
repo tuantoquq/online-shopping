@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
@@ -22,19 +22,28 @@ function LoginForm(props) {
   const role = props.role;
   //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
+  useEffect(() => {
+    if (TokenService.getLocalAccessToken(role)) {
+      if (role === 'customer') {
+        navigate('/');
+      }
+      if (role === 'shopper') {
+        navigate('/shopper/accept-order');
+      }
+    }
+  }, []);
+
   const [open, setOpen] = useState(false);
 
   const LOGIN_URL = `/${role}/login`;
-  const [accessToken, setAccessToken] = useState('');
+  const [accessToken, setAccessToken] = useState(null);
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(() => {
-    return window.localStorage[`${role}_access_token`] !== '';
-  });
+  const [success, setSuccess] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -49,17 +58,32 @@ function LoginForm(props) {
   }, [user, pwd]);
 
   useEffect(() => {
-    TokenService.setLocalAccessToken(role, accessToken);
-    console.log(accessToken);
+    //console.log('accessToken: ', TokenService.getLocalAccessToken(role));
     //setAuth({ user, pwd, role, accessToken });
-    if (accessToken) {
+    if (TokenService.getLocalAccessToken(role)) {
+      //console.log(role);
+      //console.log(TokenService.getLocalAccessToken(role));
       setSuccess(true);
+    } else {
+      //console.log(false);
+      setSuccess(false);
+      //TokenService.setLocalAccessToken(role, accessToken);
     }
   }, [accessToken]);
 
   useEffect(() => {
+    //console.log(success);
     if (success === true) {
-      navigate('/');
+      //console.log('navigate');
+      if (role === 'customer') {
+        navigate('/');
+      }
+      if (role === 'shopper') {
+        navigate('/shopper/accept-order');
+      }
+      if (role === 'admin') {
+        navigate('/admin');
+      }
     }
   }, [success]);
 
@@ -68,6 +92,12 @@ function LoginForm(props) {
   }, [user, pwd]);
 
   useEffect(() => {
+    if (TokenService.getLocalAccessToken(role)) {
+      // console.log(role);
+      setSuccess(true);
+    } else {
+      setSuccess(false);
+    }
     let r = '';
     if (role === 'customer') {
       r = 'khách hàng';
@@ -99,19 +129,17 @@ function LoginForm(props) {
           // withCredentials: true,
         }
       );
-      console.log(JSON.stringify(response?.data));
-      console.log(JSON.stringify(response));
+      //console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response));
       if (response.data.status === 2) {
         setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
         const token = response?.data?.data?.token;
+        TokenService.setLocalAccessToken(role, accessToken);
         setAccessToken(token);
-        //setAuth({ user, pwd, role, accessToken });
-        //console.log(accessToken);
         setUser('');
         setPwd('');
-        //setSuccess(true);
       }
     } catch (err) {
       if (!err?.response) {
@@ -130,7 +158,7 @@ function LoginForm(props) {
     }
   };
 
-  return success ? (
+  return TokenService.getLocalAccessToken(role) || success ? (
     <div className={clsx(styles.loginContainer, styles.row)}></div>
   ) : (
     <div className={clsx(styles.loginContainer, styles.row)}>
