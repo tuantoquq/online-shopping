@@ -274,17 +274,20 @@ productController.filter = async (req, res) => {
                     })
                 }
                 else if(property == 'categoryName'){
+                    var categories = await Category.find({categoryName: {$in: req.body['categoryName']}})
+                    if(!categories){
+                        return res.status(httpStatus.OK).json({
+                            status: apiStatus.OTHER_ERROR,
+                            message: "Not found category"
+                        })
+                    }
+                    let categoriIds = []
+                    for(let i =0;i < categories.length; i++){
+                        categoriIds.push(categories[i]._id)
+                    }
+                    console.log(categoriIds)
                     query.push({
-                        $lookup: {
-                            from: "Category",
-                            localField: "categoryId",
-                            foreignField: "_id",
-                            pipeline: [
-                                // {$match: {$expr: {$in: ["$categoryName", req.body['categoryName']]}}}
-                                {$match: { categoryName : {$in: req.body['categoryName']}}}
-                            ],
-                            as: "matches"
-                        }
+                        $match: { categoryId: {$in: categoriIds}}
                     })
                 }
                 else if(property == 'startPrice'){
@@ -340,17 +343,7 @@ productController.filter = async (req, res) => {
             });
         }
 
-        // query.push({
-        //     "$facet": {
-        //         "data": [
-        //           { "$skip": skip },
-        //           { "$limit": maxItem }
-        //         ],
-        //         "pagination": [
-        //           { "$count": "total" }
-        //         ]
-        //       }
-        // })
+        
         console.log(query)
         const maxDocuments = await Product.aggregate(query).length
         console.log(maxDocuments)
@@ -362,12 +355,13 @@ productController.filter = async (req, res) => {
         else{
             countPage = ~~(maxDocuments / maxItem) + 1
         }
-        let products = await Product.aggregate(query).skip(skip).limit(maxItem)
-        console.log(products.length)
+        let productIds = await Product.aggregate(query).skip(skip).limit(maxItem).project({
+            _id: 1 // By default
+        })
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
             message: "filter products successfully",
-            data: products,
+            data: productIds,
             maxPage: countPage
         });
 
