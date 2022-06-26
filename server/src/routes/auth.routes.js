@@ -9,7 +9,7 @@ import {
     refreshTokenForCustomer,
     refreshTokenForAdmin,
     refreshTokenForShopper,
-} from '../controller/auth.js';
+} from '../controller/auth.controller.js';
 import {
     validateLoginCustomerAndShopper,
     validateRegister,

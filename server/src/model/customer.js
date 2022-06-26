@@ -24,13 +24,16 @@ const CustomerSchema = new mongoose.Schema(
         },
         dateOfBirth: {
             type: String,
+            required: true,
         },
         gender: {
             //MALE, FEMALE, OTHER
             type: String,
+            required: true,
         },
         avatarUrl: {
             type: String,
+            default: 'avt_default.png',
         },
         createdAt: {
             type: Date,

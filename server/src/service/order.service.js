@@ -6,7 +6,7 @@ import Order from '../model/order.js';
 const OrderService = {};
 
 OrderService.addOrder = async (orderRequest) => {
-   await orderRequest.save(function(err, order){
+    await orderRequest.save(function (err, order) {
         if (err)
             throw new CustomError(
                 httpStatus.INTERNAL_SERVER_ERROR,
@@ -26,8 +26,12 @@ OrderService.getListOrderByCustomer = async (customerId) => {
 };
 
 OrderService.updateOrder = async (orderId, orderStatus) => {
-    let order = await Order.findByIdAndUpdate(orderId, {orderStatus: orderStatus}, {new: true});
-    if(!order){
+    let order = await Order.findByIdAndUpdate(
+        orderId,
+        { orderStatus: orderStatus },
+        { new: true },
+    );
+    if (!order) {
         throw new CustomError(
             httpStatus.INTERNAL_SERVER_ERROR,
             apiStatus.DATABASE_ERROR,
@@ -35,10 +39,10 @@ OrderService.updateOrder = async (orderId, orderStatus) => {
         );
     }
     return order;
-}
+};
 
 OrderService.getListOrderByCustomerAndStatus = async (customerId, status) => {
-    let listOrder = await Order.find({customerId: customerId, orderStatus: status});
+    let listOrder = await Order.find({ customerId: customerId, orderStatus: status });
     return listOrder;
-}
+};
 export default OrderService;

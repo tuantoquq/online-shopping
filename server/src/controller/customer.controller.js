@@ -28,15 +28,15 @@ export const getCustomerProfile = async (req, res) => {
 };
 
 export const cancelOrder = async (req, res) => {
-    try{
+    try {
         const orderId = req.query.orderId;
         let updateOrder = await OrderService.updateOrder(orderId, -1);
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "cancel order successfully",
-            data: updateOrder
+            message: 'cancel order successfully',
+            data: updateOrder,
         });
-    }catch(err){
+    } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.httpStatus).send({
                 status: err.apiStatus,

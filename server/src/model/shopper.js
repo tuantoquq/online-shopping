@@ -28,9 +28,12 @@ const ShopperSchema = new mongoose.Schema(
         gender: {
             //MALE, FEMALE, OTHER
             type: String,
+            required: true,
         },
         avatarUrl: {
             type: String,
+            default: 'avt_default.png',
+            required: true,
         },
         cccd: {
             type: String,

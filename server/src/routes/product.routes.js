@@ -8,10 +8,7 @@ productRoutes.post(
     verifyToken,
     productController.insertProductToDatabase,
 );
-productRoutes.get(
-    '/api/v1/product/get',
-    productController.getProductFromDatabase,
-);
+productRoutes.get('/api/v1/product/get', productController.getProductFromDatabase);
 productRoutes.post(
     '/api/v1/product/delete',
     verifyToken,
