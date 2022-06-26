@@ -330,17 +330,6 @@ productController.filter = async (req, res) => {
                     }
                 }
             }
-            if (!products) {
-                return res.status(httpStatus.OK).json({
-                    status: apiStatus.INVALID_PARAM,
-                    message: "We don't have any product belong to this category",
-                });
-            }
-            return res.status(httpStatus.OK).json({
-                status: apiStatus.SUCCESS,
-                message: 'filter products successfully',
-                data: products,
-            });
         }
 
         
