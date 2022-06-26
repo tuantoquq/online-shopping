@@ -66,7 +66,7 @@ function UserDisplay(props){
                 <div className={styles.right_cpn}>
                     <h3>{user_name}</h3>
                     <p>{user_age}</p>
-                    {/* <p>{user_phone}</p> */}
+                    <p>{user_phone}</p>
                 </div>
             </div>
 
