@@ -28,7 +28,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function Search() {
   const location = useLocation();
   const search = location.state.search;
-  // console.log(search);
+  console.log(search);
   //request data with search term;
   const PRODUCT_SEARCH_URL = '/product/search';
 
@@ -66,61 +66,37 @@ function Search() {
     },
   ]);
 
-  //for all data -request once time when component construct
-  const [allCategories] = useState((search) => getAllCategories(search));
-  const [allBrands] = useState((search) => getAllBrands(search));
-  const [allLocations] = useState((search) => getAllLocations(search));
+  //for all data -request once time when component
+  const [allCategories, setAllCategories] = useState([]);
 
-  function getAllLocations(searchTerm) {
-    // console.log('re-render');
-    //get All location from list products
-    const ressponseData = [
-      'Hà Nội',
-      'Hải Phòng',
-      'TP. Hồ  Chí Minh',
-      'Quận Long Biên',
-      'Nghệ An',
-      'Quận Hoàng Mai',
-    ];
-    //console.log(ressponseData);
-    return ressponseData; //sample data
-  }
+  const [showedCategories, setShowedCategories] = useState([]);
 
-  function getAllCategories(searchTerm) {
-    const ressponseData = [
-      'Phụ kiện máy tính',
-      'Đồ chơi',
-      'Gamming',
-      'Máy tính bàn',
-      'Bàn di chuột',
-      'Thời trang',
-    ];
-    //console.log(ressponseData);
-    return ressponseData; //sample data
-  }
+  useEffect(() => {
+    axios
+      .get('/category/get?all=true')
+      .then((res) => {
+        let allCates = res.data.data.map((item) => item.categoryName);
+        allCates = new Set(allCates);
+        allCates = [...allCates];
+        setAllCategories(allCates);
+        setShowedCategories(allCates.slice(0, 5));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  // const [showedLocations, setShowedLocations] = useState(
+  //   allLocations.slice(0, 5)
+  // );
+  // const [showedBrands, setShowedBrands] = useState(allBrands.slice(0, 5));
 
-  function getAllBrands(searchTerm) {
-    //request data
-    const ressponseData = ['Lionvn', 'Creality', 'Phrozen', 'Elgoo'];
-    //console.log(ressponseData);
-    return ressponseData;
-  }
-
-  //for display filter if all data too long
-  const [showedCategories, setShowedCategories] = useState(
-    allCategories.slice(0, 5)
-  );
-  const [showedLocations, setShowedLocations] = useState(
-    allLocations.slice(0, 5)
-  );
-  const [showedBrands, setShowedBrands] = useState(allBrands.slice(0, 5));
   const [numPages, setNumPages] = useState(0);
   //console.log(numPages);
 
   //for changing Filter
   const [categories, setCategories] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [brands, setBrands] = useState([]);
+  // const [locations, setLocations] = useState([]);
+  // const [brands, setBrands] = useState([]);
   const [fromPrice, setFromPrice] = useState('');
   const [toPrice, setToPrice] = useState('');
   const [fromPriceApplied, setFromPriceApplied] = useState(null);
@@ -157,59 +133,59 @@ function Search() {
     }
   }
 
-  //Locations
-  const handleLocations = (location) => {
-    setLocations((prev) => {
-      const isChecked = locations.includes(location);
-      if (isChecked) {
-        return locations.filter((item) => item !== location);
-      } else {
-        return [...prev, location];
-      }
-    });
-  };
+  // //Locations
+  // const handleLocations = (location) => {
+  //   setLocations((prev) => {
+  //     const isChecked = locations.includes(location);
+  //     if (isChecked) {
+  //       return locations.filter((item) => item !== location);
+  //     } else {
+  //       return [...prev, location];
+  //     }
+  //   });
+  // };
 
-  function handleSeeLessLocations() {
-    const len = allLocations.length;
-    setShowedLocations(allLocations.slice(0, 5));
-    const checkedUnshowed = allLocations
-      .slice(5, len)
-      .filter((item) => locations.find((location) => location === item));
-    //console.log(checkedUnshowed);
-    if (checkedUnshowed.length !== 0) {
-      for (const location of checkedUnshowed) {
-        //console.log(location);
-        setLocations(locations.filter((item) => item !== location));
-      }
-    }
-  }
+  // function handleSeeLessLocations() {
+  //   const len = allLocations.length;
+  //   setShowedLocations(allLocations.slice(0, 5));
+  //   const checkedUnshowed = allLocations
+  //     .slice(5, len)
+  //     .filter((item) => locations.find((location) => location === item));
+  //   //console.log(checkedUnshowed);
+  //   if (checkedUnshowed.length !== 0) {
+  //     for (const location of checkedUnshowed) {
+  //       //console.log(location);
+  //       setLocations(locations.filter((item) => item !== location));
+  //     }
+  //   }
+  // }
 
-  // Brands
-  const handleBrands = (brand) => {
-    setBrands((prev) => {
-      const isChecked = brands.includes(brand);
-      if (isChecked) {
-        return brands.filter((item) => item !== brand);
-      } else {
-        return [...prev, brand];
-      }
-    });
-  };
+  // // Brands
+  // const handleBrands = (brand) => {
+  //   setBrands((prev) => {
+  //     const isChecked = brands.includes(brand);
+  //     if (isChecked) {
+  //       return brands.filter((item) => item !== brand);
+  //     } else {
+  //       return [...prev, brand];
+  //     }
+  //   });
+  // };
 
-  function handleSeeLessBrands() {
-    const len = allBrands.length;
-    setShowedBrands(allBrands.slice(0, 5));
-    const checkedUnshowed = allBrands
-      .slice(5, len)
-      .filter((item) => brands.find((brand) => brand === item));
-    //console.log(checkedUnshowed);
-    if (checkedUnshowed.length !== 0) {
-      for (const brand of checkedUnshowed) {
-        //console.log(brand);
-        setBrands(brands.filter((item) => item !== brand));
-      }
-    }
-  }
+  // function handleSeeLessBrands() {
+  //   const len = allBrands.length;
+  //   setShowedBrands(allBrands.slice(0, 5));
+  //   const checkedUnshowed = allBrands
+  //     .slice(5, len)
+  //     .filter((item) => brands.find((brand) => brand === item));
+  //   //console.log(checkedUnshowed);
+  //   if (checkedUnshowed.length !== 0) {
+  //     for (const brand of checkedUnshowed) {
+  //       //console.log(brand);
+  //       setBrands(brands.filter((item) => item !== brand));
+  //     }
+  //   }
+  // }
 
   function handleApply(apply) {
     //console.log('Set apply to', apply);
@@ -245,8 +221,8 @@ function Search() {
 
   function handleClearAll() {
     setCategories([]);
-    setLocations([]);
-    setBrands([]);
+    // setLocations([]);
+    // setBrands([]);
     setRating();
     setFromPrice('');
     setToPrice('');
@@ -280,13 +256,18 @@ function Search() {
     const responseData = Math.floor(Math.random() * 10) + 1;
     return responseData;
   }
+
+  // useEffect(() => {
+  //   setCategories(allCategories.slice(0, 5));
+  // }, [allCategories]);
+
   useEffect(() => {
     //console.log('filter change');
     const filter = {
       search: search,
       category: categories,
-      location: locations,
-      brand: brands,
+      // location: locations,
+      // brand: brands,
       rating: rating,
       fromPrice: fromPriceApplied,
       toPrice: toPriceApplied,
@@ -312,15 +293,15 @@ function Search() {
         console.log(err);
       }
     }
-    searchProduct();
+    // searchProduct();
     setProductIdList([1, 2, 3, 4]);
     setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
     setPage(1);
   }, [
     search,
     categories,
-    locations,
-    brands,
+    // locations,
+    // brands,
     rating,
     fromPriceApplied,
     toPriceApplied,
@@ -332,8 +313,8 @@ function Search() {
     const filter = {
       search: search,
       category: categories,
-      location: locations,
-      brand: brands,
+      // location: locations,
+      // brand: brands,
       rating: rating,
       fromPrice: fromPriceApplied,
       toPrice: toPriceApplied,
@@ -409,7 +390,7 @@ function Search() {
               )}
             </div>
           </div>
-          <div className={clsx(styles.searchFilter)}>
+          {/* <div className={clsx(styles.searchFilter)}>
             <h3>Nơi Bán</h3>
             <div>
               {showedLocations.map((location, index) => (
@@ -498,7 +479,7 @@ function Search() {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           <div className={clsx(styles.searchFilter)}>
             <h3>Khoảng giá</h3>
             <div>
