@@ -9,7 +9,11 @@ const customerRoutes = express.Router();
 customerRoutes.get('/api/v1/customer/auth/get-profiles', verifyToken, getCustomerProfile);
 customerRoutes.post('/api/v1/customer/auth/cancel-order', verifyToken, cancelOrder);
 <<<<<<< HEAD
+<<<<<<< HEAD
 customerRoutes.post('/api/v1/customer/auth/update', verifyToken, updateInforCustomer);
+=======
+customerRoutes.post('/api/v1/customer/update', verifyToken, updateInforCustomer)
+>>>>>>> fix search engine
 =======
 customerRoutes.post('/api/v1/customer/update', verifyToken, updateInforCustomer)
 >>>>>>> fix search engine
