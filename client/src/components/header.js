@@ -12,42 +12,32 @@ import {useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ navigation }) {
   const navigate = useNavigate();
   const dictDay = {
-    0: 'Chủ nhật',
-    1: 'Thứ Hai',
-    2: 'Thứ Ba',
-    3: 'Thứ Tư',
-    4: 'Thứ Năm',
-    5: 'Thứ Sáu',
-    6: 'Thứ Bảy',
+    0: "Chủ nhật",
+    1: "Thứ Hai",
+    2: "Thứ Ba",
+    3: "Thứ Tư",
+    4: "Thứ Năm",
+    5: "Thứ Sáu",
+    6: "Thứ Bảy",
   };
   let date = new Date();
   const dateCurr = date.toLocaleDateString();
   const dayCurr = dictDay[date.getDay()];
 
   const listTopic = [
-    ['Váy', 'vay'],
-    ['Túi', 'túi'],
-    ['Tai nghe', 'tai nghe'],
-    ['Điện thoại', 'điện thoại'],
-    ['Sạc iphone', 'sạc iphone'],
+    ["Váy", "vay"],
+    ["Túi", "túi"],
+    ["Tai nghe", "tai nghe"],
+    ["Điện thoại", "điện thoại"],
+    ["Sạc iphone", "sạc iphone"],
   ];
 
-  const topicThoiSu = [
-    ['Chính trị', 'thoi-su/chinh-tri'],
-    ['Dân sinh', 'thoi-su/dan-sinh'],
-    ['Giao thông', 'thoisu-dan-sinh'],
-  ];
-  const toppicGocNhin = [
-    ['Bình luận nhiều', 'goc-nhin/nhieu-binh-luan'],
-    ['Covid-19', 'goc-nhin/covid-19'],
-    ['Kinh doanh', 'goc-nhin/kinh-doanh'],
-  ];
 
-  const [username, setUsername] = useState('');
-
+  const [username, setUsername] = useState("");
+  const [query, setQuery] = useState("");
   const navigatePath = function (path) {
     if (window.location.pathname !== path) {
       navigate(path);
@@ -57,7 +47,7 @@ function Header() {
   return (
     <div className={styles.Header}>
       <div className={styles.toolBar}>
-        <label className={styles.namePaper} onClick={() => navigatePath('/')}>
+        <label className={styles.namePaper} onClick={() => navigatePath("/")}>
           Tipi Shop
         </label>
         <label
@@ -67,6 +57,8 @@ function Header() {
         <div className={styles.divSearch}>
           <input
             type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Nhập nội dung..."
             className={styles.search}
           />
@@ -74,7 +66,11 @@ function Header() {
             src={searchImage}
             className={styles.image}
             alt="search"
-            onClick={() => navigatePath('/tim-kiem')}
+            onClick={() =>
+              navigate("/search", {
+                state: { search: query },
+              })
+            }
           />
         </div>
 
@@ -83,20 +79,20 @@ function Header() {
             src={userImage}
             className={styles.userIcon}
             onClick={() =>
-              Cookies.get('access_token') == null
-                ? navigatePath('/customer/login')
-                : navigatePath('/user-information')
+              Cookies.get("access_token") == null
+                ? navigatePath("/customer/login")
+                : navigatePath("/user-information")
             }
           />
           <p
             className={styles.textColor}
             onClick={() =>
-              Cookies.get('access_token') == null
-                ? navigatePath('/customer/login')
-                : navigatePath('/user-information')
+              Cookies.get("access_token") == null
+                ? navigatePath("/customer/login")
+                : navigatePath("/user-information")
             }
           >
-            {Cookies.get('access_token') == null ? 'Đăng nhập' : username}
+            {Cookies.get("access_token") == null ? "Đăng nhập" : username}
           </p>
         </a>
       </div>
@@ -106,7 +102,15 @@ function Header() {
           <ul className={`${styles.textColor} ${styles.narMenu}`}>
             {listTopic.map((topic) => (
               <li>
-                <Link to={`/${topic[1]}`}>{topic[0]}</Link>
+                <p
+                  onClick={() =>
+                    navigate("/search", {
+                      state: { search: topic[0] },
+                    })
+                  }
+                >
+                  {topic[0]}
+                </p>
               </li>
             ))}
             <li>
@@ -119,7 +123,7 @@ function Header() {
         </div>
 
         <div className={styles.cart}>
-          <img src={cartImage}/>
+          <img src={cartImage} />
         </div>
       </div>
     </div>

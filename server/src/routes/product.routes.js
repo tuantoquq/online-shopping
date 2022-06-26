@@ -1,5 +1,5 @@
 import express from 'express';
-import productController from '../controller/product.js';
+import productController from '../controller/product.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 
 const productRoutes = express.Router();
@@ -10,7 +10,6 @@ productRoutes.post(
 );
 productRoutes.get(
     '/api/v1/product/get',
-    verifyToken,
     productController.getProductFromDatabase,
 );
 productRoutes.post(

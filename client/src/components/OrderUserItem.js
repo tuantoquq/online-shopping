@@ -16,20 +16,30 @@ import imageTest from '../assets/testproduct.jpg'
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router-dom';
 
 function ButtonOrder({post, st}){
+    const navigate = useNavigate();
+    const navigatePath = function (path) {
+        if (window.location.pathname !== path) {
+          navigate(path);
+        }
+      };
     return (
         <div >
             {post.map((p) => {
                 return(
                     <div >
                         {p.status === st && (
-                            <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>           
-                                <Button variant="outlined"> {p.button1} </Button>
-                                {p.button2 === "Danh gia shop" && (
-                                    <Link to="/TestShop" >
-                                        <Button variant="outlined"> {p.button2} </Button>
-                                    </Link>
+                            <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>
+                                <div className={stylesProduct.tap}>
+                                    <Button variant="outlined" onClick={() => navigatePath("/cart")}> {p.button1} </Button>                                
+                                </div>          
+                                 
+                                {p.button2 === "Đánh giá shop" && (
+                                    <div className={stylesProduct.tap}>
+                                        <Button variant="outlined" onClick={() => navigatePath("/TestShop")}> {p.button2} </Button>                  
+                                    </div>       
                                 )}
                             </div>
                         )}
@@ -44,11 +54,11 @@ function ButtonOrder({post, st}){
 
 function OrderUserItem({productOrder}){
     const posts = [
-        {status: "Cho lay hang", button1: "Huy don hang", button2: ""},
-        {status: "Da xac nhan", button1: "Huy don hang", button2: ""},
-        {status: "Dang giao", button1: "Huy don hang", button2: ""},
-        {status: "Da giao", button1: "Mua Lai", button2: "Danh gia shop"},
-        {status: "Da huy", button1: "Mua Lai", button2: ""}
+        {status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: ""},
+        {status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: ""},
+        {status: "Đang giao", button1: "Huỷ đơn hàng", button2: ""},
+        {status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop"},
+        {status: "Đã hủy", button1: "Mua lại", button2: ""}
       ];
     return(
         <div className={styleOrderUser.Home}>
@@ -81,8 +91,8 @@ function OrderUserItem({productOrder}){
                             <h5> 
                                 {productOrder.name}
                             </h5>
-                            <h5 className={styleOrderUser.item}> Loai hang: {productOrder.type} </h5>
-                            <h5 className={styleOrderUser.item}> So luong: {productOrder.count} </h5>
+                            <h5 className={styleOrderUser.item}> Loại hàng: {productOrder.type} </h5>
+                            <h5 className={styleOrderUser.item}> Số lượng: {productOrder.count} </h5>
                         </div>
                         <div className={styleOrderUser.moneyItem}>
                             {productOrder.cost}
@@ -93,7 +103,7 @@ function OrderUserItem({productOrder}){
                     </div>
                     <div className={styleOrderUser.button}>
                         <h2>
-                            Tong tien: {productOrder.cost * productOrder.count}
+                            Tổng tiền: {productOrder.cost * productOrder.count}
                         </h2>
                     </div>
                     <div className={styleOrderUser.button}>
