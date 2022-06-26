@@ -18,23 +18,33 @@ function ProductInformation({navigation}) {
     const navigate = useNavigate();
     const [productData,setProductData] = useState(null)
     const [productCategory,setProductCategory] = useState(null)
+    const [comment,setComment] = useState(null)
+
 
     let s = window.location.href.split('/')
+    let path = `/product/get?productId=${s[s.length-1]}`
+    // '/product/get?productId=629e172caf24631642b441ee'
     useEffect(()=>{
-      axiosConfig.get('/product/get?productId=629e172caf24631642b441ee').then(res=>{
+      axiosConfig.get(path).then(res=>{
         setProductData(res.data.data)
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+        console.log(res.data.data?.categoryId)
+        let pathCategory = `/category/get?categoryId=${res.data.data?.categoryId}`
+        axiosConfig.get(pathCategory).then(res=>{
+          setProductCategory(res.data.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
 
-    },[])
-    let categoryId = productData?.categoryId
-    console.log(`/category/get?categoryId=${categoryId}`)
+        let pathComment = '/comments?productId=629e16a6af24631642b44151'
+        axiosConfig.get(pathComment).then(res=>{
+          setComment(res.data.data)
+          console.log(res.data.data)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
 
-    useEffect(()=>{
-      axiosConfig.get(`/category/get?categoryId=${categoryId}`).then(res=>{
-        setProductCategory(res.data.data)
       })
       .catch(err=>{
         console.log(err)
