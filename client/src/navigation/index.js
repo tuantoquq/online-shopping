@@ -53,10 +53,10 @@ function RootRoutes() {
       <Route path="/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
 
-      <Route path="/ProductTest/:teamId" element={<ProductInformation />} />
+      <Route path="/product/:teamId" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
       <Route path="/vay" element={<OrderUserManager />} />
-      <Route path="/ProductManager" element={<ProductManager />} />
+      <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
       <Route path="/admin" element={<AdminDashboard />} />
