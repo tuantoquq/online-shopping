@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import styles from './CSS/ProductCardCSS.module.scss';
 import Card from '@mui/material/Card';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StoreIcon from '@mui/icons-material/Store';
 import CardMedia from '@mui/material/CardMedia';
 import Rating from '@mui/material/Rating';
 
@@ -36,9 +37,8 @@ function ProductCard(props) {
             // withCredentials: true,
           }
         );
-        //console.log(response);
+        console.log(response);
         const data = response.data.data;
-        //console.log(Math.floor(data.ratingStar));
         let name = '';
         if (data.productName.length <= 53) {
           name = data.productName;
@@ -51,6 +51,7 @@ function ProductCard(props) {
           selled: data.soldHistory,
           price: data.price,
           image: data.imageUrls[0].base_url,
+          count: data.count,
         };
         setProductInfo(product);
       } catch (err) {
@@ -97,8 +98,8 @@ function ProductCard(props) {
               </span>
             </div>
             <span className={clsx(styles.location)}>
-              <LocationOnIcon className={clsx(styles.locationIcon)} />
-              {productInfo.location}
+              <StoreIcon className={clsx(styles.locationIcon)} />
+              {'còn ' + productInfo.count + ' sản phẩm'}
             </span>
           </div>
         </div>
