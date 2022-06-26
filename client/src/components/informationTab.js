@@ -26,35 +26,21 @@ export default function InformationTab() {
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
-      <ListItemButton>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Sent mail" />
-      </ListItemButton>
-
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Drafts" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-        </List>
-      </Collapse>
-
+      <Link
+        to="/shopper/ProductManager"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <ListItemButton onClick={handleClick}>
+          <ListItemIcon>
+            <DraftsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Quản lý sản phẩm" />
+        </ListItemButton>
+      </Link>
 
       <ListItemButton onClick={handleClick}>
         <ListItemIcon>
@@ -64,12 +50,12 @@ export default function InformationTab() {
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
 
-
-
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-
-          <Link to='/shopper/accept-order' style={{ textDecoration: 'none' ,color:'black'}}>
+          <Link
+            to="/shopper/accept-order"
+            style={{ textDecoration: "none", color: "black" }}
+          >
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
                 <AssignmentIcon />
@@ -78,7 +64,10 @@ export default function InformationTab() {
             </ListItemButton>
           </Link>
 
-          <Link to='/shopper/delivering-order' style={{ textDecoration: 'none',color:'black' }}>
+          <Link
+            to="/shopper/delivering-order"
+            style={{ textDecoration: "none", color: "black" }}
+          >
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
                 <AccessTimeIcon />
@@ -87,8 +76,10 @@ export default function InformationTab() {
             </ListItemButton>
           </Link>
 
-          <Link to='/shopper/delivered-order' style={{ textDecoration: 'none',color:'black' }}>
-
+          <Link
+            to="/shopper/delivered-order"
+            style={{ textDecoration: "none", color: "black" }}
+          >
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
                 <FactCheckIcon />
@@ -97,16 +88,17 @@ export default function InformationTab() {
             </ListItemButton>
           </Link>
 
-          <Link to='/shopper/reject-order' style={{ textDecoration: 'none' ,color:'black'}}>
+          <Link
+            to="/shopper/reject-order"
+            style={{ textDecoration: "none", color: "black" }}
+          >
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
                 <BookmarkRemoveIcon />
               </ListItemIcon>
               <ListItemText primary="Đơn từ chối" />
             </ListItemButton>
-
           </Link>
-
         </List>
       </Collapse>
     </List>
