@@ -55,7 +55,7 @@ productController.insertProductToDatabase = async (req, res) => {
             const productSave = await newProduct.save();
             return res.status(httpStatus.CREATED).json({
                 status: apiStatus.SUCCESS,
-                message: "add product successfully!",
+                message: 'add product successfully!',
                 data: productSave,
             });
         } catch (e) {
@@ -85,7 +85,7 @@ productController.getProductFromDatabase = async (req, res) => {
         }
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "get products successfully",
+            message: 'get products successfully',
             data: productFind,
         });
     } catch (e) {
@@ -152,7 +152,7 @@ productController.updateProductFromDatabase = async (req, res) => {
         }
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "update product successfully",
+            message: 'update product successfully',
             data: product,
         });
     } catch (e) {
@@ -207,7 +207,7 @@ productController.search = async (req, res) => {
         const documents = await Product.find({ _id: { $in: ids } });
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "search product successfully",
+            message: 'search product successfully',
             data: documents,
         });
     } catch (e) {
@@ -266,7 +266,7 @@ productController.filter = async (req, res) => {
             }
             return res.status(httpStatus.OK).json({
                 status: apiStatus.SUCCESS,
-                message: "filter products successfully",
+                message: 'filter products successfully',
                 data: products,
             });
         }
