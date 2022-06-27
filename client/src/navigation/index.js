@@ -50,9 +50,8 @@ function RootRoutes() {
         element={<UserInformation role="admin" />}
       />
       <Route path="/search" element={<Search />} />
-      <Route path="/user" element={<UserInformation />} />
       <Route path="/user/orderhistory" element={<OrderHistory />} />
-      <Route path="/user/cart" element={<Cart />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="/user/checkout" element={<Checkout/>} />
 
       <Route path="/product/:teamId" element={<ProductInformation />} />

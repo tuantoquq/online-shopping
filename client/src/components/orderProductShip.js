@@ -2,16 +2,33 @@ import ProductItem from "./productItem"
 import styles from './CSS/orderProduct.module.css'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-
-
+import {useEffect, useState} from 'react';
+import {getCartItem} from "../service/CustomerService";
 
 function OrderProductShip(){
+    const [cartItem, setCartItem] = useState([]);
+    const [totalPrice, setTotalPrice] = useState();
+    useEffect(() => {
+        getCartItem().then(
+            res => {
+                console.log(res?.data);
+                setCartItem(res?.data?.data);
+            }
+        ).catch(err => {
+            console.log(err);
+        });
 
+    }, []);
     return (
         <div className={styles.content}>
             <div className={styles.listProduct}>
-                <ProductItem/>
-                <ProductItem/>
+            <div>
+            {
+                cartItem.map(item => {
+                    return <ProductItem productId={item.productId} quantity={item.count} />
+                })
+            }
+            </div>
             </div>
             <div className={styles.comp1}>
             <div className={styles.displayMoney}>

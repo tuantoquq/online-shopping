@@ -126,8 +126,8 @@ function Header({ navigation }) {
           <img src={cartImage} 
              onClick={() =>
               Cookies.get("access_token") == null
-                ? navigatePath("/user/cart")
-                : navigatePath("/user/cart ")
+                ? navigatePath("/cart")
+                : navigatePath("/cart ")
             }
           />
         </div>
