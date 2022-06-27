@@ -5,36 +5,39 @@ import styles from '../components/CSS/UserInformation.module.css'
 import UserDisplay from "../components/userDisplay.js";
 import AccountInformation from "../components/AccountInformation";
 import { useEffect, useState } from "react";
-// import { getUserInformation } from "../api/userApi";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import {getCustomerProfile} from '../service/CustomerService.js';
+import avtImage from '../assets/avt_default.png';
 
 
 function UserInformation(navigation,role){
     const [user, setUser] = useState();
     const navigator = useNavigate();
-    
-    // useEffect(() => {
-    //     getUserInformation(Cookies.get("access_token")).then(
-    //         res => setUser(res.data)
-    //     ).catch((err) => {
-    //         console.log(err);
-    //     })
-    // }, []);
 
+    useEffect(() => {
+        getCustomerProfile().then(
+            res => {
+                console.log(res?.data?.data);
+                setUser(res?.data?.data);
+            }
+        ).catch(err => {
+            console.log(err);
+        });
+
+    }, []);
     const handleLogout = () => {
-        Cookies.remove('access_token');
-        alert('Bạn đã đăng xuất thành công');
-        navigator('/');
+        // Cookies.remove('access_token');
+        // alert('Bạn đã đăng xuất thành công');
+        // navigator('/');
     }
     return (
         <div className={styles.container}>
             <Header navigation={navigation}/>
             <div className={styles.content}>
-                <UserDisplay user_url={user?.avt_url.length === 0 ? "avt_default.png" : user?.avt_url} 
-                    user_name={user?.nick_name}
-                    user_age ={user?.date_of_birth}
-                    user_phone ={user?.phone_number}
+                <UserDisplay user_url={user?.avatarUrl == 'avt_default.png' ? avtImage : user?.avatarUrl}  
+                    user_name={user?.lastName}
+                    user_age ={user?.birthDay === undefined ? "Chưa cập nhật" : user?.birthDay}
+                    user_phone ={user?.phoneNumber}
                 />
                 {/* <AccountInformation user={user}/> */}
                 <AccountInformation role={navigation.role}/>

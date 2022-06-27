@@ -123,7 +123,13 @@ function Header({ navigation }) {
         </div>
 
         <div className={styles.cart}>
-          <img src={cartImage} />
+          <img src={cartImage} 
+             onClick={() =>
+              Cookies.get("access_token") == null
+                ? navigatePath("/cart")
+                : navigatePath("/cart ")
+            }
+          />
         </div>
       </div>
     </div>

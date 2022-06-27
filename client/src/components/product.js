@@ -13,7 +13,7 @@ import UserRating from './userRating';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosConfig from '../config/axios';
-
+import {addCartItem } from '../service/CustomerService';
 function ProductInformation({navigation}) {
     const navigate = useNavigate();
     const [productData,setProductData] = useState()
@@ -115,7 +115,11 @@ function ProductInformation({navigation}) {
                   </div>
                   <div className={stylesProduct.soldInfo}>
                     <div className={stylesProduct.button2}>
-                      <Button variant="contained" onClick={() => console.log("them")}> Thêm vào giỏ hàng </Button>
+                      <Button variant="contained" onClick={() => 
+                        addCartItem({productId: s[s.length-1], quantity:1}).then(res => {
+                          console.log(res.data);
+                      })
+                        }> Thêm vào giỏ hàng </Button>
                     </div>
                     <div className={stylesProduct.button2}>
                       <Button variant="contained" onClick={() => navigatePath("/cart")}> Mua ngay </Button>                         
