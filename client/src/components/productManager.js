@@ -23,6 +23,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
+import InformationTab from '../components/informationTab';
+import stylesTab from '../screens/CSS/seller_acceptOrder.module.css';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -241,7 +243,7 @@ function ProductManager(products) {
   
     const [page, setPage] = useState(0);
   
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const [order, setOrder] = React.useState('asc');
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = React.useState('id');
@@ -492,62 +494,104 @@ function ProductManager(products) {
           </Box>
         </Modal>
 
-
-        <div className={styles.content} >
-          <div className={styles.wraper}>
-            <div className={stylesProductManger.tdisplay}>  
-                <p>Quản lý sản phẩm</p>
-                {/* search */}
-                <div className={clsx(stylesProductManger.searchBar)}>
-                  <SearchIcon className={clsx(stylesProductManger.searchIcon)} />
-                  <input
-                    className={clsx(stylesProductManger.searchInput)}
-                    type="text"
-                    placeholder="Tìm sản phẩm . . ."
-                    spellCheck={false}
-                    value={searchTerm}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      return setSearchTerm(e.target.value);
-                    }}
-                  />
-                  {searchTerm && (
-                    <button
-                      className={clsx(stylesProductManger.clearButton)}
-                      onClick={() => setSearchTerm('')}
-                    >
-                      <CloseIcon className={clsx(stylesProductManger.clearIcon)} />
-                    </button>
-                  )}
-                </div>
-
-                <Button href="#text-buttons" onClick={handleOpen}>Thêm sản phẩm</Button>
+        
+        <div className={stylesTab.content} >
+            <div className={stylesTab.tab1} >
+              <InformationTab/>
             </div>
-            
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <EnhancedTableHead
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={handleRequestSort}
-                  rowCount={posts.length}
-                />
-                <TableBody>
-                  {posts.slice().sort(getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((product, index) => {
-                      const isItemSelected = isSelected(product.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
+            <div className={stylesTab.tab2} >
+              <div className={styles.wraper}>
+                <div className={stylesProductManger.tdisplay}>  
+                    <p>Quản lý sản phẩm</p>
+                    {/* search */}
+                    <div className={clsx(stylesProductManger.searchBar)}>
+                      <SearchIcon className={clsx(stylesProductManger.searchIcon)} />
+                      <input
+                        className={clsx(stylesProductManger.searchInput)}
+                        type="text"
+                        placeholder="Tìm sản phẩm . . ."
+                        spellCheck={false}
+                        value={searchTerm}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                          return setSearchTerm(e.target.value);
+                        }}
+                      />
+                      {searchTerm && (
+                        <button
+                          className={clsx(stylesProductManger.clearButton)}
+                          onClick={() => setSearchTerm('')}
+                        >
+                          <CloseIcon className={clsx(stylesProductManger.clearIcon)} />
+                        </button>
+                      )}
+                    </div>
+
+                    <Button href="#text-buttons" onClick={handleOpen}>Thêm sản phẩm</Button>
+                </div>
+                
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <EnhancedTableHead
+                      order={order}
+                      orderBy={orderBy}
+                      onRequestSort={handleRequestSort}
+                      rowCount={posts.length}
+                    />
+                    <TableBody>
+                      {posts.slice().sort(getComparator(order, orderBy))
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((product, index) => {
+                          const isItemSelected = isSelected(product.id);
+                          const labelId = `enhanced-table-checkbox-${index}`;
+
+                          return (
+                            <TableRow
+                              hover
+                              onClick={(event) => handleClick(event, product.id)}
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={product.id}
+                              selected={isItemSelected}
+                            >
+                              <TableCell component="th" scope="row">
+                                {product.id}
+                              </TableCell>
+                              <TableCell align="right"><Button onClick={() => handleOpenInforProduct(product)}>{product.name}</Button></TableCell>
+                              <TableCell align="right">{product.cost}</TableCell>
+                              <TableCell align="right">{product.solded}</TableCell>
+                              <TableCell align="right">{product.count}</TableCell>
+                              <TableCell align="right">{product.rating}</TableCell>
+                              <TableCell align="right">{product.lastUpdate}</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                        {emptyRows > 0 && (
+                          <TableRow
+                          >
+
+                          </TableRow>
+                        )}
+                    </TableBody>
+                    </Table>
+                  {/* <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell> ID </TableCell>
+                        <TableCell align="right"> Sản phẩm </TableCell>
+                        <TableCell align="right"> Giá tiền </TableCell>
+                        <TableCell align="right"> Đã bán </TableCell>
+                        <TableCell align="right"> Kho </TableCell>
+                        <TableCell align="right"> Đánh giá </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {posts.map((product) => (
                         <TableRow
-                          hover
-                          onClick={(event) => handleClick(event, product.id)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
                           key={product.id}
-                          selected={isItemSelected}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                           <TableCell component="th" scope="row">
                             {product.id}
@@ -557,58 +601,24 @@ function ProductManager(products) {
                           <TableCell align="right">{product.solded}</TableCell>
                           <TableCell align="right">{product.count}</TableCell>
                           <TableCell align="right">{product.rating}</TableCell>
-                          <TableCell align="right">{product.lastUpdate}</TableCell>
                         </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow
-                      >
+                      ))}
+                    </TableBody>
+                  </Table> */}
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 15]}
+                  component="div"
+                  count={posts.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </div>
+              
+            </div>
 
-                      </TableRow>
-                    )}
-                </TableBody>
-                </Table>
-              {/* <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell> ID </TableCell>
-                    <TableCell align="right"> Sản phẩm </TableCell>
-                    <TableCell align="right"> Giá tiền </TableCell>
-                    <TableCell align="right"> Đã bán </TableCell>
-                    <TableCell align="right"> Kho </TableCell>
-                    <TableCell align="right"> Đánh giá </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {posts.map((product) => (
-                    <TableRow
-                      key={product.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {product.id}
-                      </TableCell>
-                      <TableCell align="right"><Button onClick={() => handleOpenInforProduct(product)}>{product.name}</Button></TableCell>
-                      <TableCell align="right">{product.cost}</TableCell>
-                      <TableCell align="right">{product.solded}</TableCell>
-                      <TableCell align="right">{product.count}</TableCell>
-                      <TableCell align="right">{product.rating}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table> */}
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 15]}
-              component="div"
-              count={posts.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </div>
         </div>
         <Footer />
       </div>

@@ -8,4 +8,5 @@ const customerRoutes = express.Router();
 customerRoutes.get('/api/v1/customer/auth/get-profiles', verifyToken, getCustomerProfile);
 customerRoutes.post('/api/v1/customer/auth/cancel-order', verifyToken, cancelOrder);
 customerRoutes.post('/api/v1/customer/auth/update', verifyToken, updateInforCustomer);
+
 export default customerRoutes;

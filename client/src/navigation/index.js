@@ -55,10 +55,10 @@ function RootRoutes() {
       <Route path="/user/cart" element={<Cart />} />
       <Route path="/user/checkout" element={<Checkout/>} />
 
-      <Route path="/ProductTest/:teamId" element={<ProductInformation />} />
+      <Route path="/product/:teamId" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
       <Route path="/vay" element={<OrderUserManager />} />
-      <Route path="/ProductManager" element={<ProductManager />} />
+      <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
       <Route path="/admin" element={<AdminDashboard />} />
