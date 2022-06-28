@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
@@ -20,6 +20,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function LoginForm(props) {
   const navigate = useNavigate();
   const role = props.role;
+
   //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
   useEffect(() => {
@@ -29,6 +30,9 @@ function LoginForm(props) {
       }
       if (role === 'shopper') {
         navigate('/shopper/accept-order');
+      }
+      if (role === 'admin') {
+        navigate('/admin');
       }
     }
   }, []);
