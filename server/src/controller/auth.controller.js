@@ -43,7 +43,7 @@ export const registerCustomer = async (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 dateOfBirth: req.body.dateOfBirth,
                 gender: req.body.gender,
-                avatarUrl: req.body.avatarUrl
+                avatarUrl: req.body.avatarUrl,
             });
             let customer = await CustomerService.addCustomer(newCustomer);
             return res.status(httpStatus.OK).send({
@@ -92,7 +92,9 @@ export const updateInforCustomer = async (req, res) => {
             }
         }
         dataUpdate['updateAt'] = Date.now();
-        let customer = await Customer.findOneAndUpdate({ _id: customerId }, dataUpdate, {new: true});
+        let customer = await Customer.findOneAndUpdate({ _id: customerId }, dataUpdate, {
+            new: true,
+        });
         if (!customer) {
             return res.status(httpStatus.NOT_FOUND).json({
                 status: apiStatus.DATABASE_ERROR,
@@ -101,7 +103,7 @@ export const updateInforCustomer = async (req, res) => {
         }
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "update customer profile successfully",
+            message: 'update customer profile successfully',
             data: customer,
         });
     } catch (e) {
@@ -349,7 +351,9 @@ export const updateInforShopper = async (req, res) => {
             }
         }
 
-        let shop = await Shopper.findOneAndUpdate({ _id: shopperId }, dataUpdate, {new: true});
+        let shop = await Shopper.findOneAndUpdate({ _id: shopperId }, dataUpdate, {
+            new: true,
+        });
         if (!shop) {
             return res.status(httpStatus.NOT_FOUND).json({
                 status: apiStatus.DATABASE_ERROR,
@@ -358,7 +362,7 @@ export const updateInforShopper = async (req, res) => {
         }
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "update shopper profile successfully",
+            message: 'update shopper profile successfully',
             data: shop,
         });
     } catch (e) {

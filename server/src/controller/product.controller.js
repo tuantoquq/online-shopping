@@ -259,99 +259,114 @@ productController.filter = async (req, res) => {
             'categoryName',
             'startPrice',
             'endPrice',
-            "minRating",
-            "orderBy",
-            "sortBy"
-        ]
-        console.log(req.body['categoryName'])
-        let query = []
-        for(let i = 0; i < listPros.length; i++){
-            let property = listPros[i]
-            if(req.body.hasOwnProperty(property)){
-                if(property == 'query'){
+            'minRating',
+            'orderBy',
+            'sortBy',
+        ];
+        console.log(req.body['categoryName']);
+        let query = [];
+        for (let i = 0; i < listPros.length; i++) {
+            let property = listPros[i];
+            if (req.body.hasOwnProperty(property)) {
+                if (property == 'query') {
                     query.push({
-                        $match: { $or: [{productName: {$regex: req.body[property], $options: 'i'}}, {shortDescription: {$regex: req.body[property], $options: 'i'}}]}
-                    })
-                }
-                else if(property == 'categoryName'){
-                    var categories = await Category.find({categoryName: {$in: req.body['categoryName']}})
-                    if(!categories){
+                        $match: {
+                            $or: [
+                                {
+                                    productName: {
+                                        $regex: req.body[property],
+                                        $options: 'i',
+                                    },
+                                },
+                                {
+                                    shortDescription: {
+                                        $regex: req.body[property],
+                                        $options: 'i',
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                } else if (property == 'categoryName') {
+                    var categories = await Category.find({
+                        categoryName: { $in: req.body['categoryName'] },
+                    });
+                    if (!categories) {
                         return res.status(httpStatus.OK).json({
                             status: apiStatus.OTHER_ERROR,
-                            message: "Not found category"
-                        })
+                            message: 'Not found category',
+                        });
                     }
-                    let categoriIds = []
-                    for(let i =0;i < categories.length; i++){
-                        categoriIds.push(categories[i]._id)
+                    let categoriIds = [];
+                    for (let i = 0; i < categories.length; i++) {
+                        categoriIds.push(categories[i]._id);
                     }
-                    console.log(categoriIds)
+                    console.log(categoriIds);
                     query.push({
-                        $match: { categoryId: {$in: categoriIds}}
-                    })
-                }
-                else if(property == 'startPrice'){
+                        $match: { categoryId: { $in: categoriIds } },
+                    });
+                } else if (property == 'startPrice') {
                     query.push({
-                        $match: { price: {$lte: req.body['endPrice'], $gte: req.body['startPrice']}}
-                    })
-                }
-                else if (property == 'minRating'){
+                        $match: {
+                            price: {
+                                $lte: req.body['endPrice'],
+                                $gte: req.body['startPrice'],
+                            },
+                        },
+                    });
+                } else if (property == 'minRating') {
                     query.push({
-                        $match: {ratingStar: {$gte: req.body['minRating']}}
-                    })
-                }
-                else if(property == 'orderBy'){
-                    let sortby = req.body.sortBy == 'desc'? -1: 1
-                    if (req.body[property] == 'price'){
+                        $match: { ratingStar: { $gte: req.body['minRating'] } },
+                    });
+                } else if (property == 'orderBy') {
+                    let sortby = req.body.sortBy == 'desc' ? -1 : 1;
+                    if (req.body[property] == 'price') {
                         query.push({
-                            $sort: {price: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'pho bien'){
+                            $sort: { price: sortby },
+                        });
+                    } else if (req.body[property] == 'pho bien') {
                         query.push({
-                            $sort: {soldHistory: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'moi nhat'){
+                            $sort: { soldHistory: sortby },
+                        });
+                    } else if (req.body[property] == 'moi nhat') {
                         query.push({
-                            $sort: {createAt: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'rating'){
+                            $sort: { createAt: sortby },
+                        });
+                    } else if (req.body[property] == 'rating') {
                         query.push({
-                            $sort: {ratingStar: sortby}
-                        })
-                    }
-                    else{
+                            $sort: { ratingStar: sortby },
+                        });
+                    } else {
                         return res.status(httpStatus.OK).json({
-                            message: "order by " + req.body['orderBy'] + " isn't support",
-                            status: apiStatus.OTHER_ERROR
-                        })
+                            message: 'order by ' + req.body['orderBy'] + " isn't support",
+                            status: apiStatus.OTHER_ERROR,
+                        });
                     }
                 }
             }
         }
 
-        
-        console.log(query)
-        const maxDocuments = await Product.aggregate(query).length
-        console.log(maxDocuments)
+        console.log(query);
+        const maxDocuments = await Product.aggregate(query).length;
+        console.log(maxDocuments);
 
-        let countPage = 0
-        if (maxDocuments % maxItem == 0){
-            countPage = maxDocuments/maxItem
+        let countPage = 0;
+        if (maxDocuments % maxItem == 0) {
+            countPage = maxDocuments / maxItem;
+        } else {
+            countPage = ~~(maxDocuments / maxItem) + 1;
         }
-        else{
-            countPage = ~~(maxDocuments / maxItem) + 1
-        }
-        let productIds = await Product.aggregate(query).skip(skip).limit(maxItem).project({
-            _id: 1 // By default
-        })
+        let productIds = await Product.aggregate(query)
+            .skip(skip)
+            .limit(maxItem)
+            .project({
+                _id: 1, // By default
+            });
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "filter products successfully",
+            message: 'filter products successfully',
             data: productIds,
-            maxPage: countPage
+            maxPage: countPage,
         });
 
         // let categoryName = req.body.categoryName;

@@ -143,3 +143,29 @@ export const updateDeliveryAddress = async (req, res) => {
         });
     }
 };
+
+export const getListDeliveryAddressByCustomer = async (req, res) => {
+    try {
+        let customerId = req.userId;
+        console.log(customerId);
+        let listAddress = await DeliveryAddressService.getListAddressByCustomerId(
+            customerId,
+        );
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'get list delivery address by customer successfully',
+            data: listAddress,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
