@@ -56,6 +56,15 @@
     cursor: pointer;
     
 }
+
+.divUser1{
+    /* padding-left: 50px; */
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    
+}
 .toolBar a{
     text-decoration: none;
 }

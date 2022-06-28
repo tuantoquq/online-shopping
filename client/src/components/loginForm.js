@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,18 +21,22 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function LoginForm(props) {
   const navigate = useNavigate();
   const role = props.role;
+
   //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
-  useEffect(() => {
-    if (TokenService.getLocalAccessToken(role)) {
-      if (role === 'customer') {
-        navigate('/');
-      }
-      if (role === 'shopper') {
-        navigate('/shopper/accept-order');
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (TokenService.getLocalAccessToken(role)) {
+  //     if (role === 'customer') {
+  //       navigate('/');
+  //     }
+  //     if (role === 'shopper') {
+  //       navigate('/shopper/accept-order');
+  //     }
+  //     if (role === 'admin') {
+  //       navigate('/admin');
+  //     }
+  //   }
+  // }, []);
 
   const [open, setOpen] = useState(false);
 
@@ -119,16 +124,30 @@ function LoginForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email: user, password: pwd }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        }
-      );
+      let response;
+      if (role !== 'admin') {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ email: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      } else {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ username: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      }
       //console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response));
       if (response.data.status === 2) {
@@ -136,7 +155,11 @@ function LoginForm(props) {
         setOpen(true);
       } else {
         const token = response?.data?.data?.token;
+        const refreshToken = response?.data?.data?.refreshToken;
+
         TokenService.setLocalAccessToken(role, token);
+        TokenService.setLocalRefreshToken(role, refreshToken);
+        RoleService.setLocalRole(role);
         setAccessToken(token);
         setUser('');
         setPwd('');
@@ -205,7 +228,7 @@ function LoginForm(props) {
               htmlFor="email"
               className={clsx(styles.formLabel, styles.row)}
             >
-              Email:
+              {role === 'admin' ? 'Username:' : 'Email:'}
             </label>
             <input
               id="email"
