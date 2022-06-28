@@ -95,6 +95,18 @@
     resize: vertical;
 }
 
+.formInput2 {
+    word-wrap: break-word;
+    font-size: 1em;
+    width: 80%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    display: block;
+}
+
 .avatarInput {
     padding-top: 1px;
     padding-left: 80px;
