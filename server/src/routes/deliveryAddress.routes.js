@@ -4,6 +4,7 @@ import {
     getDeliveryAddressById,
     deleteDeliveryAddress,
     updateDeliveryAddress,
+    getListDeliveryAddressByCustomer,
 } from '../controller/deliveryAddress.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 
@@ -18,7 +19,19 @@ deliverAddressRoutes.get(
     verifyToken,
     getDeliveryAddressById,
 );
-deliverAddressRoutes.delete('/api/v1/customer/auth/delivery-address/:addressId', verifyToken, deleteDeliveryAddress);
-deliverAddressRoutes.put('/api/v1/customer/auth/delivery-address/:addressId', verifyToken, updateDeliveryAddress);
-
+deliverAddressRoutes.delete(
+    '/api/v1/customer/auth/delivery-address/:addressId',
+    verifyToken,
+    deleteDeliveryAddress,
+);
+deliverAddressRoutes.put(
+    '/api/v1/customer/auth/delivery-address/:addressId',
+    verifyToken,
+    updateDeliveryAddress,
+);
+deliverAddressRoutes.get(
+    '/api/v1/customer/auth/delivery-address',
+    verifyToken,
+    getListDeliveryAddressByCustomer,
+);
 export default deliverAddressRoutes;

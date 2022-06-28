@@ -43,4 +43,8 @@ ProductService.getTop30RecommendProducts = async () => {
     return listProduct;
 };
 
+ProductService.getListProductOfShop = async (shopId) => {
+    let response = await Product.find({ shopId: shopId });
+    return response;
+};
 export default ProductService;

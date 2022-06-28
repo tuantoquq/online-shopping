@@ -1,5 +1,5 @@
 import express from 'express';
-import productController from '../controller/product.js';
+import productController from '../controller/product.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 
 const productRoutes = express.Router();
@@ -8,11 +8,7 @@ productRoutes.post(
     verifyToken,
     productController.insertProductToDatabase,
 );
-productRoutes.get(
-    '/api/v1/product/get',
-    verifyToken,
-    productController.getProductFromDatabase,
-);
+productRoutes.get('/api/v1/product/get', productController.getProductFromDatabase);
 productRoutes.post(
     '/api/v1/product/delete',
     verifyToken,
@@ -25,7 +21,7 @@ productRoutes.post(
     productController.updateProductFromDatabase,
 );
 
-productRoutes.get('/api/v1/product/search', productController.search);
+// productRoutes.get('/api/v1/product/search', productController.search);
 productRoutes.get('/api/v1/product/filter', productController.filter);
 productRoutes.get(
     '/api/v1/product/top-6-selling',

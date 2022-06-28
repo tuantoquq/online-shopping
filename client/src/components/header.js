@@ -1,17 +1,19 @@
+import React from 'react';
+import searchImage from '../assets/magnifier.png';
+import userImage from '../assets/user1.png';
+import menuImage from '../assets/squares.png';
+import cartImage from '../assets/shopping-cart.png';
+import styles from './CSS/HeaderCSS.module.css';
 
-import React from "react";
-import searchImage from '../assets/magnifier.png'
-import userImage from '../assets/user1.png'
-import menuImage from '../assets/squares.png'
-import cartImage from '../assets/shopping-cart.png'
-import styles from './CSS/HeaderCSS.module.css'
-
-import Cookies from "js-cookie";
-import {useState,useEffect} from 'react'
+import Cookies from 'js-cookie';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
+import { getCustomerProfile } from '../service/CustomerService';
+import { getShopperProfile } from '../service/ShopperService';
+import { useState, useEffect, memo, useLayoutEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-
+import { Avatar, Menu, MenuItem } from '@mui/material';
 function Header() {
   const navigate = useNavigate();
   const dictDay = {
@@ -35,24 +37,69 @@ function Header() {
     ['Sạc iphone', 'sạc iphone'],
   ];
 
-  const topicThoiSu = [
-    ['Chính trị', 'thoi-su/chinh-tri'],
-    ['Dân sinh', 'thoi-su/dan-sinh'],
-    ['Giao thông', 'thoisu-dan-sinh'],
-  ];
-  const toppicGocNhin = [
-    ['Bình luận nhiều', 'goc-nhin/nhieu-binh-luan'],
-    ['Covid-19', 'goc-nhin/covid-19'],
-    ['Kinh doanh', 'goc-nhin/kinh-doanh'],
-  ];
+  const [accessToken, setAccessToken] = useState(
+    TokenService.getLocalAccessToken(RoleService.getLocalRole())
+  );
+  const [role, setRole] = useState(RoleService.getLocalRole());
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-  const [username, setUsername] = useState('');
+  const handleLogout = () => {
+    TokenService.removeLocalAccessToken(RoleService.getLocalRole());
+    RoleService.removeLocalRole();
+    setAccessToken(null);
+    setRole(RoleService.getLocalRole());
+    setAnchorEl(null);
+    navigate('/');
+  };
 
+  const handleClickInfo = () => {
+    setAnchorEl(null);
+    if (role === 'customer') {
+      navigate(`/user/infomation`);
+    } else {
+      navigate(`/${role}/infomation`);
+    }
+  };
+
+  const [user, setUser] = useState({});
+  const [query, setQuery] = useState('');
   const navigatePath = function (path) {
     if (window.location.pathname !== path) {
       navigate(path);
     }
   };
+
+  useLayoutEffect(() => {
+    if (accessToken) {
+      if (role === 'customer') {
+        getCustomerProfile()
+          .then((res) => {
+            console.log(res?.data?.data);
+            setUser(res?.data?.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      if (role === 'shopper') {
+        getShopperProfile()
+          .then((res) => {
+            console.log(res?.data?.data);
+            setUser(res?.data?.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }, []);
 
   return (
     <div className={styles.Header}>
@@ -67,6 +114,8 @@ function Header() {
         <div className={styles.divSearch}>
           <input
             type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Nhập nội dung..."
             className={styles.search}
           />
@@ -74,31 +123,61 @@ function Header() {
             src={searchImage}
             className={styles.image}
             alt="search"
-            onClick={() => navigatePath('/tim-kiem')}
+            onClick={() => {
+              if (query !== '') {
+                navigate('/search', {
+                  state: { search: query },
+                });
+              }
+            }}
           />
         </div>
+        {!accessToken && (
+          <div className={styles.divUser}>
+            <img
+              src={userImage}
+              className={styles.userIcon}
+              onClick={() => navigatePath('/customer/login')}
+              alt="default-btn"
+            />
+            <p
+              className={styles.textColor}
+              onClick={() => navigatePath('/customer/login')}
+            >
+              {'Đăng nhập'}
+            </p>
+          </div>
+        )}
 
-        <a className={styles.divUser}>
-          <img
-            src={userImage}
-            className={styles.userIcon}
-            onClick={() =>
-              Cookies.get('access_token') == null
-                ? navigatePath('/customer/login')
-                : navigatePath('/user-information')
-            }
-          />
-          <p
-            className={styles.textColor}
-            onClick={() =>
-              Cookies.get('access_token') == null
-                ? navigatePath('/customer/login')
-                : navigatePath('/user-information')
-            }
-          >
-            {Cookies.get('access_token') == null ? 'Đăng nhập' : username}
-          </p>
-        </a>
+        {accessToken && (
+          <div className={styles.divUser1}>
+            <Avatar
+              alt="avatar"
+              src={user.avatar}
+              className={styles.userIcon}
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            ></Avatar>
+            <p
+              className={styles.textColor}
+              onClick={handleClick}
+            >{`${user.firstName} ${user.lastName}`}</p>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClickInfo}>Thông tin cá nhân</MenuItem>
+              <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+            </Menu>
+          </div>
+        )}
       </div>
 
       <div className={styles.cmp_2}>
@@ -106,12 +185,20 @@ function Header() {
           <ul className={`${styles.textColor} ${styles.narMenu}`}>
             {listTopic.map((topic) => (
               <li>
-                <Link to={`/${topic[1]}`}>{topic[0]}</Link>
+                <p
+                  onClick={() =>
+                    navigate('/search', {
+                      state: { search: topic[0] },
+                    })
+                  }
+                >
+                  {topic[0]}
+                </p>
               </li>
             ))}
             <li>
               <div className={styles.divUser}>
-                <a>Tất cả</a>
+                <span>Tất cả</span>
                 <img src={menuImage} className={styles.image} alt="menuImage" />
               </div>
             </li>
@@ -119,11 +206,19 @@ function Header() {
         </div>
 
         <div className={styles.cart}>
-          <img src={cartImage}/>
+          <img
+            src={cartImage}
+            onClick={() =>
+              accessToken
+                ? navigatePath('/cart')
+                : navigatePath('/customer/login')
+            }
+            alt=""
+          />
         </div>
       </div>
     </div>
   );
 }
 
-export default Header;
+export default memo(Header);

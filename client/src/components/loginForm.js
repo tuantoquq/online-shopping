@@ -1,26 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import clsx from 'clsx';
 import styles from './CSS/LoginFormCSS.module.scss';
 import logoImage from '../assets/logo-design.png';
-import AuthContext from './authProvider';
 
 import axios from '../config/axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function LoginForm(props) {
+  const navigate = useNavigate();
   const role = props.role;
+
+  //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
+  // useEffect(() => {
+  //   if (TokenService.getLocalAccessToken(role)) {
+  //     if (role === 'customer') {
+  //       navigate('/');
+  //     }
+  //     if (role === 'shopper') {
+  //       navigate('/shopper/accept-order');
+  //     }
+  //     if (role === 'admin') {
+  //       navigate('/admin');
+  //     }
+  //   }
+  // }, []);
+
   const [open, setOpen] = useState(false);
 
   const LOGIN_URL = `/${role}/login`;
+<<<<<<< HEAD
   const { setAuth } = useContext(AuthContext);
+=======
+  const [accessToken, setAccessToken] = useState(null);
+>>>>>>> 470b6d843cf73425adbdfabc90abeb9451665666
   const userRef = useRef();
   const errRef = useRef();
 
@@ -42,6 +67,46 @@ function LoginForm(props) {
   }, [user, pwd]);
 
   useEffect(() => {
+    //console.log('accessToken: ', TokenService.getLocalAccessToken(role));
+    //setAuth({ user, pwd, role, accessToken });
+    if (TokenService.getLocalAccessToken(role)) {
+      //console.log(role);
+      //console.log(TokenService.getLocalAccessToken(role));
+      setSuccess(true);
+    } else {
+      //console.log(false);
+      setSuccess(false);
+      //TokenService.setLocalAccessToken(role, accessToken);
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    //console.log(success);
+    if (success === true) {
+      //console.log('navigate');
+      if (role === 'customer') {
+        navigate('/');
+      }
+      if (role === 'shopper') {
+        navigate('/shopper/accept-order');
+      }
+      if (role === 'admin') {
+        navigate('/admin');
+      }
+    }
+  }, [success]);
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [user, pwd]);
+
+  useEffect(() => {
+    if (TokenService.getLocalAccessToken(role)) {
+      // console.log(role);
+      setSuccess(true);
+    } else {
+      setSuccess(false);
+    }
     let r = '';
     if (role === 'customer') {
       r = 'khách hàng';
@@ -63,27 +128,45 @@ function LoginForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email: user, password: pwd }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        }
-      );
-      console.log(JSON.stringify(response?.data));
-      console.log(JSON.stringify(response));
+      let response;
+      if (role !== 'admin') {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ email: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      } else {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ username: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      }
+      //console.log(JSON.stringify(response?.data));
+      //console.log(JSON.stringify(response));
       if (response.data.status === 2) {
         setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
-        const accessToken = response?.data?.token;
-        setAuth({ user, pwd, role, accessToken });
+        const token = response?.data?.data?.token;
+        const refreshToken = response?.data?.data?.refreshToken;
+
+        TokenService.setLocalAccessToken(role, token);
+        TokenService.setLocalRefreshToken(role, refreshToken);
+        RoleService.setLocalRole(role);
+        setAccessToken(token);
         setUser('');
         setPwd('');
-        setSuccess(true);
       }
     } catch (err) {
       if (!err?.response) {
@@ -102,8 +185,8 @@ function LoginForm(props) {
     }
   };
 
-  return success ? (
-    <h2>Return home </h2>
+  return TokenService.getLocalAccessToken(role) || success ? (
+    <div className={clsx(styles.loginContainer, styles.row)}></div>
   ) : (
     <div className={clsx(styles.loginContainer, styles.row)}>
       <div
@@ -149,7 +232,7 @@ function LoginForm(props) {
               htmlFor="email"
               className={clsx(styles.formLabel, styles.row)}
             >
-              Email:
+              {role === 'admin' ? 'Username:' : 'Email:'}
             </label>
             <input
               id="email"

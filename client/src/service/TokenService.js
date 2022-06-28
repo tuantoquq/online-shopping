@@ -1,4 +1,10 @@
 class TokenService {
+    setLocalAccessToken(role, accessToken){
+        localStorage.setItem(`${role}_access_token`, accessToken);
+    }
+    setLocalRefreshToken(role, refreshToken){
+        localStorage.setItem(`${role}_refresh_token`, refreshToken);
+    }
     getLocalAccessToken(role){
         return localStorage.getItem(`${role}_access_token`);
     }

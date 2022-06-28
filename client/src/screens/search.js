@@ -21,16 +21,20 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function Search({ search }) {
+function Search() {
+  const location = useLocation();
+  const search = location.state.search;
+  console.log(search);
   //request data with search term;
   const [error, setError] = useState(false);
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -41,24 +45,24 @@ function Search({ search }) {
   const allRating = useRef([5, 4, 3, 2, 1]);
   const allSort = useRef([
     {
-      value: 'related',
-      showed: 'Liên quan',
+      value: "related",
+      showed: "Liên quan",
     },
     {
-      value: 'newer',
-      showed: 'Mới nhất',
+      value: "newer",
+      showed: "Mới nhất",
     },
     {
-      value: 'bestseller',
-      showed: 'Bán chạy',
+      value: "bestseller",
+      showed: "Bán chạy",
     },
     {
-      value: 'lowerPrice',
-      showed: 'Giá từ thấp đến cao',
+      value: "lowerPrice",
+      showed: "Giá từ thấp đến cao",
     },
     {
-      value: 'higherPrice',
-      showed: 'Giá từ cao đến thấp',
+      value: "higherPrice",
+      showed: "Giá từ cao đến thấp",
     },
   ]);
 
@@ -71,12 +75,12 @@ function Search({ search }) {
     // console.log('re-render');
     //get All location from list products
     const ressponseData = [
-      'Hà Nội',
-      'Hải Phòng',
-      'TP. Hồ  Chí Minh',
-      'Quận Long Biên',
-      'Nghệ An',
-      'Quận Hoàng Mai',
+      "Hà Nội",
+      "Hải Phòng",
+      "TP. Hồ  Chí Minh",
+      "Quận Long Biên",
+      "Nghệ An",
+      "Quận Hoàng Mai",
     ];
     //console.log(ressponseData);
     return ressponseData; //sample data
@@ -84,12 +88,12 @@ function Search({ search }) {
 
   function getAllCategories(searchTerm) {
     const ressponseData = [
-      'Phụ kiện máy tính',
-      'Đồ chơi',
-      'Gamming',
-      'Máy tính bàn',
-      'Bàn di chuột',
-      'Thời trang',
+      "Phụ kiện máy tính",
+      "Đồ chơi",
+      "Gamming",
+      "Máy tính bàn",
+      "Bàn di chuột",
+      "Thời trang",
     ];
     //console.log(ressponseData);
     return ressponseData; //sample data
@@ -97,7 +101,7 @@ function Search({ search }) {
 
   function getAllBrands(searchTerm) {
     //request data
-    const ressponseData = ['Lionvn', 'Creality', 'Phrozen', 'Elgoo'];
+    const ressponseData = ["Lionvn", "Creality", "Phrozen", "Elgoo"];
     //console.log(ressponseData);
     return ressponseData;
   }
@@ -117,14 +121,14 @@ function Search({ search }) {
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [fromPrice, setFromPrice] = useState('');
-  const [toPrice, setToPrice] = useState('');
+  const [fromPrice, setFromPrice] = useState("");
+  const [toPrice, setToPrice] = useState("");
   const [fromPriceApplied, setFromPriceApplied] = useState(null);
   const [toPriceApplied, setToPriceApplied] = useState(null);
   const [apply, setApply] = useState(false);
   const [rating, setRating] = useState(0);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState('related');
+  const [sort, setSort] = useState("related");
 
   //Categories
   const handleCategories = (category) => {
@@ -215,9 +219,9 @@ function Search({ search }) {
       const from = Number(fromPrice);
       const to = Number(toPrice);
 
-      if (fromPrice === '' || toPrice === '') {
-        setFromPriceApplied(fromPrice !== '' ? from : null);
-        setToPriceApplied(toPrice !== '' ? to : null);
+      if (fromPrice === "" || toPrice === "") {
+        setFromPriceApplied(fromPrice !== "" ? from : null);
+        setToPriceApplied(toPrice !== "" ? to : null);
         setApply(apply);
       } else if (to <= from) {
         setError(true);
@@ -244,15 +248,16 @@ function Search({ search }) {
     setLocations([]);
     setBrands([]);
     setRating();
-    setFromPrice('');
-    setToPrice('');
+    setFromPrice("");
+    setToPrice("");
     setApply(false);
     setFromPriceApplied(null);
     setToPriceApplied(null);
-    setSort('related');
+    setSort("related");
   }
   function getProductIdList(filter, page) {
     //request
+
     function randomId() {
       return Math.floor(Math.random() * 12 + 1);
     }
@@ -323,20 +328,21 @@ function Search({ search }) {
 
   return (
     <div className={clsx(styles.search)}>
+      <Header />
       <Snackbar
         className={clsx(styles.errorAlert)}
         open={error}
         autoHideDuration={2000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           Vui lòng điền khoảng giá phù hợp!
         </Alert>
       </Snackbar>
       <div className={clsx(styles.searchContainer)}>
         <div className={clsx(styles.searchSidebar)}>
           <h2 className={clsx(styles.sidebarTitle)}>
-            {' '}
+            {" "}
             <FilterAltIcon /> Bộ lọc tìm kiếm
           </h2>
           <div className={clsx(styles.searchFilter)}>
@@ -370,7 +376,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedCategories(allCategories)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{' '}
+                      <ExpandMoreIcon /> Xem thêm{" "}
                     </span>
                   )}
                   {showedCategories.length > 5 && (
@@ -378,7 +384,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessCategories}
                     >
-                      <ExpandLessIcon /> Thu gọn{' '}
+                      <ExpandLessIcon /> Thu gọn{" "}
                     </span>
                   )}
                 </div>
@@ -415,7 +421,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedLocations(allLocations)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{' '}
+                      <ExpandMoreIcon /> Xem thêm{" "}
                     </span>
                   )}
                   {showedLocations.length > 5 && (
@@ -423,7 +429,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessLocations}
                     >
-                      <ExpandLessIcon /> Thu gọn{' '}
+                      <ExpandLessIcon /> Thu gọn{" "}
                     </span>
                   )}
                 </div>
@@ -460,7 +466,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedBrands(allBrands)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{' '}
+                      <ExpandMoreIcon /> Xem thêm{" "}
                     </span>
                   )}
                   {showedBrands.length > 5 && (
@@ -468,7 +474,7 @@ function Search({ search }) {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessBrands}
                     >
-                      <ExpandLessIcon /> Thu gọn{' '}
+                      <ExpandLessIcon /> Thu gọn{" "}
                     </span>
                   )}
                 </div>
@@ -512,7 +518,7 @@ function Search({ search }) {
                   className={clsx(styles.button)}
                   variant="contained"
                   onClick={() => handleApply(true)}
-                  disabled={apply || (fromPrice === '' && toPrice === '')}
+                  disabled={apply || (fromPrice === "" && toPrice === "")}
                 >
                   Áp dụng
                 </Button>
@@ -573,20 +579,20 @@ function Search({ search }) {
         <div className={clsx(styles.searchBody)}>
           <div className={clsx(styles.shopContainer)}>
             <span className={clsx(styles.searchedTitle)}>
-              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
+              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{" "}
               Shop liên quan đến '<strong> {search}</strong>'
             </span>
             <ShopCard id={shopId} />
           </div>
           <div>
             <span className={clsx(styles.searchedTitle)}>
-              <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
+              <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{" "}
               Kết quả tìm kiếm liên quan đến '<strong> {search}</strong>'
             </span>
             <div className={clsx(styles.productContent)}>
               <div className={clsx(styles.productSort)}>
                 <span className={clsx(styles.productSortTitle)}>
-                  Sắp xếp theo{' '}
+                  Sắp xếp theo{" "}
                 </span>
                 <div className={clsx(styles.productSortNav)}>
                   {allSort.current.map((item) => (

@@ -1,6 +1,7 @@
 import React from 'react'
 import stylesProduct from '../screens/CSS/productInfor.module.css';
 import {useState} from 'react';
+import { Button } from '@mui/material';
 
 function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}){
     const [count, setCount] = useState(startValue);
@@ -19,24 +20,28 @@ function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}){
 
     return (
       <div className={stylesProduct.soldInfo}>
-        <button 
-            className={stylesProduct.button}
-            onClick={() => setCount(Number(count) - 1 < 1 ? 1 : Number(count) - 1)}
-        >
-            {titleLeft}
-        </button>
+        <div className={stylesProduct.button}>
+          <Button 
+              onClick={() => setCount(Number(count) - 1 < 1 ? 1 : Number(count) - 1)}
+          >
+              {titleLeft}
+          </Button>          
+        </div>
+
         <input 
             className={stylesProduct.button1} 
             value={count}
             type="text" 
             onChange={handleChange}
         />
-        <button 
-            className={stylesProduct.button}
-            onClick={() => setCount(Number(count) + 1 > numberProduct ? Number(count) : Number(count) + 1)}
-        >
-            {titleRight}
-        </button>
+        <div className={stylesProduct.button}>
+          <Button 
+              onClick={() => setCount(Number(count) + 1 > numberProduct ? Number(count) : Number(count) + 1)}
+          >
+              {titleRight}
+          </Button>          
+        </div>
+
         <p  className={stylesProduct.numberProduct}>{numberProduct} san pham con hang</p>
       </div>
     );

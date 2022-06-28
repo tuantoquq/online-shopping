@@ -53,7 +53,7 @@ function TabPanel(props) {
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h6" component="div">
-                            Khong san pham
+                            Không có đơn hàng
                         </Typography>
                       </CardContent>
                     </CardActionArea>
@@ -67,11 +67,11 @@ function TabPanel(props) {
 function OrderUserManager({navigation}){
   
   const orders = [
-    {id: 2, status: "Cho lay hang", name: "Bộ Sưu Tập Khối Rubik Carbon MoYu Meilong 2x2 3x3 4x4 5x5 Tam Giác 12 Mặt Skewb Square-1 SQ-1 Megaminx Pyranminx Cube", type: "Do choi", count: 3, cost: 30000},
-    {id: 2, status: "Cho lay hang", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 4, status: "Da giao", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 5, status: "Da huy", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 1, status: "Cho xac nhan", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
+    {id: 2, status: "Chờ lấy hàng", name: "Bộ Sưu Tập Khối Rubik Carbon MoYu Meilong 2x2 3x3 4x4 5x5 Tam Giác 12 Mặt Skewb Square-1 SQ-1 Megaminx Pyranminx Cube", type: "Do choi", count: 3, cost: 30000},
+    {id: 2, status: "Chờ lấy hàng", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
+    {id: 4, status: "Đã giao", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
+    {id: 5, status: "Đã hủy", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
+    {id: 1, status: "Chờ xác nhận", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
   ];
   
   const [value, setValue] = React.useState(0);
@@ -85,7 +85,7 @@ function OrderUserManager({navigation}){
             <Header navigation={navigation}/>
             <div className={styles.content} >
                 <div className={styles.wraper}>
-                    <p className={styles.tdisplay}> Quan ly don hang </p>
+                    <p className={styles.tdisplay}> Quản lý đơn hàng </p>
                     <Box
                     sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
                     >
@@ -97,12 +97,12 @@ function OrderUserManager({navigation}){
                         aria-label="secondary tabs example"
                         orientation="vertical"
                         >
-                            <Tab value={0} label="Tat ca"/>
-                            <Tab value={1} label="Cho xac nhan" />
-                            <Tab value={2} label="Cho lay hang"/>
-                            <Tab value={3} label="Dang giao"/>
-                            <Tab value={4} label="Da giao"/>
-                            <Tab value={5} label="Da huy"/>
+                            <Tab value={0} label="Tất cả"/>
+                            <Tab value={1} label="Chờ xác nhận" />
+                            <Tab value={2} label="Chờ lấy hàng"/>
+                            <Tab value={3} label="Đang giao"/>
+                            <Tab value={4} label="Đã giao"/>
+                            <Tab value={5} label="Đã hủy"/>
                         </Tabs>
                         <TabPanel value={value} index={0} productOrders={orders}>        
                         </TabPanel>

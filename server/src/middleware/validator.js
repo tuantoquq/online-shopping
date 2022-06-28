@@ -22,4 +22,6 @@ export const validateRegister = [
     check('phoneNumber', 'Invalid phoneNumber')
         .isLength({ min: 10, max: 12 })
         .matches(/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/),
+    check('dateOfBirth', 'Date of birth does not empty').not().isEmpty(),
+    check('gender', 'Gender does not empty').not().isEmpty(),
 ];

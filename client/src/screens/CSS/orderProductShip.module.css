@@ -1,0 +1,18 @@
+.displayaddress{
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid rgb(233, 223, 223) 1px;
+}
+.disphone{
+    margin-left: 5%;
+}
+.disaddress{
+    position: absolute;
+    right: 10%;
+}
+.content{
+    margin-bottom: 10px;
+    border: solid 1px rgb(43, 21, 21);
+    padding-left: 10px;
+    padding-right: 10px;
+}

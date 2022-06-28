@@ -30,6 +30,13 @@ DeliveryAddressService.addDeliveryAddress = async (address) => {
 
 DeliveryAddressService.getListAddressByCustomerId = async (customerId) => {
     let listAddress = await DeliveryAddress.find({ customerId: customerId });
+    if (!listAddress) {
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.DATABASE_ERROR,
+            `Did not find delivery address with customer: ${customerId}`,
+        );
+    }
     return listAddress;
 };
 
@@ -54,8 +61,10 @@ DeliveryAddressService.checkExistAddress = async (addressInfo) => {
 };
 
 DeliveryAddressService.updateDeliveryAddress = async (addressId, updateInfo) => {
-    let address = await DeliveryAddress.findByIdAndUpdate(addressId, updateInfo, {new: true});
-    if(!address){
+    let address = await DeliveryAddress.findByIdAndUpdate(addressId, updateInfo, {
+        new: true,
+    });
+    if (!address) {
         throw new CustomError(
             httpStatus.NOT_FOUND,
             apiStatus.DATABASE_ERROR,
@@ -63,5 +72,5 @@ DeliveryAddressService.updateDeliveryAddress = async (addressId, updateInfo) => 
         );
     }
     return address;
-}
+};
 export default DeliveryAddressService;

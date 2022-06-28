@@ -49,6 +49,16 @@
     justify-content: space-between;
 }
 .divUser{
+    /* padding-left: 50px; */
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    
+}
+
+.divUser1{
+    /* padding-left: 50px; */
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -79,7 +89,7 @@
 
     /* justify-content: space-around; */
     margin-left: 20%;
-    /* width: 50%; */
+    /* width: 80%; */
 
 
 }
@@ -117,11 +127,19 @@
     align-content: center;
     align-items: center;
 }
-  
+
+.narBar ul {
+    margin-left: 80px;
+}
 .narBar ul li{
 
     display: block;
     white-space: nowrap;
+    align-items: center;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        margin-right: 20px;
 }
 
 .narBar ul li:hover {

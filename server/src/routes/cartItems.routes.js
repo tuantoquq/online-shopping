@@ -17,5 +17,9 @@ cartItemsRoutes.delete(
     deleteCartItems,
 );
 
-cartItemsRoutes.get('/api/v1/customer/auth/cart', verifyToken, getAllCartItemsByCustomerId)
+cartItemsRoutes.get(
+    '/api/v1/customer/auth/cart',
+    verifyToken,
+    getAllCartItemsByCustomerId,
+);
 export default cartItemsRoutes;

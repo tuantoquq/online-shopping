@@ -32,9 +32,12 @@ export const addOrder = async (req, res) => {
 
         //create order products
         let listOrderProduct = [];
-        for(let i = 0; i< listCartItems.length; i++){
+        for (let i = 0; i < listCartItems.length; i++) {
             //get cartItems from id
-            let cartItems = await CartItemsService.findCartItemsById(listCartItems[i], userId);
+            let cartItems = await CartItemsService.findCartItemsById(
+                listCartItems[i],
+                userId,
+            );
 
             //get current product
             let product = await ProductService.findProductById(cartItems.productId);
@@ -83,26 +86,58 @@ export const addOrder = async (req, res) => {
 };
 
 export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
-    try{
+    try {
         let status = req.query.status;
         let customerId = req.userId;
         let listOrder;
-        if(status != null && status != undefined  && status != ""){
-            listOrder = await OrderService.getListOrderByCustomerAndStatus(customerId, status);
-        }else {
-            console.log("aaaa");
+        if (status != null && status != undefined && status != '') {
+            listOrder = await OrderService.getListOrderByCustomerAndStatus(
+                customerId,
+                status,
+            );
+        } else {
+            console.log('aaaa');
             listOrder = await OrderService.getListOrderByCustomer(customerId);
         }
 
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "get list order successfully",
-            data: listOrder
+            message: 'get list order successfully',
+            data: listOrder,
         });
-    }catch(err){
+    } catch (err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
         });
     }
-}
+};
+
+export const updateOrderStatus = async (req, res) => {
+    try {
+        let { status, orderId } = req.body;
+        if (status === 1 || status === -1) {
+            let order = await OrderService.updateOrder(orderId, status);
+            return res.status(httpStatus.OK).send({
+                status: apiStatus.SUCCESS,
+                message: 'update order status successfully',
+                data: order,
+            });
+        }
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Request status not valid',
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};

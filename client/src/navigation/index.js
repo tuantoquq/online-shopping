@@ -8,6 +8,7 @@ import Register from '../screens/register';
 import ProductInformation from '../components/product';
 import OrderUserManager from '../components/OrderUserManager';
 import Cart from '../screens/Cart';
+import Checkout from '../screens/Checkout';
 import Search from '../screens/search';
 import AcceptOrder from '../screens/sellerAcceptOrder';
 import DeliveringOrder from '../screens/sellerDeliveringOrder';
@@ -34,11 +35,12 @@ function RootRoutes() {
 
       <Route path="/customer/login" element={<Login role="customer" />} />
       <Route path="/shopper/login" element={<Login role="shopper" />} />
-      <Route path="/admin/login" element={<Register role="admin" />} />
+      <Route path="/admin/login" element={<Login role="admin" />} />
 
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
       <Route path="/search" element={<Search searchTerm="" />} />
+
       <Route
         path="/user/infomation"
         element={<UserInformation role="user" />}
@@ -47,18 +49,17 @@ function RootRoutes() {
         path="/admin/infomation"
         element={<UserInformation role="admin" />}
       />
-      <Route path="/search" element={<Search search="keycap" />} />
-      <Route path="/user" element={<UserInformation />} />
-      <Route path="/orderhistory" element={<OrderHistory />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/user/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/user/checkout" element={<Checkout/>} />
 
-      <Route path="/ProductTest" element={<ProductInformation />} />
+      <Route path="/product/:teamId" element={<ProductInformation />} />
       <Route path="/testShop" element={<ShopHome />} />
       <Route path="/vay" element={<OrderUserManager />} />
-      <Route path="/ProductManager" element={<ProductManager />} />
+      <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
-      <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin" element={<AdminDashboard />} />
 
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />

@@ -13,9 +13,13 @@ import commentRoutes from './routes/comment.routes.js';
 import uploadFileRoutes from './routes/uploadFile.routes.js';
 import deliverAddressRoutes from './routes/deliveryAddress.routes.js';
 import orderRoutes from './routes/order.routes.js';
+import morgan from 'morgan';
+import shopRoutes from './routes/shop.routes.js';
+import shopperRoutes from './routes/shopper.routes.js';
 
 const app = express();
 app.use(cors());
+app.use(morgan('combined'));
 
 app.use(express.json());
 
@@ -29,6 +33,9 @@ app.use(commentRoutes);
 app.use(uploadFileRoutes);
 app.use(deliverAddressRoutes);
 app.use(orderRoutes);
+app.use(shopRoutes);
+app.use(shopperRoutes);
+
 const PORT = process.env.SERVER_PORT || 8081;
 
 app.listen(PORT, () => {

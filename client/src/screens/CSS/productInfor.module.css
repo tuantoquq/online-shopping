@@ -41,10 +41,10 @@
 }
 .button{
     text-align: center;
-    margin-top: 50px;
+    margin-top: 45px;
     max-height: 30px;
     max-width: 50px;
-    margin-left: 1px;
+    margin-left: -10px;
     margin-right: 1px;
 }
 
@@ -91,4 +91,8 @@
     margin-left: 1px;
     margin-right: 20px;
     width: 100px;
+}
+
+.colInformation_3{
+    width: 800px;
 }
