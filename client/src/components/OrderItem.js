@@ -36,7 +36,7 @@ function OrderItem({productId, quantity, cartId}){
                             onClick={() => {
                               setItemCount(Math.max(itemCount - 1, 1));
                               updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
-                                console.log(res);
+                                // console.log(res);
                               });
                             }}
                           >
@@ -46,7 +46,7 @@ function OrderItem({productId, quantity, cartId}){
                             onClick={() => {
                               setItemCount(itemCount + 1);
                               updateCartItem({cartItemsId:cartId, quantity: itemCount+1}).then(res => {
-                                console.log(res);
+                                // console.log(res);
                               });
                             }}
                           >

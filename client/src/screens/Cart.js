@@ -36,19 +36,29 @@ function Cart() {
                 // console.log(res?.data);
                 setCartItem(res?.data?.data);
             }
-        ).catch(err => {
+        ).then(
+            ()=>{
+            let total = 0;
+            for (let i = 0; i < cartItem.length; i++) {
+                total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
+                console.log(parseInt(getItemPrice(cartItem[i].productId)));
+            }
+            setTotalPrice(total);
+            }
+        )
+        .catch(err => {
             console.log(err);
         });
 
     }, []);
-    useEffect(() => {
-        let total = 0;
-        for (let i = 0; i < cartItem.length; i++) {
-            total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-            // console.log(parseInt(cartItem[i].count));
-        }
-        setTotalPrice(total);
-    }, [cartItem]);
+    // useEffect(() => {
+    //     let total = 0;
+    //     for (let i = 0; i < cartItem.length; i++) {
+    //         total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
+    //         // console.log(parseInt(cartItem[i].count));
+    //     }
+    //     setTotalPrice(total);
+    // }, [cartItem]);
     
     return(
         // console.log(numberProduct),
