@@ -16,7 +16,7 @@ function ImageList({images}) {
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
   const maxSteps = images.length;
-  console.log(images);
+  // console.log(images);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

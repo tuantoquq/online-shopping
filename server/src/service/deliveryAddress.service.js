@@ -30,6 +30,13 @@ DeliveryAddressService.addDeliveryAddress = async (address) => {
 
 DeliveryAddressService.getListAddressByCustomerId = async (customerId) => {
     let listAddress = await DeliveryAddress.find({ customerId: customerId });
+    if (!listAddress) {
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.DATABASE_ERROR,
+            `Did not find delivery address with customer: ${customerId}`,
+        );
+    }
     return listAddress;
 };
 

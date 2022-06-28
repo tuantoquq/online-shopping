@@ -140,7 +140,7 @@ function LoginForm(props) {
         setOpen(true);
       } else {
         const token = response?.data?.data?.token;
-        TokenService.setLocalAccessToken(role, accessToken);
+        TokenService.setLocalAccessToken(role, token);
         setAccessToken(token);
         setUser('');
         setPwd('');

@@ -112,3 +112,32 @@ export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
         });
     }
 };
+
+export const updateOrderStatus = async (req, res) => {
+    try {
+        let { status, orderId } = req.body;
+        if (status === 1 || status === -1) {
+            let order = await OrderService.updateOrder(orderId, status);
+            return res.status(httpStatus.OK).send({
+                status: apiStatus.SUCCESS,
+                message: 'update order status successfully',
+                data: order,
+            });
+        }
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Request status not valid',
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
