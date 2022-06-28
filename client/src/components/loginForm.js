@@ -124,16 +124,30 @@ function LoginForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email: user, password: pwd }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        }
-      );
+      let response;
+      if (role !== 'admin') {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ email: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      } else {
+        response = await axios.post(
+          LOGIN_URL,
+          JSON.stringify({ username: user, password: pwd }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+      }
       //console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response));
       if (response.data.status === 2) {
@@ -214,7 +228,7 @@ function LoginForm(props) {
               htmlFor="email"
               className={clsx(styles.formLabel, styles.row)}
             >
-              Email:
+              {role === 'admin' ? 'Username:' : 'Email:'}
             </label>
             <input
               id="email"
