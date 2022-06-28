@@ -3,8 +3,7 @@ import styles from './CSS/UserDisplay.module.css'
 import clsx from "clsx";
 // import { submitFile } from "../api/newsApi";
 // import { updateAvatarImage } from "../api/userApi";
-import Cookies from "js-cookie";
-
+import {updateCustomerProfile} from '../service/CustomerService.js';
 
 function UserDisplay(props){
     const user_url = props.user_url
@@ -28,19 +27,9 @@ function UserDisplay(props){
         }
     }
     const updateAvatar = () => {
-        // submitFile()
-        // .then(res => {
-        //     updateAvatarImage(res, Cookies.get("access_token"))
-        //     .then(res => {
-        //         console.log(res.data?.avt_url)
-        //         setUserUrl(res.data?.avt_url)
-        //     })
-        //     .catch((err) => {
-        //         console.log(err)
-        //     })
-        // })
-        // // window.location.reload();
-        
+        updateCustomerProfile({avatarUrl: userUrl}).then(res => {
+            console.log("Update info: ", res.data);
+        })
     }
 
     return (
@@ -66,7 +55,7 @@ function UserDisplay(props){
                 <div className={styles.right_cpn}>
                     <h3>{user_name}</h3>
                     <p>{user_age}</p>
-                    {/* <p>{user_phone}</p> */}
+                    <p>{user_phone}</p>
                 </div>
             </div>
 

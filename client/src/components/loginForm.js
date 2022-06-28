@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRef, useState, useEffect, useLayoutEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,18 +21,22 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 function LoginForm(props) {
   const navigate = useNavigate();
   const role = props.role;
+
   //const { auth, setAuth } = useContext(AuthContext);
   //console.log(role);
-  useEffect(() => {
-    if (TokenService.getLocalAccessToken(role)) {
-      if (role === 'customer') {
-        navigate('/');
-      }
-      if (role === 'shopper') {
-        navigate('/shopper/accept-order');
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (TokenService.getLocalAccessToken(role)) {
+  //     if (role === 'customer') {
+  //       navigate('/');
+  //     }
+  //     if (role === 'shopper') {
+  //       navigate('/shopper/accept-order');
+  //     }
+  //     if (role === 'admin') {
+  //       navigate('/admin');
+  //     }
+  //   }
+  // }, []);
 
   const [open, setOpen] = useState(false);
 
@@ -136,7 +141,11 @@ function LoginForm(props) {
         setOpen(true);
       } else {
         const token = response?.data?.data?.token;
-        TokenService.setLocalAccessToken(role, accessToken);
+        const refreshToken = response?.data?.data?.refreshToken;
+
+        TokenService.setLocalAccessToken(role, token);
+        TokenService.setLocalRefreshToken(role, refreshToken);
+        RoleService.setLocalRole(role);
         setAccessToken(token);
         setUser('');
         setPwd('');

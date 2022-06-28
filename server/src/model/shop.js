@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import mongoosePaginate from 'mongoose-paginate-v2';
 const ShopSchema = new mongoose.Schema(
     {
         shopperId: {
@@ -31,6 +31,6 @@ const ShopSchema = new mongoose.Schema(
         versionKey: false,
     },
 );
-
+ShopSchema.plugin(mongoosePaginate);
 const Shop = mongoose.model('Shop', ShopSchema);
 export default Shop;

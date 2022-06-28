@@ -260,17 +260,24 @@ productController.filter = async (req, res) => {
             'startPrice',
             'endPrice',
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
             'minRating',
             'orderBy',
             'sortBy',
         ];
+<<<<<<< HEAD
         console.log(req);
+=======
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
         console.log(req.body['categoryName']);
         let query = [];
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
             if (req.body.hasOwnProperty(property)) {
                 if (property == 'query') {
+<<<<<<< HEAD
                     query.push({
                         $match: {
                             $or: [
@@ -354,70 +361,93 @@ productController.filter = async (req, res) => {
             let property = listPros[i]
             if(req.body.hasOwnProperty(property)){
                 if(property == 'query'){
+=======
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
                     query.push({
-                        $match: { $or: [{productName: {$regex: req.body[property], $options: 'i'}}, {shortDescription: {$regex: req.body[property], $options: 'i'}}]}
-                    })
-                }
-                else if(property == 'categoryName'){
-                    var categories = await Category.find({categoryName: {$in: req.body['categoryName']}})
-                    if(!categories){
+                        $match: {
+                            $or: [
+                                {
+                                    productName: {
+                                        $regex: req.body[property],
+                                        $options: 'i',
+                                    },
+                                },
+                                {
+                                    shortDescription: {
+                                        $regex: req.body[property],
+                                        $options: 'i',
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                } else if (property == 'categoryName') {
+                    var categories = await Category.find({
+                        categoryName: { $in: req.body['categoryName'] },
+                    });
+                    if (!categories) {
                         return res.status(httpStatus.OK).json({
                             status: apiStatus.OTHER_ERROR,
-                            message: "Not found category"
-                        })
+                            message: 'Not found category',
+                        });
                     }
-                    let categoriIds = []
-                    for(let i =0;i < categories.length; i++){
-                        categoriIds.push(categories[i]._id)
+                    let categoriIds = [];
+                    for (let i = 0; i < categories.length; i++) {
+                        categoriIds.push(categories[i]._id);
                     }
-                    console.log(categoriIds)
+                    console.log(categoriIds);
                     query.push({
-                        $match: { categoryId: {$in: categoriIds}}
-                    })
-                }
-                else if(property == 'startPrice'){
+                        $match: { categoryId: { $in: categoriIds } },
+                    });
+                } else if (property == 'startPrice') {
                     query.push({
-                        $match: { price: {$lte: req.body['endPrice'], $gte: req.body['startPrice']}}
-                    })
-                }
-                else if (property == 'minRating'){
+                        $match: {
+                            price: {
+                                $lte: req.body['endPrice'],
+                                $gte: req.body['startPrice'],
+                            },
+                        },
+                    });
+                } else if (property == 'minRating') {
                     query.push({
-                        $match: {ratingStar: {$gte: req.body['minRating']}}
-                    })
-                }
-                else if(property == 'orderBy'){
-                    let sortby = req.body.sortBy == 'desc'? -1: 1
-                    if (req.body[property] == 'price'){
+                        $match: { ratingStar: { $gte: req.body['minRating'] } },
+                    });
+                } else if (property == 'orderBy') {
+                    let sortby = req.body.sortBy == 'desc' ? -1 : 1;
+                    if (req.body[property] == 'price') {
                         query.push({
-                            $sort: {price: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'pho bien'){
+                            $sort: { price: sortby },
+                        });
+                    } else if (req.body[property] == 'pho bien') {
                         query.push({
-                            $sort: {soldHistory: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'moi nhat'){
+                            $sort: { soldHistory: sortby },
+                        });
+                    } else if (req.body[property] == 'moi nhat') {
                         query.push({
-                            $sort: {createAt: sortby}
-                        })
-                    }
-                    else if(req.body[property] == 'rating'){
+                            $sort: { createAt: sortby },
+                        });
+                    } else if (req.body[property] == 'rating') {
                         query.push({
-                            $sort: {ratingStar: sortby}
-                        })
-                    }
-                    else{
+                            $sort: { ratingStar: sortby },
+                        });
+                    } else {
                         return res.status(httpStatus.OK).json({
+<<<<<<< HEAD
                             message: "order by " + req.body['orderBy'] + " isn't support",
                             status: apiStatus.OTHER_ERROR
                         })
 >>>>>>> e77c5fdae09f7f46eb323dff7fe0967e7ebacaac
+=======
+                            message: 'order by ' + req.body['orderBy'] + " isn't support",
+                            status: apiStatus.OTHER_ERROR,
+                        });
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
                     }
                 }
             }
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         console.log(query);
         const maxDocuments = await Product.aggregate(query).length;
@@ -445,23 +475,34 @@ productController.filter = async (req, res) => {
         console.log(query)
         const maxDocuments = await Product.aggregate(query).length
         console.log(maxDocuments)
+=======
+        console.log(query);
+        const maxDocuments = await Product.aggregate(query).length;
+        console.log(maxDocuments);
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
 
-        let countPage = 0
-        if (maxDocuments % maxItem == 0){
-            countPage = maxDocuments/maxItem
+        let countPage = 0;
+        if (maxDocuments % maxItem == 0) {
+            countPage = maxDocuments / maxItem;
+        } else {
+            countPage = ~~(maxDocuments / maxItem) + 1;
         }
-        else{
-            countPage = ~~(maxDocuments / maxItem) + 1
-        }
-        let productIds = await Product.aggregate(query).skip(skip).limit(maxItem).project({
-            _id: 1 // By default
-        })
+        let productIds = await Product.aggregate(query)
+            .skip(skip)
+            .limit(maxItem)
+            .project({
+                _id: 1, // By default
+            });
         return res.status(httpStatus.OK).json({
             status: apiStatus.SUCCESS,
-            message: "filter products successfully",
+            message: 'filter products successfully',
             data: productIds,
+<<<<<<< HEAD
             maxPage: countPage
 >>>>>>> e77c5fdae09f7f46eb323dff7fe0967e7ebacaac
+=======
+            maxPage: countPage,
+>>>>>>> 334514a282636545d4bccbc0a067b531969c29e3
         });
 
         // let categoryName = req.body.categoryName;
