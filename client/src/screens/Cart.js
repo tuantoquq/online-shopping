@@ -18,48 +18,37 @@ function Cart() {
     const [cartItem, setCartItem] = useState([]);
     const [totalPrice, setTotalPrice] = useState();
     const [price, setPrice] = useState();
-    function getItemPrice(productId) {
-        let path = `/product/get?productId=${productId}`;
-        axiosConfig.get(path).then(res=>{
-            setPrice(res?.data?.data?.price);
-            console.log(price)
-          })
-          .catch(err=>{
-            console.log(err)
-          })
-        console.log(price)
-        return price;
-    }
+    const [change, setChange] = useState(0);
+    function getChange() {setChange(change+1)}
     useEffect(() => {
+
+
         getCartItem().then(
             res => {
-                // console.log(res?.data);
+                // console.log(res?.data?.data);
                 setCartItem(res?.data?.data);
-            }
-        ).then(
-            ()=>{
-            let total = 0;
-            for (let i = 0; i < cartItem.length; i++) {
-                total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-                console.log(parseInt(getItemPrice(cartItem[i].productId)));
-            }
-            setTotalPrice(total);
+                const list_id  = res.data.data.map(item=>item.productId);
+                const list_count = res.data.data.map(item=>item.count);
+                let total = 0;
+                for (let i = 0; i < list_id.length; i++) {
+                    let path = `/product/get?productId=${list_id[i]}`
+                    axiosConfig.get(path).then(res=>{
+                        let price = res?.data?.data?.price
+                        total += price* parseInt(list_count[i]);
+                        setTotalPrice(total);
+                        // console.log('total:',total);
+                      })
+                      .catch(err=>{
+                        console.log(err)
+                      })
+                }
             }
         )
         .catch(err => {
             console.log(err);
         });
 
-    }, []);
-    // useEffect(() => {
-    //     let total = 0;
-    //     for (let i = 0; i < cartItem.length; i++) {
-    //         total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-    //         // console.log(parseInt(cartItem[i].count));
-    //     }
-    //     setTotalPrice(total);
-    // }, [cartItem]);
-    
+    }, [change]);
     return(
         // console.log(numberProduct),
         <div >
@@ -71,7 +60,7 @@ function Cart() {
                     <div >
                         {
                             cartItem.map((item, index) => {
-                                return <OrderItem productId={item.productId} quantity={item.count} cartId={item._id} key = {index}/>
+                                return <OrderItem productId={item.productId} quantity={item.count} cartId={item._id} key = {index} handle={getChange} />
                             })
                         }
                     </div>
@@ -86,7 +75,7 @@ function Cart() {
                     <div >
                         <button>Trở lại</button>
                         <button
-                        onClick={() =>navigatePath("/user/checkout")}>Hoàn thành</button>
+                        onClick={() =>navigatePath("/user/checkout")}>Thanh toán</button>
                     </div>
                 </div>
             <Footer/>

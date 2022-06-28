@@ -24,6 +24,7 @@ function Checkout() {
         });
 
     }, []);
+    
     return(
         
         <div >
@@ -49,7 +50,7 @@ function Checkout() {
                 </div>
                 <div >
                     <button onClick={()=>navigatePath("/cart")}>Trở lại</button>
-                    <button>Hoàn thành</button>
+                    <button>Đặt Hàng</button>
                 </div>
             </div>
             <Footer/>

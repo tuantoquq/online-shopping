@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import clsx from 'clsx'
 import axiosConfig from '../config/axios';
 import {deleteCartItem, updateCartItem} from '../service/CustomerService';
-function OrderItem({productId, quantity, cartId}){
+function OrderItem({productId, quantity, cartId, handle}) {
     const [productData, setProductData] = useState();
     const [itemCount, setItemCount] = useState(parseInt(quantity));
     let path = `/product/get?productId=${productId}`
@@ -36,6 +36,7 @@ function OrderItem({productId, quantity, cartId}){
                             onClick={() => {
                               setItemCount(Math.max(itemCount - 1, 1));
                               updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
+                                  handle();
                                 // console.log(res);
                               });
                             }}
@@ -46,6 +47,7 @@ function OrderItem({productId, quantity, cartId}){
                             onClick={() => {
                               setItemCount(itemCount + 1);
                               updateCartItem({cartItemsId:cartId, quantity: itemCount+1}).then(res => {
+                                  handle();
                                 // console.log(res);
                               });
                             }}
@@ -58,6 +60,7 @@ function OrderItem({productId, quantity, cartId}){
                               <Button className={styles.last}
                                 onClick={() => {
                                   deleteCartItem(cartId).then(res => {
+                                    handle(); 
                                     console.log(res);
                                   })
                                 }}

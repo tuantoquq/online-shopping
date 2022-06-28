@@ -9,48 +9,34 @@ function OrderProductShip(){
     const [cartItem, setCartItem] = useState([]);
     const [totalPrice, setTotalPrice] = useState();
     const [price, setPrice] = useState();
-    function getItemPrice(productId) {
-        let path = `/product/get?productId=${productId}`;
-        axiosConfig.get(path).then(res=>{
-            const data = res?.data?.data?.price
-            setPrice(data);
-            console.log(price)
-          })
-          .catch(err=>{
-            console.log(err)
-          })
-        // console.log(price)
-        return price;
-    }
     
     useEffect(() => {
         getCartItem().then(
             res => {
-                // console.log(res?.data);
+                // console.log(res?.data.data);
                 setCartItem(res?.data?.data);
+                const list_id  = res.data.data.map(item=>item.productId);
+                const list_count = res.data.data.map(item=>item.count);
+                let total = 10000;
+                for (let i = 0; i < list_id.length; i++) {
+                    let path = `/product/get?productId=${list_id[i]}`
+                    axiosConfig.get(path).then(res=>{
+                        let price = res?.data?.data?.price
+                        total += price* parseInt(list_count[i]);
+                        setTotalPrice(total);
+                        // console.log('total:',total);
+                      })
+                      .catch(err=>{
+                        console.log(err)
+                      })
+                }
             }
-        )
-        .then(()=>{
-            let total = 10000;
-            for (let i = 0; i < cartItem.length; i++) {
-                total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-                console.log(parseInt(cartItem[i].count));
-            }
-            setTotalPrice(total);}
         )
         .catch(err => {
             console.log(err);
         });
 
     }, []);
-    // useEffect(() => {
-    //     let total = 10000;
-    //     for (let i = 0; i < cartItem.length; i++) {
-    //         total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-    //         // console.log(parseInt(cartItem[i].count));
-    //     }
-    //     setTotalPrice(total);
-    // }, [cartItem]);
 
     return (
         <div className={styles.content}>
