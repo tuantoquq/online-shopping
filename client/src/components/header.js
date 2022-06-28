@@ -9,7 +9,8 @@ import Cookies from 'js-cookie';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 import { getCustomerProfile } from '../service/CustomerService';
-import { useState, useEffect, memo } from 'react';
+import { getShopperProfile } from '../service/ShopperService';
+import { useState, useEffect, memo, useLayoutEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Menu, MenuItem } from '@mui/material';
@@ -75,16 +76,28 @@ function Header() {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (accessToken) {
-      getCustomerProfile()
-        .then((res) => {
-          console.log(res?.data?.data);
-          setUser(res?.data?.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (role === 'customer') {
+        getCustomerProfile()
+          .then((res) => {
+            console.log(res?.data?.data);
+            setUser(res?.data?.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+      if (role === 'shopper') {
+        getShopperProfile()
+          .then((res) => {
+            console.log(res?.data?.data);
+            setUser(res?.data?.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   }, []);
 
