@@ -36,4 +36,16 @@ ShopService.findShopById = async (shopId) => {
     return shop;
 };
 
+ShopService.findShopByShopperId = async (shopperId) => {
+    let shop = await Shop.findOne({ shopperId: shopperId });
+    if (!shop) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Shop not found with shopper id ${shopperId}`,
+        );
+    }
+    return shop;
+};
+
 export default ShopService;
