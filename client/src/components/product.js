@@ -122,7 +122,12 @@ function ProductInformation({navigation}) {
                         }> Thêm vào giỏ hàng </Button>
                     </div>
                     <div className={stylesProduct.button2}>
-                      <Button variant="contained" onClick={() => navigatePath("/cart")}> Mua ngay </Button>                         
+                      <Button variant="contained" onClick={() => {
+                        addCartItem({productId: s[s.length-1], quantity:1}).then(res => {
+                          console.log(res.data);
+                        });
+                        navigatePath("/cart")
+                        }}> Mua ngay </Button>                         
                     </div>
                  
                   </div>

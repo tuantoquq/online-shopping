@@ -56,3 +56,17 @@ export const deleteCartItem = async (cartId) => {
     }
     return response;
 }
+
+export const updateCartItem = async (quantity) => {
+    let response;
+    try{
+        response = await customerApi.put(`/customer/auth/cart/update`, quantity, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}

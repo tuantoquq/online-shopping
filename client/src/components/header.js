@@ -81,7 +81,7 @@ function Header({ navigation }) {
             onClick={() =>
               Cookies.get("access_token") == null
                 ? navigatePath("/customer/login")
-                : navigatePath("/user-information")
+                : navigatePath("/user/information")
             }
           />
           <p
@@ -89,7 +89,7 @@ function Header({ navigation }) {
             onClick={() =>
               Cookies.get("access_token") == null
                 ? navigatePath("/customer/login")
-                : navigatePath("/user-information")
+                : navigatePath("/user/information")
             }
           >
             {Cookies.get("access_token") == null ? "Đăng nhập" : username}

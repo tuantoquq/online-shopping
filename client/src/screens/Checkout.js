@@ -16,7 +16,7 @@ function Checkout() {
     useEffect(() => {
         getCustomerProfile().then(
             res => {
-                console.log(res?.data?.data);
+                // console.log(res?.data?.data);
                 setUser(res?.data?.data);
             }
         ).catch(err => {
@@ -36,10 +36,11 @@ function Checkout() {
                     <h3>Địa chỉ nhận hàng</h3> 
                     <div className={styles.displayaddress}>
                         <div className={styles.disphone}>   
-                            <p>{user.firstName +" "+ user.lastName}</p>
-                            <p>Số điện thoại: {user.phoneNumber}</p>
+                            <p>{user?.firstName +" "+ user?.lastName}</p>
+                            <p>Số điện thoại: {user?.phoneNumber}</p>
                         </div>
-                        <div className={styles.disaddress}> Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</div>
+                        <div className={styles.disaddress}>{user?.deliveryAddress?.length != 0 ? 'Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội' : user?.deliveryAddress}</div>
+                        
                     </div> 
                 </div> 
                        <OrderProductShip></OrderProductShip>
