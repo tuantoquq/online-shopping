@@ -102,3 +102,13 @@ export const addOrder = async (order) => {
     }
     return response;
 }
+
+export const getOrderHistory = async () => {
+    let response;
+    try{
+        response = await customerApi.get('/customer/auth/orders');
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}

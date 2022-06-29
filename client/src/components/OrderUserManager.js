@@ -20,6 +20,9 @@ import OrderUserItem from './OrderUserItem';
 import styleOrderUser from '../screens/CSS/orderUserItem.module.css'
 import noImage from '../assets/noItem.png'
 import { CardContent } from '@mui/material';
+import { useEffect, useState } from "react";
+import axiosConfig from "../config/axios";
+import { getOrderHistory } from '../service/CustomerService';
 
 function TabPanel(props) {
     const { children, value, index, productOrders, ...other } = props;
@@ -79,6 +82,20 @@ function OrderUserManager({navigation}){
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+  const [orderData, setOrderData] = useState();
+
+  useEffect(() => {
+    getOrderHistory().then(
+        res => {
+            console.log(res?.data?.data);
+            setOrderData(res?.data?.data);
+        }
+    ).catch(err => {
+        console.log(err);
+    });
+
+  }, []);
 
     return(
         <div className={styles.Home}>
