@@ -37,7 +37,7 @@ function ProductCard(props) {
             // withCredentials: true,
           }
         );
-        console.log(response);
+        // console.log(response);
         const data = response.data.data;
         let name = '';
         if (data.productName.length <= 53) {

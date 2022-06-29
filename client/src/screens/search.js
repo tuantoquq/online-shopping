@@ -30,7 +30,7 @@ function Search() {
   const search = location.state.search;
   console.log(search);
   //request data with search term;
-  const PRODUCT_SEARCH_URL = '/product/filter';
+  const PRODUCT_SEARCH_URL = `/product/filter`;
 
   const [error, setError] = useState(false);
   const handleClose = (event, reason) => {
@@ -280,16 +280,12 @@ function Search() {
       //console.log('Filter changed');
       //request for new data +numPages
       try {
-        const response = await axios.get(
-          PRODUCT_SEARCH_URL,
-          JSON.stringify(filter),
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            // withCredentials: true,
-          }
-        );
+        const response = await axios.get(PRODUCT_SEARCH_URL, filter, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        });
         console.log(response);
         setProductIdList(response.data.data);
         setNumPages(response.data.maxPage); //numPages was responsed

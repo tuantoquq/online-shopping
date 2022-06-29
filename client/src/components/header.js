@@ -81,7 +81,7 @@ function Header() {
       if (role === 'customer') {
         getCustomerProfile()
           .then((res) => {
-            console.log(res?.data?.data);
+            // console.log(res?.data?.data);
             setUser(res?.data?.data);
           })
           .catch((err) => {
@@ -91,7 +91,7 @@ function Header() {
       if (role === 'shopper') {
         getShopperProfile()
           .then((res) => {
-            console.log(res?.data?.data);
+            // console.log(res?.data?.data);
             setUser(res?.data?.data);
           })
           .catch((err) => {
