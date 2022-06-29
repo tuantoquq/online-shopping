@@ -56,7 +56,7 @@ function RootRoutes() {
 
       <Route path="/product/:teamId" element={<ProductInformation />} />
       <Route path="/shop/:shopId" element={<ShopHome />} />
-      <Route path="/vay" element={<OrderUserManager />} />
+      <Route path="/user/orderManager" element={<OrderUserManager />} />
       <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
