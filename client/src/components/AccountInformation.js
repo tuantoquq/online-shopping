@@ -181,7 +181,7 @@ function AccountInformation(props){
                         </div>
                     </div>
                     
-                    <div className={styles.group}>
+                    {/* <div className={styles.group}>
                         <div className={styles.infor}>
                             <label className={styles.column}>Địa chỉ</label>
                             <label className={styles.midColumn}>{currentUser?.address}</label>
@@ -210,7 +210,7 @@ function AccountInformation(props){
                                 }}
                             >Lưu thay đổi</lable>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className={styles.group}>
                         <div className={styles.infor}>
