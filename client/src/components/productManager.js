@@ -25,6 +25,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import InformationTab from '../components/informationTab';
 import stylesTab from '../screens/CSS/seller_acceptOrder.module.css';
+import axiosConfig from '../config/axios';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -53,7 +54,6 @@ function getComparator(order, orderBy){
 }
 
 const headCells = [
-  { id: 'ID', numeric: false, disablePadding: true, label: 'ID'},
   { id: 'name', numeric: false, disablePadding: false, label: 'Tên sản phẩm'},
   { id: 'cost', numeric: true, disablePadding: false, label: 'Giá tiền'},
   { id: 'solded', numeric: true, disablePadding: false, label: 'Đã bán'},
@@ -112,16 +112,16 @@ function EnhancedTableHead(props) {
 }
 
 
-function ProductManager(products) {
-    const posts = [
-      {id: "1", name: "Mo hinh 1", cost: 30000, solded: 3, count: 100, rating: 4.3, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-      {id: "2", name: "Mo hinh 2", cost: 40000, solded: 1, count: 130, rating: 4.7, detail: "Mo hinh best", type: "Do choi", lastUpdate: "12:20:20 21/06/2022"},
-      {id: "3", name: "Mo hinh 3", cost: 50000, solded: 2, count: 160, rating: 4.5, detail: "Mo hinh nho nhan", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-      {id: "4", name: "Mo hinh 4", cost: 60000, solded: 3, count: 120, rating: 4.4, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-      {id: "5", name: "Mo hinh x", cost: 10000, solded: 3, count: 190, rating: 4.6, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-      {id: "6", name: "Mo hinh 6", cost: 40000, solded: 9, count: 130, rating: 4.8, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 22/06/2022"},
-      {id: "7", name: "Mo hinh 7", cost: 40000, solded: 7, count: 110, rating: 4.1, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 19/06/2022"}
-    ];
+function ProductManager() {
+    // const posts = [
+    //   {id: "1", name: "Mo hinh 1", cost: 30000, solded: 3, count: 100, rating: 4.3, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
+    //   {id: "2", name: "Mo hinh 2", cost: 40000, solded: 1, count: 130, rating: 4.7, detail: "Mo hinh best", type: "Do choi", lastUpdate: "12:20:20 21/06/2022"},
+    //   {id: "3", name: "Mo hinh 3", cost: 50000, solded: 2, count: 160, rating: 4.5, detail: "Mo hinh nho nhan", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
+    //   {id: "4", name: "Mo hinh 4", cost: 60000, solded: 3, count: 120, rating: 4.4, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
+    //   {id: "5", name: "Mo hinh x", cost: 10000, solded: 3, count: 190, rating: 4.6, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
+    //   {id: "6", name: "Mo hinh 6", cost: 40000, solded: 9, count: 130, rating: 4.8, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 22/06/2022"},
+    //   {id: "7", name: "Mo hinh 7", cost: 40000, solded: 7, count: 110, rating: 4.1, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 19/06/2022"}
+    // ];
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -148,15 +148,23 @@ function ProductManager(products) {
       console.log(product)
       setOpenInforProduct(true);
       setOpen(true);
-      setId(product.id)
-      setName(product.name);
-      setDetail(product.detail);
-      setCount(product.count);
-      setCost(product.cost);
+      setId(product?._id)
+      setName(product?.productName);
+      setDetail(product?.shortDescription);
+      setCount(product?.count);
+      setCost(product?.price);
+      let pathCategory = `/category/get?categoryId=${product?.categoryId}`
+      axiosConfig.get(pathCategory).then(async res=>{
+        setType(res.data.data?.categoryName);
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    
       setType(product.type);
-      setSolded(product.solded);
-      setRating(product.rating);
-      setAvatarImg(imageTest);
+      setSolded(product?.soldHistory);
+      setRating(product?.ratingStar);
+      setAvatarImg(product?.imageUrls[0]?.base_url);
       setErrMsg('');
       setSuccess(false);
       setTextTitle("Thông tin sản phẩm");
@@ -232,11 +240,29 @@ function ProductManager(products) {
       }
     };
 
-    useEffect(() => {
-      if (errMsg !== '') {
-        setOpen(true);
-      }
-    }, [errMsg]);
+    // api
+  const [shopData, setShopData] = useState();
+  const [productData, setProductData] = useState();
+
+  let s = window.location.href.split('/')
+  let tmp = '629ddb1583ec9b8c8547522d'
+  let pathShop = `/shops/profile?shopId=${tmp}`
+  let pathProduct = `/shops/list-products?shopId=${tmp}`
+  useEffect(()=>{
+    axiosConfig.get(pathShop).then(async res=>{
+      setShopData(res.data.data)
+      await axiosConfig.get(pathProduct).then(res=>{
+        setProductData(res.data.data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+
+  },[])
 
 // sort && page
     const [searchTerm, setSearchTerm] = useState('');
@@ -267,7 +293,7 @@ function ProductManager(products) {
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - posts.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productData?.length) : 0;
     const handleClick = (event, name) => {
       const selectedIndex = selected.indexOf(name);
       let newSelected = [];
@@ -353,7 +379,7 @@ function ProductManager(products) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         type="text"
-                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        className={clsx(stylesProductManger.formInput2, stylesProductManger.row)}
                         placeholder="Tên sản phẩm..."
                         required
                       />
@@ -478,7 +504,7 @@ function ProductManager(products) {
                     type="detail"
                     value={detail}
                     onChange={(e) => setDetail(e.target.value)}
-                    className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                    className={clsx(stylesProductManger.formInput2, stylesProductManger.row)}
                     placeholder="Mô tả..."
                     required
                   />
@@ -537,10 +563,10 @@ function ProductManager(products) {
                       order={order}
                       orderBy={orderBy}
                       onRequestSort={handleRequestSort}
-                      rowCount={posts.length}
+                      rowCount={productData?.length}
                     />
                     <TableBody>
-                      {posts.slice().sort(getComparator(order, orderBy))
+                      {productData?.slice().sort(getComparator(order, orderBy))
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((product, index) => {
                           const isItemSelected = isSelected(product.id);
@@ -557,14 +583,13 @@ function ProductManager(products) {
                               selected={isItemSelected}
                             >
                               <TableCell component="th" scope="row">
-                                {product.id}
+                                <Button onClick={() => handleOpenInforProduct(product)}>{product?.productName}</Button>
                               </TableCell>
-                              <TableCell align="right"><Button onClick={() => handleOpenInforProduct(product)}>{product.name}</Button></TableCell>
-                              <TableCell align="right">{product.cost}</TableCell>
-                              <TableCell align="right">{product.solded}</TableCell>
-                              <TableCell align="right">{product.count}</TableCell>
-                              <TableCell align="right">{product.rating}</TableCell>
-                              <TableCell align="right">{product.lastUpdate}</TableCell>
+                              <TableCell align="right">{product?.price}</TableCell>
+                              <TableCell align="right">{product?.soldHistory}</TableCell>
+                              <TableCell align="right">{product?.count}</TableCell>
+                              <TableCell align="right">{product?.ratingStar}</TableCell>
+                              <TableCell align="right">{product?.updateAt}</TableCell>
                             </TableRow>
                           );
                         })}
@@ -609,7 +634,7 @@ function ProductManager(products) {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15]}
                   component="div"
-                  count={posts.length}
+                  count={productData?.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

@@ -14,12 +14,16 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosConfig from '../config/axios';
 import {addCartItem } from '../service/CustomerService';
+
+const defautlAvatar =
+  'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
+
 function ProductInformation({navigation}) {
     const navigate = useNavigate();
     const [productData,setProductData] = useState()
     const [productCategory,setProductCategory] = useState()
     const [comments,setComment] = useState()
-
+    const [shopData, setShopData] = useState()
 
     let s = window.location.href.split('/')
     let path = `/product/get?productId=${s[s.length-1]}`
@@ -27,7 +31,6 @@ function ProductInformation({navigation}) {
     useEffect(()=>{
       axiosConfig.get(path).then(async res=>{
         setProductData(res.data.data)
-        console.log(res.data.data?.categoryId)
         let pathCategory = `/category/get?categoryId=${res.data.data?.categoryId}`
         await axiosConfig.get(pathCategory).then(res=>{
           setProductCategory(res.data.data)
@@ -39,6 +42,15 @@ function ProductInformation({navigation}) {
         let pathComment = '/comments?productId=629e16a6af24631642b44151'
         await axiosConfig.get(pathComment).then(res=>{
           setComment(res.data.data)
+          // comments?.map((comment) => {console.log(comment)})
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+
+        let pathShop = `/shops/profile?shopId=${res.data.data?.shopId}`
+        await axiosConfig.get(pathShop).then(res=>{
+          setShopData(res.data.data)
           console.log(res.data.data)
           // comments?.map((comment) => {console.log(comment)})
         })
@@ -96,10 +108,10 @@ function ProductInformation({navigation}) {
                   </div>
                   <div className={stylesProduct.colInformation}>
                     <div className={stylesProduct.colInformation_2}>
-                      <h3> Gui tu </h3>  
+                      <h3> Gửi từ </h3>  
                     </div>
                     <div>
-                      <h3> Ha Noi </h3>  
+                      <h3> {shopData?.address} </h3>  
                     </div>      
                   </div>
                   <div className={stylesProduct.colInformation}>
@@ -146,16 +158,16 @@ function ProductInformation({navigation}) {
                   <CardActionArea>
                     <CardMedia
                       component="img"
-                      image={imageTest}
+                      image={defautlAvatar}
                       alt="green iguana"
                     />
                   </CardActionArea>
                 </Card>
               </div>
               <div className={stylesProduct.productTitle}>
-                <Link to='/testShop' >
+                <Link to={"/shop/" + shopData?.shopperId} >
                   <h2>
-                    Shop Mo Hinh
+                    {shopData?.shopName}
                   </h2>
                 </Link>
               </div>
@@ -186,7 +198,7 @@ function ProductInformation({navigation}) {
                 Gửi từ
               </div>
               <div>
-                Ha Noi
+                {shopData?.address}
               </div>
             </div>
 

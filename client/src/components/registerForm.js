@@ -85,10 +85,10 @@ function RegisterForm(props) {
           lastName: lastName,
           phoneNumber: phone,
           gender: gender,
-          birthDay: bday,
+          dateOfBirth: bday,
           address: address,
           password: password,
-          avatar: avatarImg,
+          avatarUrl: avatarImg,
         };
       } else {
         const iday = new Date(ngayCap);
@@ -98,10 +98,10 @@ function RegisterForm(props) {
           lastName: lastName,
           phoneNumber: phone,
           gender: gender,
-          birthDay: bday,
+          dateOfBirth: bday,
           address: address,
           password: password,
-          avatar: avatarImg,
+          avatarUrl: avatarImg,
           cccd: cmnd,
           issueDate: iday,
           issuePlace: noiCap,
