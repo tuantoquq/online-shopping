@@ -3,7 +3,7 @@ import stylesProduct from '../screens/CSS/productInfor.module.css';
 import {useState} from 'react';
 import { Button } from '@mui/material';
 
-function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}){
+function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}) {
     const [count, setCount] = useState(startValue);
 
     const handleChange = event => {

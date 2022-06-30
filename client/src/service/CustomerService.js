@@ -57,6 +57,52 @@ export const deleteCartItem = async (cartId) => {
     return response;
 }
 
+export const updateCartItem = async (quantity) => {
+    let response;
+    try{
+        response = await customerApi.put(`/customer/auth/cart/update`, quantity, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
+export const getListCartItems = async() =>{
+    let response;
+    try{
+        response = await customerApi.get('/customer/auth/cart');
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
+export const getListAddress = async () => {
+    let response;
+    try{
+        response = await customerApi.get('/customer/auth/delivery-address');
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
+
+export const addOrder = async (order) => {
+    let response;
+    try{
+        response = await customerApi.post('/customer/auth/orders', order, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
+
 export const getOrderHistory = async () => {
     let response;
     try{

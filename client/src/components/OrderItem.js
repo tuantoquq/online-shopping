@@ -3,8 +3,8 @@ import { Button, CardActionArea, ButtonGroup } from '@mui/material';
 import {useState, useEffect} from 'react';
 import clsx from 'clsx'
 import axiosConfig from '../config/axios';
-import {deleteCartItem} from '../service/CustomerService';
-function OrderItem({productId, quantity, cartId}){
+import {deleteCartItem, updateCartItem} from '../service/CustomerService';
+function OrderItem({productId, quantity, cartId, handle}) {
     const [productData, setProductData] = useState();
     const [itemCount, setItemCount] = useState(parseInt(quantity));
     let path = `/product/get?productId=${productId}`
@@ -22,7 +22,7 @@ function OrderItem({productId, quantity, cartId}){
       
           <div className={styles.listProduct}>
           <div className={clsx(styles.all,styles.elm1)}>
-                  <img src='assets/laptop.jpg' className={styles.image}/>
+                  <img src={productData?.imageUrls[0].base_url} className={styles.image}/>
                   <div className={styles.left_comp}>
                       <div className={styles.comp1}>
                           <p>{productData?.productName}</p>
@@ -35,6 +35,10 @@ function OrderItem({productId, quantity, cartId}){
                           <Button
                             onClick={() => {
                               setItemCount(Math.max(itemCount - 1, 1));
+                              updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
+                                  handle();
+                                // console.log(res);
+                              });
                             }}
                           >
                             {"-"}
@@ -42,6 +46,10 @@ function OrderItem({productId, quantity, cartId}){
                           <Button
                             onClick={() => {
                               setItemCount(itemCount + 1);
+                              updateCartItem({cartItemsId:cartId, quantity: itemCount+1}).then(res => {
+                                  handle();
+                                // console.log(res);
+                              });
                             }}
                           >
                             {"+"}
@@ -52,6 +60,7 @@ function OrderItem({productId, quantity, cartId}){
                               <Button className={styles.last}
                                 onClick={() => {
                                   deleteCartItem(cartId).then(res => {
+                                    handle(); 
                                     console.log(res);
                                   })
                                 }}
