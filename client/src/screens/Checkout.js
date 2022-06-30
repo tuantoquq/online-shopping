@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import styles from "./CSS/orderProductShip.module.css";
 import OrderProductShip from '../components/orderProductShip.js';
 import { useNavigate } from 'react-router-dom';
-import {getCustomerProfile, getListAddress, addOrder, getListCartItems} from '../service/CustomerService.js';
+import {deleteCartItem, getListAddress, addOrder, getListCartItems} from '../service/CustomerService.js';
 import {useState, useEffect} from 'react';
 function Checkout() {
     const navigate = useNavigate();
@@ -78,14 +78,13 @@ function Checkout() {
                 <div >
                     <button onClick={()=>navigatePath("/cart")}>Trở lại</button>
                     <button onClick={()=>{
-                        // navigatePath("/user/orderhistory");
+                        navigatePath("/user/orderManager");
                         console.log(listCartItems);
-                        console.log(
                         addOrder({
                             addressId: address[0]._id,
                             listCartItems: listCartItems
-                        }).then(res => {console.log(res)})
-                        );
+                        }).then(res => {console.log(res?.data)});
+                        listCartItems.map(item=>deleteCartItem(item));
                 }}>Đặt Hàng</button>
                 </div>
             </div>
