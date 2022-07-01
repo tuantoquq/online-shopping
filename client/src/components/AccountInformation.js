@@ -13,6 +13,7 @@ function AccountInformation(props){
     const [newEmail, setNewEmail] = useState();
     const [newPassword, setNewPassword] = useState();
     const [currentUser, setCurrentUser] = useState();
+    const [newAddress, setNewAddress] = useState();
     useEffect(() => {
         setCurrentUser(props.user)
     },[props])
@@ -185,24 +186,24 @@ function AccountInformation(props){
                             <label className={styles.column}>Địa chỉ</label>
                             <label className={styles.midColumn}>{currentUser?.address}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(5)}
+                                onClick={()=>displayUpdate(8)}
                             >Thay đổi</label>
                         </div>
-                        <div className={styles.update} id={5}>
+                        <div className={styles.update} id={8}>
                             <lable className={styles.column}>
                                 Cập nhật thông tin
                             </lable>
                             <input placeholder='Nhập thông tin...'
                                 className={clsx(styles.midColumn,styles.inputUpdate)}
-                                value={newAddres}
+                                value={newAddress}
                                 onChange={(e) => setNewAddress(e.target.value)}
                             />
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
-                                    if(newAddres == null){
+                                    if(newAddress == null){
                                         alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else{
-                                        updateCustomerProfile({address: newAddress}).then(res => {
+                                        updateCustomerProfile({deliveryAddress: newAddress}).then(res => {
                                             console.log("Update info: ", res.data);
                                         })
                                     }
