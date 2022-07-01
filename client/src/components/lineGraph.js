@@ -1,42 +1,69 @@
 import React, { useState, useEffect, memo } from 'react';
+import { format, add } from 'date-fns';
 import Chart from 'react-apexcharts';
+import PropTypes from 'prop-types';
 
-function LineGraph({ id, day, data, xAxis, width }) {
-  const [prevWeek, setPrevWeek] = useState([]);
-
+function LineGraph({ id, startDate, endDate, lines, xAxis, width, height }) {
+  const [selectedTime, setSelectedTime] = useState([]);
+  // console.log(selectedTime);
+  const series = xAxis.map((value, index) => {
+    return {
+      name: value,
+      data: lines[index],
+    };
+  });
   useEffect(() => {
-    const lastWeek = [7, 6, 5, 4, 3, 2, 1].map((i) => {
-      let nDay = new Date();
-      nDay.setDate(day.getDate() - i);
-      //console.log(nDay);
-      return (
-        nDay.getDate() + '/' + (nDay.getMonth() + 1) + '/' + nDay.getFullYear()
-      );
-    });
-    console.log(lastWeek);
-    setPrevWeek(lastWeek);
-  }, [day]);
+    let timeRange = [];
+    let start = startDate;
+    while (format(start, 'MM/dd/yyyy') !== format(endDate, 'MM/dd/yyyy')) {
+      timeRange.push(start);
+      // console.log(start);
+      start = add(start, { days: 1 });
+    }
+    timeRange.push(endDate);
+    setSelectedTime(timeRange.map((day) => format(day, 'MM/dd/yyyy')));
+    // console.log(timeRange);
+  }, [startDate, endDate]);
 
   return (
     <Chart
       options={{
         chart: {
           id: id,
+          type: 'area',
+          stacked: false,
+
+          zoom: {
+            type: 'x',
+            enabled: true,
+            autoScaleYaxis: true,
+          },
+          toolbar: {
+            autoSelected: 'zoom',
+          },
+        },
+        stroke: {
+          width: 3,
+          // curve: 'smooth',
+        },
+        markers: {
+          size: 3,
         },
         xaxis: {
-          categories: prevWeek,
+          type: 'datetime',
+          categories: selectedTime,
+          tickAmount: 10,
+          labels: {
+            formatter: function (value, timestamp, opts) {
+              return opts.dateFormatter(new Date(timestamp), 'dd/MM');
+            },
+          },
         },
       }}
-      series={[
-        {
-          name: xAxis,
-          data: data,
-        },
-      ]}
-      type="line"
+      series={series}
       width={width}
+      height={height}
     />
   );
 }
-
 export default memo(LineGraph);

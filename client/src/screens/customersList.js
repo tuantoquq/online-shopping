@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import styles from './CSS/customersListCSS.module.scss';
 import AdminSidebar from '../components/adminSidebar';
-
+import AdminHeader from '../components/adminHeader';
 import AccountsList from '../components/accountsList';
 
 function CustomerLists(props) {
@@ -25,15 +25,18 @@ function CustomerLists(props) {
   }, [locked]);
 
   return (
-    <div className={clsx(styles.pageContainer)}>
-      <AdminSidebar select="customers" />
-      <div className={clsx(styles.pageBody)}>
-        <AccountsList
-          idsList={accountIdsList}
-          role="customer"
-          status={locked}
-          onStatusChange={handleStatusChange}
-        />
+    <div>
+      <AdminHeader />
+      <div className={clsx(styles.pageContainer)}>
+        <AdminSidebar select="customers" />
+        <div className={clsx(styles.pageBody)}>
+          <AccountsList
+            idsList={accountIdsList}
+            role="customer"
+            status={locked}
+            onStatusChange={handleStatusChange}
+          />
+        </div>
       </div>
     </div>
   );

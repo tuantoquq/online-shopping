@@ -41,11 +41,7 @@ function LoginForm(props) {
   const [open, setOpen] = useState(false);
 
   const LOGIN_URL = `/${role}/login`;
-<<<<<<< HEAD
-  const { setAuth } = useContext(AuthContext);
-=======
   const [accessToken, setAccessToken] = useState(null);
->>>>>>> 470b6d843cf73425adbdfabc90abeb9451665666
   const userRef = useRef();
   const errRef = useRef();
 

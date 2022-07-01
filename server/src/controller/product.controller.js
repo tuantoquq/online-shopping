@@ -1,78 +1,15 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
+import CustomError from '../error/customError.js';
 import { Product, Category } from '../model/index.js';
+import CategoryService from '../service/category.service.js';
 // import bm25 from 'wink-bm25-text-search';
 // import winkNLP from 'wink-nlp';
 // import model from 'wink-eng-lite-web-model';
 import ProductService from '../service/product.service.js';
+import ShopService from '../service/shop.service.js';
+import StringUtils from '../utils/stringUtils.js';
 
-const productController = {};
-
-productController.insertProductToDatabase = async (req, res) => {
-    try {
-        const {
-            productName,
-            longDescription,
-            shortDescription,
-            price,
-            codes,
-            count,
-            sizes,
-            categoryName,
-            shopId,
-        } = req.body;
-
-        let category = new Category({
-            categoryName: categoryName,
-        });
-
-        try {
-            console.log(productName);
-            console.log(shopId);
-            let product = await Product.findOne({
-                productName: productName,
-                shopId: shopId,
-            });
-            const categorySave = await category.save();
-            if (product) {
-                return res.status(httpStatus.BAD_REQUEST).json({
-                    status: apiStatus.INVALID_PARAM,
-                    message: 'Product has been exist in this Shop',
-                });
-            }
-            let newProduct = new Product({
-                productName: productName,
-                longDescription: longDescription,
-                shortDescription: shortDescription,
-                price: price,
-                codes: codes,
-                count: count,
-                shopId: shopId,
-                sizes: sizes,
-                categoryId: categorySave._id,
-            });
-            console.log(newProduct);
-
-            const productSave = await newProduct.save();
-            return res.status(httpStatus.CREATED).json({
-                status: apiStatus.SUCCESS,
-                message: 'add product successfully!',
-                data: productSave,
-            });
-        } catch (e) {
-            return res.status(httpStatus.BAD_REQUEST).json({
-                status: apiStatus.OTHER_ERROR,
-                message: e.message,
-            });
-        }
-    } catch (e) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            status: apiStatus.OTHER_ERROR,
-            message: e.message,
-        });
-    }
-};
-
-productController.getProductFromDatabase = async (req, res) => {
+export const getProductById = async (req, res) => {
     try {
         let productId = req.query.productId;
         let productFind = await Product.findById(productId);
@@ -95,102 +32,6 @@ productController.getProductFromDatabase = async (req, res) => {
         });
     }
 };
-
-productController.deleteProductFromDatabase = async (req, res) => {
-    try {
-        console.log(req.body.productId);
-        let product = await Product.findByIdAndRemove(req.query.productId);
-        if (product == null) {
-            return res.status(httpStatus.NOT_FOUND).json({
-                status: apiStatus.INVALID_PARAM,
-                message: "Can't find product",
-            });
-        }
-
-        return res.status(httpStatus.OK).json({
-            status: apiStatus.SUCCESS,
-            message: 'Delete product done',
-        });
-    } catch (e) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            status: apiStatus.OTHER_ERROR,
-            message: e.message,
-        });
-    }
-};
-
-productController.updateProductFromDatabase = async (req, res) => {
-    try {
-        let productId = req.query.productId;
-        var dataUpdate = {};
-        let listPros = [
-            'productName',
-            'longDescription',
-            'shortDescription',
-            'price',
-            'codes',
-            'count',
-            'sizes',
-            'ratingStart',
-            'ratingCount',
-        ];
-
-        for (let i = 0; i < listPros.length; i++) {
-            let pros = listPros[i];
-            // eslint-disable-next-line no-prototype-builtins
-            if (req.body.hasOwnProperty(pros)) {
-                dataUpdate[pros] = req.body[pros];
-            }
-        }
-        dataUpdate['updateAt'] = Date.now();
-        let product = await Product.findByIdAndUpdate(productId, dataUpdate);
-        if (!product) {
-            return res.status(httpStatus.NOT_FOUND).json({
-                status: apiStatus.INVALID_PARAM,
-                message: "Can't find product",
-            });
-        }
-        return res.status(httpStatus.OK).json({
-            status: apiStatus.SUCCESS,
-            message: 'update product successfully',
-            data: product,
-        });
-    } catch (e) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-            message: e.message,
-        });
-    }
-};
-// productController.search = async (req, res) => {
-//     try{
-//         const { query } = req.body
-//         const documents = await Product.find({
-//             $or: [{productName: {$regex: query, $options: 'i'}}, {shortDescription: {$regex: query, $options: 'i'}}]
-//         })
-//         if(!documents){
-//             return res.status(httpStatus.OK).json({
-//                 status: apiStatus.SUCCESS,
-//                 message: "Not found documents",
-//                 data: []
-//             })
-//         }
-//         var listIds = []
-//         for(let i =0; i< documents.length; i++){
-//             listIds.push(documents[i]._id)
-//         }
-//         return res.status(httpStatus.OK).json({
-//             status: apiStatus.SUCCESS,
-//             data: listIds
-//         })
-
-//     }
-//     catch (e) {
-//         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-//             status: apiStatus.OTHER_ERROR,
-//             message: e.message,
-//         });
-//     }
-// }
 
 // productController.search = async (req, res) => {
 //     try {
@@ -248,7 +89,7 @@ productController.updateProductFromDatabase = async (req, res) => {
 //     }
 // };
 
-productController.filter = async (req, res) => {
+export const filterProduct = async (req, res) => {
     try {
         let currentPage = req.body.currentPage ? req.body.currentPage : 1;
         let maxItem = req.body.maxItem ? req.body.maxItem : 20;
@@ -267,6 +108,7 @@ productController.filter = async (req, res) => {
         let query = [];
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (req.body.hasOwnProperty(property)) {
                 if (property == 'query') {
                     query.push({
@@ -418,7 +260,7 @@ productController.filter = async (req, res) => {
     }
 };
 
-productController.getTop6SellingProduct = async (req, res) => {
+export const getTop6SellingProduct = async (req, res) => {
     try {
         let top6Products = await ProductService.getTop6Selling();
         return res.status(httpStatus.OK).send({
@@ -434,7 +276,7 @@ productController.getTop6SellingProduct = async (req, res) => {
     }
 };
 
-productController.getTop30RecommendProducts = async (req, res) => {
+export const getTop30RecommendProducts = async (req, res) => {
     try {
         let top30RecommendProducts = await ProductService.getTop30RecommendProducts();
         return res.status(httpStatus.OK).send({
@@ -450,4 +292,186 @@ productController.getTop30RecommendProducts = async (req, res) => {
     }
 };
 
-export default productController;
+export const addProduct = async (req, res, next) => {
+    try {
+        let categoryId = req.body.categoryId;
+        //check exist category
+        let category = await CategoryService.findCategoryById(categoryId);
+
+        let shopperId = req.userId;
+        //check exist shop with shopper id
+        let shop = await ShopService.findShopByShopperId(shopperId);
+
+        //upload images
+        let imageFiles = req.files;
+        //check file extensions
+        if (!imageFiles) {
+            const error = new Error('Upload file again!');
+            error.httpStatusCode = 400;
+            return next(error);
+        }
+
+        let imageUrls = [];
+        for (let i = 0; i < imageFiles.length; i++) {
+            imageUrls.push(`${process.env.IMAGE_PRE_PATH}/${imageFiles[i].filename}`);
+        }
+        let lastProduct = await ProductService.getLastProduct();
+        let productId = lastProduct.productId + 1;
+        let productCode = await generateCodes();
+        let productRequest = new Product({
+            productName: req.body.productName,
+            productId: productId,
+            shortDescription: req.body.shortDescription,
+            longDescription: req.body.longDescription,
+            price: parseFloat(req.body.price),
+            soldHistory: parseFloat(req.body.soldHistory),
+            imageUrls: imageUrls,
+            codes: productCode,
+            productUrl: `http://localhost:3000/products?pid=${productId}`,
+            count: parseInt(req.body.count),
+            sizes: JSON.parse(req.body.sizes),
+            ratingStar: 0,
+            ratingCount: 0,
+            categoryId: category._id,
+            shopId: shop._id,
+            createAt: Date.now(),
+            updateAt: Date.now(),
+        });
+        let newProduct = await ProductService.addProduct(productRequest);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'add product successfully',
+            data: newProduct,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+export const updateProduct = async (req, res, next) => {
+    try {
+        let productId = req.params.productId;
+        let listProps = [
+            'productName',
+            'longDescription',
+            'shortDescription',
+            'price',
+            'soldHistory',
+            'imageUrls',
+            'count',
+            'sizes',
+            'ratingStart',
+            'ratingCount',
+            'categoryId',
+        ];
+        let productRequest = {};
+        for (let i = 0; i < listProps.length; i++) {
+            let props = listProps[i];
+            // eslint-disable-next-line no-prototype-builtins
+            if (req.body[props] !== undefined) {
+                switch (props) {
+                    case 'categoryId':
+                        // eslint-disable-next-line no-case-declarations
+                        const categoryId = req.body.categoryId;
+                        //check category exist
+                        // eslint-disable-next-line no-case-declarations
+                        let category = await CategoryService.findCategoryById(categoryId);
+                        productRequest[props] = category._id;
+                        break;
+                    case 'productName':
+                    case 'longDescription':
+                    case 'shortDescription':
+                        productRequest[props] = req.body[props];
+                        break;
+                    case 'price':
+                    case 'ratingStart':
+                        productRequest[props] = parseFloat(req.body[props]);
+                        break;
+                    case 'count':
+                    case 'soldHistory':
+                    case 'ratingCount':
+                        productRequest[props] = parseInt(req.body[props]);
+                        break;
+                    case 'sizes':
+                        productRequest[props] = JSON.parse(req.body[props]);
+                        break;
+                }
+            }
+        }
+        if (req.files !== undefined && req.files.length > 0) {
+            //upload images
+            let imageFiles = req.files;
+            //check file extensions
+            if (!imageFiles) {
+                const error = new Error('Upload file again!');
+                error.httpStatusCode = 400;
+                return next(error);
+            }
+
+            let imageUrls = [];
+            for (let i = 0; i < imageFiles.length; i++) {
+                imageUrls.push(`${process.env.IMAGE_PRE_PATH}/${imageFiles[i].filename}`);
+            }
+            productRequest['imageUrls'] = imageUrls;
+        }
+        let updateProduct = await ProductService.updateProduct(productRequest, productId);
+
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.OK,
+            message: 'update product successfully',
+            data: updateProduct,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.productId;
+        let deleteProduct = await ProductService.deleteProduct(productId);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: 'delete product successfully',
+            data: deleteProduct,
+        });
+    } catch (err) {
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+};
+
+async function generateCodes() {
+    let res = StringUtils.generateProductCode();
+    let check = await ProductService.checkExistCode(res);
+    while (check) {
+        generateCodes();
+    }
+    return res;
+}
