@@ -1,183 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import isFuture from 'date-fns/isFuture';
+import React, { useState, useEffect, Component } from 'react';
+
+import { format, add } from 'date-fns';
 
 import clsx from 'clsx';
 import styles from './CSS/adminDashboardCSS.module.scss';
 import AdminSidebar from '../components/adminSidebar';
+import AdminHeader from '../components/adminHeader';
 import LineGraph from '../components/lineGraph';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
 function AdminDashboard(props) {
+  const width = window.screen.width - 370;
+  const height = window.screen.height * 0.85 - 200;
+
   const toDay = new Date();
-  const [selectedDate1, setSelectedDate1] = useState(new Date());
+  const thisDayMonthBefore = add(toDay, { days: -30 });
+  // console.log(toDay);
+  // console.log(thisDayMonthBefore);
+  const [startDate, setStartDate] = useState(thisDayMonthBefore);
+  const [endDate, setEndDate] = useState(toDay);
 
-  const [visitsLastWeek, setVisitsLastWeek] = useState([]);
-  const [selectedDateVisits, setSelecteDateVisits] = useState(
-    visitsLastWeek[6]
-  );
-  const [thisMonthVisits] = useState(() => {
-    const thisMonth = Math.floor(Math.random() * 10000 + 1);
-    return thisMonth;
-  });
-
-  const [selectedDate2, setSelectedDate2] = useState(new Date());
-
-  const [newAccountsLastWeek, setNewAccountsLastWeek] = useState([]);
-  const [selectedDateNewAccounts, setSelecteDateNewAccounts] = useState(
-    newAccountsLastWeek[6]
-  );
-  const [thisMonthNewAccount] = useState(() => {
-    const thisMonth = Math.floor(Math.random() * 100 + 1);
-    return thisMonth;
-  });
+  const [visted, setVisited] = useState([]);
+  const [newAccount, setNewAccount] = useState([]);
 
   useEffect(() => {
     //request for data
-    const lastWeekVisited = [7, 6, 5, 4, 3, 2, 1].map(
-      (i) => Math.floor(Math.random() * i * 100 + 1) * (8 - i) * i
-    );
+    let data1 = [];
+    let data2 = [];
+    if (startDate && endDate) {
+      let start = startDate;
+      let i = 2;
+      while (format(start, 'MM/dd/yyyy') !== format(endDate, 'MM/dd/yyyy')) {
+        data1.push(Math.floor(i * Math.abs(Math.sin(i) + 3)));
+        data2.push(Math.floor(i * Math.abs(Math.cos(i) + 3)));
+        start = add(start, { days: 1 });
+        // console.log(start);
+        i = i + 1;
+      }
+      data1.push(Math.floor(i * Math.abs(Math.sin(i) + 3)));
+      data2.push(Math.floor(i * Math.abs(Math.cos(i) + 3)));
 
-    setVisitsLastWeek(lastWeekVisited);
-    setSelecteDateVisits(lastWeekVisited[6]);
-  }, [selectedDate1]);
+      // console.log(timeRange);
+    }
+    //respons data
+    setVisited(data1);
+    setNewAccount(data2);
+  }, [startDate, endDate]);
 
-  useEffect(() => {
-    //request for data
+  // useEffect(() => {
+  //   //request for data
 
-    const newAccountsLastWeek = [7, 6, 5, 4, 3, 2, 1].map(
-      (i) => Math.floor(Math.random() * i * 10 + 1) * (8 - i) * i
-    );
-    setNewAccountsLastWeek(newAccountsLastWeek);
-    setSelecteDateNewAccounts(newAccountsLastWeek[6]);
-  }, [selectedDate2]);
+  //   const newAccountsLastWeek = [7, 6, 5, 4, 3, 2, 1].map(
+  //     (i) => Math.floor(Math.random() * i * 10 + 1) * (8 - i) * i
+  //   );
+  //   setNewAccountsLastWeek(newAccountsLastWeek);
+  //   setSelecteDateNewAccounts(newAccountsLastWeek[6]);
+  // }, [selectedDate2]);
 
   return (
-    <div className={clsx(styles.pageContainer)}>
-      <AdminSidebar select="statstic_visits" />
-      <div className={clsx(styles.pageBody)}>
-        <div>
-          <h3 className={clsx(styles.rowTitle)}> Thống kê số lượt truy cập</h3>
+    <div>
+      <AdminHeader />
+      <div className={clsx(styles.pageContainer)}>
+        <AdminSidebar select="statstic_visits" />
+        <div className={clsx(styles.pageBody)}>
           <div className={clsx(styles.pageRow)}>
-            <div>
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate1.getMonth() +
-                      1 +
-                      '/' +
-                      selectedDate1.getFullYear()}{' '}
-                  </strong>
-                </span>
-
-                <div>
-                  <span>{thisMonthVisits}</span>
-                </div>
-              </div>
-
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate1.getDate() +
-                      '/' +
-                      (selectedDate1.getMonth() + 1) +
-                      '/' +
-                      selectedDate1.getFullYear()}{' '}
-                  </strong>
-                </span>
-                <div>
-                  <span>{selectedDateVisits}</span>
-                </div>
-              </div>
-            </div>
+            <DateRangePicker
+              initialSettings={{
+                startDate: format(startDate, 'MM/dd/yyyy'),
+                endDate: format(endDate, 'MM/dd/yyyy'),
+              }}
+              onApply={(e, p) => {
+                setEndDate(p.endDate._d);
+                setStartDate(p.startDate._d);
+              }}
+            >
+              <input className={clsx(styles.dateRangeInput)} />
+            </DateRangePicker>
             <LineGraph
               className={clsx(styles.lineGraph)}
-              id="Số lượt truy cập trong tuần"
-              day={selectedDate1}
-              data={visitsLastWeek}
-              xAxis="visits"
-              width="450"
+              id="visits"
+              startDate={startDate}
+              endDate={endDate}
+              lines={[visted, newAccount]}
+              xAxis={['Số lượt truy cập', 'Số lượt đăng kí mới']}
+              width={width}
+              height={height}
             />
-
-            <LocalizationProvider
-              className={clsx(styles.calendar)}
-              dateAdapter={AdapterDateFns}
-            >
-              <CalendarPicker
-                className={clsx(styles.calendar)}
-                openTo="day"
-                date={selectedDate1}
-                shouldDisableDate={isFuture}
-                onChange={(newDate) => {
-                  console.log(newDate);
-                  setSelectedDate1(newDate);
-                }}
-              />
-            </LocalizationProvider>
-          </div>
-        </div>
-
-        <div>
-          <h3 className={clsx(styles.rowTitle)}>
-            Thống kê số lượt đăng ký mới
-          </h3>
-          <div className={clsx(styles.pageRow)}>
-            <div>
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate2.getMonth() +
-                      1 +
-                      '/' +
-                      selectedDate2.getFullYear()}{' '}
-                  </strong>
-                </span>
-
-                <div>
-                  <span>{thisMonthNewAccount}</span>
-                </div>
-              </div>
-
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate2.getDate() +
-                      '/' +
-                      (selectedDate2.getMonth() + 1) +
-                      '/' +
-                      selectedDate2.getFullYear()}{' '}
-                  </strong>
-                </span>
-                <div>
-                  <span>{selectedDateNewAccounts}</span>
-                </div>
-              </div>
-            </div>
-            <LineGraph
-              className={clsx(styles.lineGraph)}
-              id="Số lượt đăng ký mới trong tuần"
-              day={selectedDate2}
-              data={newAccountsLastWeek}
-              xAxis="New accounts"
-              width="450"
-            />
-
-            <LocalizationProvider
-              className={clsx(styles.calendar)}
-              dateAdapter={AdapterDateFns}
-            >
-              <CalendarPicker
-                className={clsx(styles.calendar)}
-                openTo="day"
-                date={selectedDate2}
-                shouldDisableDate={isFuture}
-                onChange={(newDate) => {
-                  console.log(newDate);
-                  setSelectedDate2(newDate);
-                }}
-              />
-            </LocalizationProvider>
           </div>
         </div>
       </div>
