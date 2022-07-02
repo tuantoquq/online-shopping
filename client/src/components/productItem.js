@@ -19,7 +19,7 @@ function ProductItem({productId, quantity,}){
     },[])
     return (
         <div className={clsx(styles.all,styles.elm1)}>
-            <img src='assets/laptop.jpg' className={styles.image}/>
+            <img src={productData?.imageUrls[0].base_url} className={styles.image}/>
             <div className={styles.left_comp}>
                 <div className={styles.comp1}>
                     <p>{productData?.productName}</p>

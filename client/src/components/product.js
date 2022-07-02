@@ -24,7 +24,10 @@ function ProductInformation({navigation}) {
     const [productCategory,setProductCategory] = useState()
     const [comments,setComment] = useState()
     const [shopData, setShopData] = useState()
-
+    const [quantity, setQuantity] = useState(1)
+    function handleChangeQuantity(value) {
+        setQuantity(value)
+    }
     let s = window.location.href.split('/')
     let path = `/product/get?productId=${s[s.length-1]}`
     // '/product/get?productId=629e172caf24631642b441ee'
@@ -121,20 +124,26 @@ function ProductInformation({navigation}) {
                     <ButtonChangeValue 
                       titleLeft="-"
                       titleRight="+"
-                      startValue={0}
+                      startValue={1}
                       numberProduct={productData?.count}
+          
                     />       
                   </div>
                   <div className={stylesProduct.soldInfo}>
                     <div className={stylesProduct.button2}>
                       <Button variant="contained" onClick={() => 
-                        addCartItem({productId: s[s.length-1], quantity:1}).then(res => {
+                        addCartItem({productId: s[s.length-1], quantity: 1}).then(res => {
                           console.log(res.data);
                       })
                         }> Thêm vào giỏ hàng </Button>
                     </div>
                     <div className={stylesProduct.button2}>
-                      <Button variant="contained" onClick={() => navigatePath("/cart")}> Mua ngay </Button>                         
+                      <Button variant="contained" onClick={() => {
+                        addCartItem({productId: s[s.length-1], quantity: 1}).then(res => {
+                          console.log(res.data);
+                        });
+                        navigatePath("/cart")
+                        }}> Mua ngay </Button>                         
                     </div>
                  
                   </div>

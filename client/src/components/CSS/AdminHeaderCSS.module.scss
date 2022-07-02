@@ -1,0 +1,46 @@
+.headerContainer {
+  // position: fixed;
+  // top: 0px;
+  // left: 0px;
+  width: 100%;
+}
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 5%;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+}
+
+.headerTitle {
+  display: flex;
+  float: left;
+  align-items: center;
+}
+
+.logoImg {
+  width: 55px;
+}
+
+.mainTitle {
+  padding-left: 16px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.subTitle {
+  font-size: 1rem;
+  padding-left: 16px;
+}
+.loginLink {
+  text-decoration: none;
+}
+.loginButton {
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.loginButton:hover {
+  border: 1px solid #fff !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}

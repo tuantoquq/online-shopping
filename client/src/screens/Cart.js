@@ -7,19 +7,7 @@ import {getCartItem} from "../service/CustomerService";
 import axiosConfig from '../config/axios';
 import { useNavigate } from 'react-router-dom';
 
-function getItemPrice(productId) {
-    let path = `/product/get?productId=${productId}`;
-    let price = 0;
-    axiosConfig.get(path).then(res=>{
-    price =  res?.data?.data?.price;
-        
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-    //   console.log(price)
-    return price;
-}
+
 function Cart() {
     const navigate = useNavigate();
     const navigatePath = function (path) {
@@ -29,26 +17,38 @@ function Cart() {
     };
     const [cartItem, setCartItem] = useState([]);
     const [totalPrice, setTotalPrice] = useState();
+    const [price, setPrice] = useState();
+    const [change, setChange] = useState(0);
+    function getChange() {setChange(change+1)}
     useEffect(() => {
+
+
         getCartItem().then(
             res => {
-                console.log(res?.data);
+                // console.log(res?.data?.data);
                 setCartItem(res?.data?.data);
+                const list_id  = res.data.data.map(item=>item.productId);
+                const list_count = res.data.data.map(item=>item.count);
+                let total = 0;
+                for (let i = 0; i < list_id.length; i++) {
+                    let path = `/product/get?productId=${list_id[i]}`
+                    axiosConfig.get(path).then(res=>{
+                        let price = res?.data?.data?.price
+                        total += price* parseInt(list_count[i]);
+                        setTotalPrice(total);
+                        // console.log('total:',total);
+                      })
+                      .catch(err=>{
+                        console.log(err)
+                      })
+                }
             }
-        ).catch(err => {
+        )
+        .catch(err => {
             console.log(err);
         });
 
-    }, []);
-    useEffect(() => {
-        let total = 100;
-        for (let i = 0; i < cartItem.length; i++) {
-            total += parseInt(getItemPrice(cartItem[i].productId))* parseInt(cartItem[i].count);
-            // console.log(parseInt(cartItem[i].count));
-        }
-        setTotalPrice(total);
-    }, [cartItem]);
-    
+    }, [change]);
     return(
         // console.log(numberProduct),
         <div >
@@ -59,8 +59,8 @@ function Cart() {
                     </div>       
                     <div >
                         {
-                            cartItem.map(item => {
-                                return <OrderItem productId={item.productId} quantity={item.count} cartId={item._id}/>
+                            cartItem.map((item, index) => {
+                                return <OrderItem productId={item.productId} quantity={item.count} cartId={item._id} key = {index} handle={getChange} />
                             })
                         }
                     </div>
@@ -68,14 +68,14 @@ function Cart() {
                     <div className={styles.comp1}>
                         <div className={styles.displayMoney}>
                             <p className={styles.disTotalPrice}>Tổng số tiền:</p>
-                            <p className={styles.totalPrice}>{totalPrice}</p>
+                            <p className={styles.totalPrice}> {totalPrice}</p>
                         </div>
 
                     </div>
                     <div >
                         <button>Trở lại</button>
                         <button
-                        onClick={() =>navigatePath("/user/checkout")}>Hoàn thành</button>
+                        onClick={() =>navigatePath("/user/checkout")}>Thanh toán</button>
                     </div>
                 </div>
             <Footer/>

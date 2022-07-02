@@ -1,33 +1,39 @@
 .pageContainer {
   display: flex;
-  padding: 0px 12px 0 0;
+  width: 100%;
 }
 
 .pageBody {
   width: calc(100% - 260px);
+  display: flex;
+  align-items: center;
 }
 .pageRow {
-  display: grid;
-  grid-template-columns: auto auto auto;
+  position: relative;
+  width: 100%;
+  display: flex;
   align-items: center;
-  padding: 0px 20px;
-  margin: 12px 0px 12px 12px;
+  padding: 40px 20px 0px 20px;
+  margin: 12px;
   justify-content: space-between;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .rowTitle {
   padding: 24px 0px 0px 12px;
 }
-
-.calendar {
-  padding: 0px;
-  margin: 0px;
-  width: 304px;
-  height: 358px;
+.dateRangeInput {
+  position: absolute;
+  font-size: 1em;
+  padding: 4px;
+  // border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+  right: 20px;
+  top: 0px;
 }
-@media (min-width: 1600px) {
-  .pageContainer {
-    padding: 0px 10%;
-  }
+.lineGraph {
+  width: 100%;
 }

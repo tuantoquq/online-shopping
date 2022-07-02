@@ -7,7 +7,7 @@ import CategoryService from '../service/category.service.js';
 // import model from 'wink-eng-lite-web-model';
 import ProductService from '../service/product.service.js';
 import ShopService from '../service/shop.service.js';
-import StringUtils from '../utils/StringUtils.js';
+import StringUtils from '../utils/stringUtils.js';
 
 export const getProductById = async (req, res) => {
     try {
