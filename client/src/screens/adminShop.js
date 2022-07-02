@@ -65,7 +65,7 @@ export default function AdminShop() {
   useEffect(() => {
     axiosConfig({
       method: 'get',
-      url: `/shops?limit=${total}`,
+      url: '/shops',
     })
       .then((res) => {
         let total = res.data.data.totalShops;
