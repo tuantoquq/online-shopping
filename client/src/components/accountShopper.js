@@ -11,7 +11,7 @@ import imageTest from '../assets/testproduct.jpg'
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { Tabs } from '@mui/material';
-
+import {getShopperProfile, updateShopperProfile} from '../service/ShopperService.js'
 function TabInfor(props) {
   const {value, account } = props;
   const [firstName, setFirstName] = useState('Bùi');
@@ -68,15 +68,12 @@ function TabInfor(props) {
       };
       console.log(data);
       try {
-        const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        });
-        console.log(JSON.stringify(response?.data));
-        console.log(JSON.stringify(response));
-        setSuccess(true);
+        // const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        // });
+        updateShopperProfile(data).then(res=>{setSuccess(true);console.log(res?.data)})
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
@@ -89,7 +86,19 @@ function TabInfor(props) {
       }
     }
   }
-
+  useEffect(()=>{
+    getShopperProfile().then(res=>{
+      setFirstName(res?.data?.data?.firstName);
+      setLastName(res?.data?.data?.lastName);
+      setEmail(res?.data?.data?.email);
+      setPhone(res?.data?.data?.phoneNumber);
+      setGender(res?.data?.data?.gender);
+      setCmnd(res?.data?.data?.cccd);
+      setNoiCap(res?.data?.data?.issuePlace);
+      setNgayCap(res?.data?.data?.issueDate);
+      setAvatarImg(res?.data?.data?.avatarUrl)
+    })
+  },[])
 
   useEffect(() => {
     if (errMsg !== '') {
