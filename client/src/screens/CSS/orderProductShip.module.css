@@ -8,7 +8,7 @@
 }
 .disaddress{
     position: absolute;
-    right: 10%;
+    right: 30%;
 }
 .content{
     margin-bottom: 10px;
@@ -17,7 +17,7 @@
     padding-right: 10px;
 }
 
-.button{
+.change_button{
     position: absolute;
     right: 10%;
 }

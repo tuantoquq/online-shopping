@@ -5,6 +5,7 @@ import OrderProductShip from '../components/orderProductShip.js';
 import { useNavigate } from 'react-router-dom';
 import {deleteCartItem, getListAddress, addOrder, getListCartItems} from '../service/CustomerService.js';
 import {useState, useEffect} from 'react';
+import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 function Checkout() {
     const navigate = useNavigate();
     const navigatePath = function (path) {
@@ -12,6 +13,7 @@ function Checkout() {
         navigate(path);
         }
     };
+    const [changed, setChanged] = useState(false);
     const [listCartItems, setListCartItems] = useState([]);
     // const [arrayListItems, setArrayListItems] = useState([]);
     const [address, setAddress] = useState([{
@@ -26,6 +28,7 @@ function Checkout() {
         "updateAt": "2022-06-28T12:47:36.241Z",
         "customerId": "62b934fb764ce6b37213b1f0"
     }]);
+    const [selectedAddress, setSelectedAddress] = useState(null);
     useEffect(() => {
         getListCartItems().then(
             res => {
@@ -61,16 +64,21 @@ function Checkout() {
                 <div className={styles.content}>
                     <h3>Địa chỉ nhận hàng</h3> 
                     <div className={styles.displayaddress}>
-                        <div className={styles.disphone}>   
-                            <p>{address[0]?.receiverName === null ? 'Nguyễn Văn A': address[0]?.receiverName}</p>
-                            <p>Số điện thoại: {address[0]?.phone === null ? '0987654321' : address[0]?.phone}</p>
-                        </div>
-                        <div className={styles.disaddress}>
-                            {address[0]?.receiverName === null ? 'Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội' : address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city}
-                        </div>
-                        {/* <button className={styles.button} 
+                        
+                        <div className={styles.change_button} >
 
-                        >Thay đổi</button> */}
+                            <Button onClick={()=>setChanged(!changed) }>Thay đổi</Button>
+                            {!changed &&<div className={styles.disphone}>   
+                                <p>{address[0]?.receiverName === null ? 'Nguyễn Văn A (0987654321)': address[0]?.receiverName + " ( " + address[0]?.phone + ") :    " + address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city }</p>
+                            </div>}
+                            {changed&&
+                                address.map(item=>{ 
+                                return <div className={styles.disphone}>   
+                                        <p>{address[0]?.receiverName === null ? 'Nguyễn Văn A (0987654321)': address[0]?.receiverName + " ( " + address[0]?.phone + ") :    " + address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city }</p>
+                                    </div>
+                                })
+                            }
+                        </div>
                     </div> 
                 </div> 
                        <OrderProductShip></OrderProductShip>
@@ -82,10 +90,10 @@ function Checkout() {
                     <button onClick={()=>{
                         navigatePath("/user/orderManager");
                         console.log(listCartItems);
-                        addOrder({
-                            addressId: address[0]._id,
-                            listCartItems: listCartItems
-                        }).then(res => {console.log(res?.data)});
+                        // addOrder({
+                        //     addressId: address[0]._id,
+                        //     listCartItems: listCartItems
+                        // }).then(res => {console.log(res?.data)});
                         listCartItems.map(item=>deleteCartItem(item));
                 }}>Đặt Hàng</button>
                 </div>
