@@ -1,5 +1,6 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
+import Shop from '../model/shop.js';
 import ProductService from '../service/product.service.js';
 import ShopService from '../service/shop.service.js';
 
@@ -7,6 +8,12 @@ export const getAllShop = async (req, res) => {
     try {
         let size = req.query.limit;
         let page = req.query.offset;
+        if(page <= 0 || size <= 0 ) {
+            return res.status(httpStatus.BAD_REQUEST).send({
+              status: apiStatus.INVALID_PARAM,
+              message: "Limit and Offset must be greater than 0"
+            });
+          }
         let name = req.query.name;
 
         let listShop = await ShopService.getListShopWithPagination(page, size, name);
@@ -48,8 +55,16 @@ export const getShopInfo = async (req, res) => {
 
 export const getListProductOfShop = async (req, res) => {
     try {
+        let size = req.query.limit;
+        let page = req.query.offset;
+        if(page <= 0 || size <= 0 ) {
+            return res.status(httpStatus.BAD_REQUEST).send({
+              status: apiStatus.INVALID_PARAM,
+              message: "Limit and Offset must be greater than 0"
+            });
+          }
         let shopId = req.query.shopId;
-        let svResponse = await ProductService.getListProductOfShop(shopId);
+        let svResponse = await ProductService.getListProductOfShop(shopId, page, size);
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'get list products of shop successfully',
@@ -62,3 +77,43 @@ export const getListProductOfShop = async (req, res) => {
         });
     }
 };
+
+export const addNewShop = async (req, res) => {
+    let shopperId;
+    try{
+        shopperId = req.userId;
+        
+        //check exist shop
+        try{
+            await ShopService.findShopByShopperId(shopperId);
+        }catch(err){
+            if(err instanceof CustomError){
+                let shopRequest = new Shop({
+                    shopName: req.body.shopName,
+                    shopperId: shopperId,
+                    address: req.body.address,
+                    status: 0,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now()
+                });
+                let newShop = await ShopService.addNewShop(shopRequest);
+                return res.status(httpStatus.OK).send({
+                    status: apiStatus.SUCCESS,
+                    message: "Add new shop successfully! Please waiting admin accept this request",
+                    data: newShop
+                });
+            }
+        }
+
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: "Each shopper can open only 1 shop!"
+        });
+
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}

@@ -52,11 +52,10 @@ function ButtonOrder({post, st}){
 
 }
 
-function OrderUserItem({productOrder}){
+function OrderUserItem({productOrder, status}){
     const posts = [
         {status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: ""},
         {status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: ""},
-        {status: "Đang giao", button1: "Huỷ đơn hàng", button2: ""},
         {status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop"},
         {status: "Đã hủy", button1: "Mua lại", button2: ""}
       ];
@@ -65,49 +64,53 @@ function OrderUserItem({productOrder}){
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>  
-                        <Link to='/testShop' >
+                        {/* <Link to='/testShop' >
                             <h2>
                                 Shop Mo Hinh
                             </h2>
-                        </Link> 
-                        <h3 className={styleOrderUser.statusTitle}> {productOrder.status} </h3>
+                        </Link>  */}
+                        <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
                     </div>
-                    <div className={styleOrderUser.productImage}>
-                        <Link to="/ProductTest">
-                            <div className="image">
-                                <Card sx={{ maxWidth: 80, minWidth: 80 }}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                        component="img"
-                                        image={imageTest}
-                                        alt="green iguana"
-                                        />
-                                    </CardActionArea>
-                                </Card>
-                            </div>                        
-                        </Link>
-                        
-                        <div className={styleOrderUser.productTitle}>
-                            <h5> 
-                                {productOrder.name}
-                            </h5>
-                            <h5 className={styleOrderUser.item}> Loại hàng: {productOrder.type} </h5>
-                            <h5 className={styleOrderUser.item}> Số lượng: {productOrder.count} </h5>
-                        </div>
-                        <div className={styleOrderUser.moneyItem}>
-                            {productOrder.cost}
-                        </div>
-                        <div className={styleOrderUser.footFake}>
-                            <p>  </p>
-                        </div>
-                    </div>
+                    {productOrder.map((order) => {
+                        return(
+                            <div className={styleOrderUser.productImage}>
+                                <Link to= {"/product/" + order?.productId}>
+                                    <div className="image">
+                                        <Card sx={{ maxWidth: 80, minWidth: 80 }}>
+                                            <CardActionArea>
+                                                <CardMedia
+                                                component="img"
+                                                image={order?.productImageUrl}
+                                                alt="green iguana"
+                                                />
+                                            </CardActionArea>
+                                        </Card>
+                                    </div>                        
+                                </Link>
+                                
+                                <div className={styleOrderUser.productTitle}>
+                                    <h5> 
+                                        {order?.productName}
+                                    </h5>
+                                    {/* <h5 className={styleOrderUser.item}> Loại hàng: {productOrder.type} </h5> */}
+                                    <h5 className={styleOrderUser.item}> Số lượng: {order?.count} </h5>
+                                </div>
+                                <div className={styleOrderUser.moneyItem}>
+                                    {order?.currentPrice}
+                                </div>
+                                <div className={styleOrderUser.footFake}>
+                                    <p>  </p>
+                                </div>
+                            </div>
+                        )
+                    })}
                     <div className={styleOrderUser.button}>
                         <h2>
-                            Tổng tiền: {productOrder.cost * productOrder.count}
+                            Tổng tiền: {productOrder?.map(item => item.currentPrice).reduce((pre, curr) => pre + curr, 0)}
                         </h2>
                     </div>
                     <div className={styleOrderUser.button}>
-                        <ButtonOrder post = {posts} st = {productOrder.status} />                
+                        <ButtonOrder post = {posts} st = {status.status} />                
                     </div>
                     <div className={stylesProduct.footFake}>
                             <p>  </p>

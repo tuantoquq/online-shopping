@@ -23,31 +23,34 @@ import { CardContent } from '@mui/material';
 import { useEffect, useState } from "react";
 import axiosConfig from "../config/axios";
 import { getOrderHistory } from '../service/CustomerService';
+import Grid from '@mui/material/Grid';
 
 function TabPanel(props) {
     const { children, value, index, productOrders, ...other } = props;
 
     const orderId = [
-      {id: 1, status:"Cho xac nhan"},
-      {id: 2, status:"Cho lay hang"},
-      {id: 3, status:"Dang giao"},
-      {id: 4, status:"Da giao"},
-      {id: 5, status:"Da huy"}
+      {id: 0, status:"Chờ xác nhận"},
+      {id: 1, status:"Chờ lấy hàng"},
+      {id: 2, status:"Đã giao"},
+      {id: -1, status:"Đã huỷ"}
     ]
-    var listOrder = productOrders.filter((productOrder) => (value === productOrder.id || value === 0))
+
+
+    var listOrder = productOrders?.filter((productOrder) => (value === productOrder?.orderStatus || value === -2))
     return (
       <div>
         {value === index && (
-            listOrder.length > 0 ? listOrder.map((productOrder) => {
+            listOrder?.length > 0 ? listOrder.map((productOrder) => {
               return(
                 <div>
                     <OrderUserItem 
-                      productOrder={productOrder}
+                      productOrder={productOrder?.orderProduct}
+                      status = {orderId.find(st => st.id === productOrder?.orderStatus)}
                     />
                 </div>
               )
             }) : <div className={styleOrderUser.noProduct}>
-                  <Card sx={{ maxWidth: 200 }}>
+                  <Card sx={{ maxWidth: 300 }}>
                     <CardActionArea>
                       <CardMedia
                         component="img"
@@ -69,14 +72,6 @@ function TabPanel(props) {
 
 function OrderUserManager({navigation}){
   
-  const orders = [
-    {id: 2, status: "Chờ lấy hàng", name: "Bộ Sưu Tập Khối Rubik Carbon MoYu Meilong 2x2 3x3 4x4 5x5 Tam Giác 12 Mặt Skewb Square-1 SQ-1 Megaminx Pyranminx Cube", type: "Do choi", count: 3, cost: 30000},
-    {id: 2, status: "Chờ lấy hàng", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 4, status: "Đã giao", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 5, status: "Đã hủy", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-    {id: 1, status: "Chờ xác nhận", name: "Mô Hình Nendoroid Nino Nakano - Nendoroid 1612 Gotoubun No Hanayome", type: "Mo hinh", count: 1, cost: 300000},
-  ];
-  
   const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -88,7 +83,6 @@ function OrderUserManager({navigation}){
   useEffect(() => {
     getOrderHistory().then(
         res => {
-            console.log(res?.data?.data);
             setOrderData(res?.data?.data);
         }
     ).catch(err => {
@@ -106,33 +100,37 @@ function OrderUserManager({navigation}){
                     <Box
                     sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
                     >
-                        <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        textColor="secondary"
-                        indicatorColor="secondary"
-                        aria-label="secondary tabs example"
-                        orientation="vertical"
-                        >
-                            <Tab value={0} label="Tất cả"/>
-                            <Tab value={1} label="Chờ xác nhận" />
-                            <Tab value={2} label="Chờ lấy hàng"/>
-                            <Tab value={3} label="Đang giao"/>
-                            <Tab value={4} label="Đã giao"/>
-                            <Tab value={5} label="Đã hủy"/>
-                        </Tabs>
-                        <TabPanel value={value} index={0} productOrders={orders}>        
-                        </TabPanel>
-                        <TabPanel value={value} index={1} productOrders={orders}>
-                        </TabPanel>
-                        <TabPanel value={value} index={2} productOrders={orders}>
-                        </TabPanel>
-                        <TabPanel value={value} index={3} productOrders={orders}>
-                        </TabPanel>
-                        <TabPanel value={value} index={4} productOrders={orders}>
-                        </TabPanel>
-                        <TabPanel value={value} index={5} productOrders={orders}>
-                        </TabPanel>
+                        <Grid container spacing={2}>
+                          <Grid item xs={2}>
+                              <Tabs
+                                value={value}
+                                onChange={handleChange}
+                                textColor="secondary"
+                                indicatorColor="secondary"
+                                aria-label="secondary tabs example"
+                                orientation="vertical"
+                                >
+                                    <Tab value={-2} label="Tất cả"/>
+                                    <Tab value={0} label="Chờ xác nhận" />
+                                    <Tab value={1} label="Chờ lấy hàng"/>
+                                    <Tab value={2} label="Đã giao"/>
+                                    <Tab value={-1} label="Đã hủy"/>
+                              </Tabs>
+                          </Grid>
+                          <Grid item xs={10}>
+                              <TabPanel value={value} index={-2} productOrders={orderData}>        
+                              </TabPanel>
+                              <TabPanel value={value} index={0} productOrders={orderData}>
+                              </TabPanel>
+                              <TabPanel value={value} index={1} productOrders={orderData}>
+                              </TabPanel>
+                              <TabPanel value={value} index={2} productOrders={orderData}>
+                              </TabPanel>
+                              <TabPanel value={value} index={-1} productOrders={orderData}>
+                              </TabPanel>
+                          </Grid>
+                        </Grid>
+
                 </Box> 
                 </div>
             </div>

@@ -55,4 +55,5 @@ CustomerService.updateAvatar = async (avtUrl, customerId) => {
     }
     return response;
 };
+
 export default CustomerService;

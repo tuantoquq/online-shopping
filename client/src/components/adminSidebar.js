@@ -75,7 +75,7 @@ function AdminSidebar({ select }) {
             </Link>
 
             <Link
-              to="/admin"
+              to="/admin/shop"
               className={clsx(styles.listItemButton, {
                 [styles.selectedItem]: selected === 2,
               })}

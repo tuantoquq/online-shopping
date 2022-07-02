@@ -19,56 +19,55 @@ function OrderItem({productId, quantity, cartId, handle}) {
     },[])
     return (
       <div className={styles.content}>
-      
           <div className={styles.listProduct}>
-          <div className={clsx(styles.all,styles.elm1)}>
-                  <img src={productData?.imageUrls[0].base_url} className={styles.image}/>
-                  <div className={styles.left_comp}>
-                      <div className={styles.comp1}>
-                          <p>{productData?.productName}</p>
-                          <p>Giá sản phẩm : {productData?.price}</p>
-                          <p>Số lượng: {itemCount}</p>
-                      </div>
-                      
-                      <div className={styles.count}>
-                        <ButtonGroup>
-                          <Button
+            <div className={clsx(styles.all,styles.elm1)}>
+              <img src={productData?.imageUrls[0].base_url} className={styles.image}/>
+              <div className={styles.left_comp}>
+                  <div className={styles.comp1}>
+                      <p>{productData?.productName}</p>
+                      <p>Giá sản phẩm : {productData?.price}</p>
+                      <p>Số lượng: {itemCount}</p>
+                  </div>
+                  
+                  <div className={styles.count}>
+                    <ButtonGroup>
+                      <Button
+                        onClick={() => {
+                          setItemCount(Math.max(itemCount - 1, 1));
+                          updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
+                              handle();
+                            // console.log(res);
+                          });
+                        }}
+                      >
+                        {"-"}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setItemCount(itemCount + 1);
+                          updateCartItem({cartItemsId:cartId, quantity: itemCount+1}).then(res => {
+                              handle();
+                            // console.log(res);
+                          });
+                        }}
+                      >
+                        {"+"}
+                      </Button>
+                    </ButtonGroup>
+                  </div>
+                  <div className={styles.comp2}>
+                          <Button className={styles.last}
                             onClick={() => {
-                              setItemCount(Math.max(itemCount - 1, 1));
-                              updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
-                                  handle();
-                                // console.log(res);
-                              });
+                              deleteCartItem(cartId).then(res => {
+                                handle(); 
+                                console.log(res);
+                              })
                             }}
-                          >
-                            {"-"}
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setItemCount(itemCount + 1);
-                              updateCartItem({cartItemsId:cartId, quantity: itemCount+1}).then(res => {
-                                  handle();
-                                // console.log(res);
-                              });
-                            }}
-                          >
-                            {"+"}
-                          </Button>
-                        </ButtonGroup>
-                      </div>
-                      <div className={styles.comp2}>
-                              <Button className={styles.last}
-                                onClick={() => {
-                                  deleteCartItem(cartId).then(res => {
-                                    handle(); 
-                                    console.log(res);
-                                  })
-                                }}
-                              >Xóa</Button>
-                              <p className={styles.product_price}>{Number(productData?.price) * itemCount}</p>  
-                      </div>
+                          >Xóa</Button>
+                          <p className={styles.product_price}>{Number(productData?.price) * itemCount}</p>  
                   </div>
               </div>
+            </div>
           </div>
 
       </div>

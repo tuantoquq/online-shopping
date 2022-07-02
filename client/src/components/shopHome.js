@@ -24,12 +24,14 @@ function ShopHome({navigation}) {
   let s = window.location.href.split('/')
   let tmp = '629ddb1583ec9b8c8547522d'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
+      let date = new Date(shopData?.createAt);
+      console.log(date.toLocaleTimeString())
       await axiosConfig.get(pathProduct).then(res=>{
-        setProductData(res.data.data)
+        setProductData(res?.data?.data?.products)
         console.log(productData)
       })
       .catch(err=>{

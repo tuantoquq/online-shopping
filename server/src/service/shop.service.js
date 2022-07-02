@@ -7,7 +7,7 @@ const ShopService = {};
 
 ShopService.getListShopWithPagination = async (page, size, name) => {
     const limit = size ? size : 10;
-    const offset = page ? page * limit : 1;
+    const offset = page ? (page - 1) * limit : 1;
     let condition = name
         ? { shopName: { $regex: new RegExp(`.*${name}.*`), $options: 'i' } }
         : {};
@@ -17,7 +17,7 @@ ShopService.getListShopWithPagination = async (page, size, name) => {
             totalShops: data.totalDocs,
             listShop: data.docs,
             totalPages: data.totalPages,
-            currentPage: data.page - 1,
+            currentPage: parseInt(page ? page : offset)
         };
     });
 
@@ -48,4 +48,17 @@ ShopService.findShopByShopperId = async (shopperId) => {
     return shop;
 };
 
+ShopService.addNewShop = async (shopRequest) => {
+    await shopRequest.save((err, shop) => {
+        if(err){
+            throw new CustomError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                apiStatus.DATABASE_ERROR,
+                `Error when save shop: ${err.message}`
+            );
+        }
+        return shop;
+    });
+    
+}
 export default ShopService;
