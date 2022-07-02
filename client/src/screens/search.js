@@ -2,10 +2,8 @@ import React from 'react';
 import clsx from 'clsx';
 import styles from './CSS/searchCSS.module.scss';
 import { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-
+import axios from '../config/axios';
 import Header from '../components/header';
-import Footer from '../components/footer';
 import ProductCard from '../components/productCard';
 import ShopCard from '../components/shopCard';
 
@@ -21,7 +19,7 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -32,9 +30,11 @@ function Search() {
   const search = location.state.search;
   console.log(search);
   //request data with search term;
+  const PRODUCT_SEARCH_URL = `/product/filter`;
+
   const [error, setError] = useState(false);
   const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -45,90 +45,66 @@ function Search() {
   const allRating = useRef([5, 4, 3, 2, 1]);
   const allSort = useRef([
     {
-      value: "related",
-      showed: "Liên quan",
+      value: 'rating',
+      showed: 'Đánh giá',
     },
     {
-      value: "newer",
-      showed: "Mới nhất",
+      value: 'moi nhat',
+      showed: 'Mới nhất',
     },
     {
-      value: "bestseller",
-      showed: "Bán chạy",
+      value: 'pho bien',
+      showed: 'Bán chạy',
     },
     {
-      value: "lowerPrice",
-      showed: "Giá từ thấp đến cao",
+      value: 'lowerPrice',
+      showed: 'Giá từ thấp đến cao',
     },
     {
-      value: "higherPrice",
-      showed: "Giá từ cao đến thấp",
+      value: 'higherPrice',
+      showed: 'Giá từ cao đến thấp',
     },
   ]);
 
-  //for all data -request once time when component construct
-  const [allCategories] = useState((search) => getAllCategories(search));
-  const [allBrands] = useState((search) => getAllBrands(search));
-  const [allLocations] = useState((search) => getAllLocations(search));
+  //for all data -request once time when component
+  const [allCategories, setAllCategories] = useState([]);
 
-  function getAllLocations(searchTerm) {
-    // console.log('re-render');
-    //get All location from list products
-    const ressponseData = [
-      "Hà Nội",
-      "Hải Phòng",
-      "TP. Hồ  Chí Minh",
-      "Quận Long Biên",
-      "Nghệ An",
-      "Quận Hoàng Mai",
-    ];
-    //console.log(ressponseData);
-    return ressponseData; //sample data
-  }
+  const [showedCategories, setShowedCategories] = useState([]);
 
-  function getAllCategories(searchTerm) {
-    const ressponseData = [
-      "Phụ kiện máy tính",
-      "Đồ chơi",
-      "Gamming",
-      "Máy tính bàn",
-      "Bàn di chuột",
-      "Thời trang",
-    ];
-    //console.log(ressponseData);
-    return ressponseData; //sample data
-  }
+  useEffect(() => {
+    axios
+      .get('/category/get?all=true')
+      .then((res) => {
+        let allCates = res.data.data.map((item) => item.categoryName);
+        allCates = new Set(allCates);
+        allCates = [...allCates];
+        setAllCategories(allCates);
+        setShowedCategories(allCates.slice(0, 5));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  // const [showedLocations, setShowedLocations] = useState(
+  //   allLocations.slice(0, 5)
+  // );
+  // const [showedBrands, setShowedBrands] = useState(allBrands.slice(0, 5));
 
-  function getAllBrands(searchTerm) {
-    //request data
-    const ressponseData = ["Lionvn", "Creality", "Phrozen", "Elgoo"];
-    //console.log(ressponseData);
-    return ressponseData;
-  }
-
-  //for display filter if all data too long
-  const [showedCategories, setShowedCategories] = useState(
-    allCategories.slice(0, 5)
-  );
-  const [showedLocations, setShowedLocations] = useState(
-    allLocations.slice(0, 5)
-  );
-  const [showedBrands, setShowedBrands] = useState(allBrands.slice(0, 5));
   const [numPages, setNumPages] = useState(0);
   //console.log(numPages);
 
   //for changing Filter
   const [categories, setCategories] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [fromPrice, setFromPrice] = useState("");
-  const [toPrice, setToPrice] = useState("");
+  // const [locations, setLocations] = useState([]);
+  // const [brands, setBrands] = useState([]);
+  const [fromPrice, setFromPrice] = useState('');
+  const [toPrice, setToPrice] = useState('');
   const [fromPriceApplied, setFromPriceApplied] = useState(null);
   const [toPriceApplied, setToPriceApplied] = useState(null);
   const [apply, setApply] = useState(false);
   const [rating, setRating] = useState(0);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState("related");
+  const [sort, setSort] = useState('pho bien');
 
   //Categories
   const handleCategories = (category) => {
@@ -157,59 +133,59 @@ function Search() {
     }
   }
 
-  //Locations
-  const handleLocations = (location) => {
-    setLocations((prev) => {
-      const isChecked = locations.includes(location);
-      if (isChecked) {
-        return locations.filter((item) => item !== location);
-      } else {
-        return [...prev, location];
-      }
-    });
-  };
+  // //Locations
+  // const handleLocations = (location) => {
+  //   setLocations((prev) => {
+  //     const isChecked = locations.includes(location);
+  //     if (isChecked) {
+  //       return locations.filter((item) => item !== location);
+  //     } else {
+  //       return [...prev, location];
+  //     }
+  //   });
+  // };
 
-  function handleSeeLessLocations() {
-    const len = allLocations.length;
-    setShowedLocations(allLocations.slice(0, 5));
-    const checkedUnshowed = allLocations
-      .slice(5, len)
-      .filter((item) => locations.find((location) => location === item));
-    //console.log(checkedUnshowed);
-    if (checkedUnshowed.length !== 0) {
-      for (const location of checkedUnshowed) {
-        //console.log(location);
-        setLocations(locations.filter((item) => item !== location));
-      }
-    }
-  }
+  // function handleSeeLessLocations() {
+  //   const len = allLocations.length;
+  //   setShowedLocations(allLocations.slice(0, 5));
+  //   const checkedUnshowed = allLocations
+  //     .slice(5, len)
+  //     .filter((item) => locations.find((location) => location === item));
+  //   //console.log(checkedUnshowed);
+  //   if (checkedUnshowed.length !== 0) {
+  //     for (const location of checkedUnshowed) {
+  //       //console.log(location);
+  //       setLocations(locations.filter((item) => item !== location));
+  //     }
+  //   }
+  // }
 
-  // Brands
-  const handleBrands = (brand) => {
-    setBrands((prev) => {
-      const isChecked = brands.includes(brand);
-      if (isChecked) {
-        return brands.filter((item) => item !== brand);
-      } else {
-        return [...prev, brand];
-      }
-    });
-  };
+  // // Brands
+  // const handleBrands = (brand) => {
+  //   setBrands((prev) => {
+  //     const isChecked = brands.includes(brand);
+  //     if (isChecked) {
+  //       return brands.filter((item) => item !== brand);
+  //     } else {
+  //       return [...prev, brand];
+  //     }
+  //   });
+  // };
 
-  function handleSeeLessBrands() {
-    const len = allBrands.length;
-    setShowedBrands(allBrands.slice(0, 5));
-    const checkedUnshowed = allBrands
-      .slice(5, len)
-      .filter((item) => brands.find((brand) => brand === item));
-    //console.log(checkedUnshowed);
-    if (checkedUnshowed.length !== 0) {
-      for (const brand of checkedUnshowed) {
-        //console.log(brand);
-        setBrands(brands.filter((item) => item !== brand));
-      }
-    }
-  }
+  // function handleSeeLessBrands() {
+  //   const len = allBrands.length;
+  //   setShowedBrands(allBrands.slice(0, 5));
+  //   const checkedUnshowed = allBrands
+  //     .slice(5, len)
+  //     .filter((item) => brands.find((brand) => brand === item));
+  //   //console.log(checkedUnshowed);
+  //   if (checkedUnshowed.length !== 0) {
+  //     for (const brand of checkedUnshowed) {
+  //       //console.log(brand);
+  //       setBrands(brands.filter((item) => item !== brand));
+  //     }
+  //   }
+  // }
 
   function handleApply(apply) {
     //console.log('Set apply to', apply);
@@ -219,9 +195,9 @@ function Search() {
       const from = Number(fromPrice);
       const to = Number(toPrice);
 
-      if (fromPrice === "" || toPrice === "") {
-        setFromPriceApplied(fromPrice !== "" ? from : null);
-        setToPriceApplied(toPrice !== "" ? to : null);
+      if (fromPrice === '' || toPrice === '') {
+        setFromPriceApplied(fromPrice !== '' ? from : null);
+        setToPriceApplied(toPrice !== '' ? to : null);
         setApply(apply);
       } else if (to <= from) {
         setError(true);
@@ -245,15 +221,15 @@ function Search() {
 
   function handleClearAll() {
     setCategories([]);
-    setLocations([]);
-    setBrands([]);
+    // setLocations([]);
+    // setBrands([]);
     setRating();
-    setFromPrice("");
-    setToPrice("");
+    setFromPrice('');
+    setToPrice('');
     setApply(false);
     setFromPriceApplied(null);
     setToPriceApplied(null);
-    setSort("related");
+    setSort('related');
   }
   function getProductIdList(filter, page) {
     //request
@@ -280,29 +256,48 @@ function Search() {
     const responseData = Math.floor(Math.random() * 10) + 1;
     return responseData;
   }
+
+  // useEffect(() => {
+  //   setCategories(allCategories.slice(0, 5));
+  // }, [allCategories]);
+
   useEffect(() => {
     //console.log('filter change');
     const filter = {
-      search: search,
-      category: categories,
-      location: locations,
-      brand: brands,
-      rating: rating,
-      fromPrice: fromPriceApplied,
-      toPrice: toPriceApplied,
-      sort: sort,
+      query: search,
+      categoryName: categories.length > 0 ? categories : undefined,
+      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+      endPrice: toPriceApplied ? toPriceApplied : undefined,
+      orderBy: sort,
+      sortBy: 'desc',
+      currentPage: 1,
     };
-    //console.log(filter);
-    //console.log('Filter changed');
-    //request for new data +numPages
-    setProductIdList(getProductIdList(filter, 1));
-    setNumPages(Math.floor(Math.random() * 8) + 2); //numPages was responsed
+    console.log(filter);
+    async function searchProduct() {
+      console.log(filter);
+      //console.log('Filter changed');
+      //request for new data +numPages
+      try {
+        const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
+        console.log(response);
+        setProductIdList(response.data.data);
+        setNumPages(response.data.maxPage); //numPages was responsed
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    searchProduct();
     setPage(1);
   }, [
     search,
     categories,
-    locations,
-    brands,
+    // locations,
+    // brands,
     rating,
     fromPriceApplied,
     toPriceApplied,
@@ -312,17 +307,34 @@ function Search() {
   useEffect(() => {
     //Request for new data
     const filter = {
-      search: search,
-      category: categories,
-      location: locations,
-      brand: brands,
-      rating: rating,
-      fromPrice: fromPriceApplied,
-      toPrice: toPriceApplied,
-      sort: sort,
+      query: search,
+      categoryName: categories.length > 0 ? categories : undefined,
+      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+      endPrice: toPriceApplied ? toPriceApplied : undefined,
+      orderBy: sort,
+      sortBy: 'desc',
+      currentPage: page,
     };
-    //console.log('page changed');
-    setProductIdList(getProductIdList(filter, page));
+    console.log(filter);
+    async function searchProduct() {
+      console.log(filter);
+      //console.log('Filter changed');
+      //request for new data +numPages
+      try {
+        const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
+        console.log(response);
+        setProductIdList(response.data.data);
+        setNumPages(response.data.maxPage); //numPages was responsed
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    searchProduct();
     setPage(page);
   }, [page]);
 
@@ -335,14 +347,14 @@ function Search() {
         autoHideDuration={2000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
           Vui lòng điền khoảng giá phù hợp!
         </Alert>
       </Snackbar>
       <div className={clsx(styles.searchContainer)}>
         <div className={clsx(styles.searchSidebar)}>
           <h2 className={clsx(styles.sidebarTitle)}>
-            {" "}
+            {' '}
             <FilterAltIcon /> Bộ lọc tìm kiếm
           </h2>
           <div className={clsx(styles.searchFilter)}>
@@ -376,7 +388,7 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedCategories(allCategories)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{" "}
+                      <ExpandMoreIcon /> Xem thêm{' '}
                     </span>
                   )}
                   {showedCategories.length > 5 && (
@@ -384,14 +396,14 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessCategories}
                     >
-                      <ExpandLessIcon /> Thu gọn{" "}
+                      <ExpandLessIcon /> Thu gọn{' '}
                     </span>
                   )}
                 </div>
               )}
             </div>
           </div>
-          <div className={clsx(styles.searchFilter)}>
+          {/* <div className={clsx(styles.searchFilter)}>
             <h3>Nơi Bán</h3>
             <div>
               {showedLocations.map((location, index) => (
@@ -421,7 +433,7 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedLocations(allLocations)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{" "}
+                      <ExpandMoreIcon /> Xem thêm{' '}
                     </span>
                   )}
                   {showedLocations.length > 5 && (
@@ -429,7 +441,7 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessLocations}
                     >
-                      <ExpandLessIcon /> Thu gọn{" "}
+                      <ExpandLessIcon /> Thu gọn{' '}
                     </span>
                   )}
                 </div>
@@ -466,7 +478,7 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={() => setShowedBrands(allBrands)}
                     >
-                      <ExpandMoreIcon /> Xem thêm{" "}
+                      <ExpandMoreIcon /> Xem thêm{' '}
                     </span>
                   )}
                   {showedBrands.length > 5 && (
@@ -474,13 +486,13 @@ function Search() {
                       className={clsx(styles.viewMore)}
                       onClick={handleSeeLessBrands}
                     >
-                      <ExpandLessIcon /> Thu gọn{" "}
+                      <ExpandLessIcon /> Thu gọn{' '}
                     </span>
                   )}
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           <div className={clsx(styles.searchFilter)}>
             <h3>Khoảng giá</h3>
             <div>
@@ -518,7 +530,7 @@ function Search() {
                   className={clsx(styles.button)}
                   variant="contained"
                   onClick={() => handleApply(true)}
-                  disabled={apply || (fromPrice === "" && toPrice === "")}
+                  disabled={apply || (fromPrice === '' && toPrice === '')}
                 >
                   Áp dụng
                 </Button>
@@ -579,20 +591,20 @@ function Search() {
         <div className={clsx(styles.searchBody)}>
           <div className={clsx(styles.shopContainer)}>
             <span className={clsx(styles.searchedTitle)}>
-              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{" "}
+              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
               Shop liên quan đến '<strong> {search}</strong>'
             </span>
             <ShopCard id={shopId} />
           </div>
           <div>
             <span className={clsx(styles.searchedTitle)}>
-              <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{" "}
+              <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
               Kết quả tìm kiếm liên quan đến '<strong> {search}</strong>'
             </span>
             <div className={clsx(styles.productContent)}>
               <div className={clsx(styles.productSort)}>
                 <span className={clsx(styles.productSortTitle)}>
-                  Sắp xếp theo{" "}
+                  Sắp xếp theo{' '}
                 </span>
                 <div className={clsx(styles.productSortNav)}>
                   {allSort.current.map((item) => (
@@ -616,7 +628,7 @@ function Search() {
               <div className={clsx(styles.productContainer)}>
                 {productIdList.map((value, index) => (
                   <Grid item xs={1} sm={1} md={1} key={index}>
-                    <ProductCard id={value} />
+                    <ProductCard productId={value} />
                   </Grid>
                 ))}
               </div>

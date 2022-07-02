@@ -29,6 +29,18 @@ ShopperService.findShopperByEmail = async (email) => {
     return shopper;
 };
 
+ShopperService.getAllWithState = async (state) => {
+    let shopper = await Shopper.find({state: state})
+    if (!shopper) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Shopper not found with state`,
+        );
+    }
+    return shopper;
+}
+
 ShopperService.addShopper = async (shopper) => {
     await shopper.save((err, shopper) => {
         if (err)

@@ -1,6 +1,7 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
 import ShopperService from '../service/shopper.service.js';
+import Shopper from '../model/shopper.js';
 
 export const getShopperProfile = async (req, res) => {
     try {
@@ -56,3 +57,30 @@ export const updateAvatar = async (req, res, next) => {
         });
     }
 };
+
+
+export const getAllShopperWithState = async (req, res,next) => {
+    try{
+        let state = req.query.state
+        console.log(state)
+        let shopper = await ShopperService.getAllWithState(state)
+        let message
+        if(!shopper){
+            message = "Empty message"
+        }
+        else{
+            message = "Success"
+        }
+        return res.status(httpStatus.OK).json({
+            message: message,
+            data: shopper
+        })
+    }
+    catch(e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+
+}

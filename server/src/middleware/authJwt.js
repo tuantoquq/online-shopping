@@ -17,26 +17,35 @@ const CatchExpiredTokenError = (err, res) => {
 };
 
 export const verifyToken = async (req, res, next) => {
-    let token = req.headers.authorization.split(' ')[1];
-    if (!token) {
+    let bearerToken = req.headers.authorization;
+    if(bearerToken !== undefined && bearerToken.startsWith("Bearer ")){
+        let token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            return res.status(httpStatus.FORBIDDEN).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'No token provide!',
+            });
+        }
+
+        verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                return CatchExpiredTokenError(err, res);
+            }
+            req.userId = decoded.id;
+            next();
+        });
+    }else {
         return res.status(httpStatus.FORBIDDEN).send({
             status: apiStatus.AUTH_ERROR,
-            message: 'No token provided!',
+            message: 'Invalid token provide!',
         });
     }
-
-    verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-            return CatchExpiredTokenError(err, res);
-        }
-        req.userId = decoded.id;
-        next();
-    });
+    
 };
 
 export const verifyRefreshToken = async (req, res, next) => {
     let bearerToken = req.headers.authorization;
-    if(bearerToken.startWith('Bearer ')){
+    if(bearerToken !== undefined && bearerToken.startsWith("Bearer ")){
         let refreshToken = bearerToken.split(' ')[1];
         if (!refreshToken) {
             return res.status(httpStatus.FORBIDDEN).send({

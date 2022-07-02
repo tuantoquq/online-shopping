@@ -23,3 +23,13 @@ export const updateShopperProfile = async (updateInfo) => {
   }
   return response;
 };
+
+export const deleteProduct = async (id) => {
+  let response;
+  try {
+    response = await shopperApi.delete(`/product/auth/delete/${id}`);
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};
