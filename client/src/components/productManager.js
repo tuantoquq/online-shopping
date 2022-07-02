@@ -26,7 +26,12 @@ import axiosConfig from '../config/axios';
 import SearchBar from "material-ui-search-bar";
 import { makeStyles } from "@material-ui/core/styles";
 import { deleteProduct } from '../service/ShopperService';
-
+import { UpdateProduct } from '../service/ShopperService';
+import { AddProduct } from '../service/ShopperService';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const useStyles = makeStyles({
   table: {
@@ -150,15 +155,15 @@ function ProductManager() {
       setDetail(product?.shortDescription);
       setCount(product?.count);
       setCost(product?.price);
-      let pathCategory = `/category/get?categoryId=${product?.categoryId}`
-      axiosConfig.get(pathCategory).then(async res=>{
-        setType(res.data.data?.categoryName);
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+      // let pathCategory = `/category/get?categoryId=${product?.categoryId}`
+      // axiosConfig.get(pathCategory).then(async res=>{
+      //   setType(res.data.data?.categoryName);
+      // })
+      // .catch(err=>{
+      //   console.log(err)
+      // })
     
-      setType(product.type);
+      setType(product?.categoryId);
       setSolded(product?.soldHistory);
       setRating(product?.ratingStar);
       setAvatarImg(product?.imageUrls[0]?.base_url);
@@ -179,12 +184,12 @@ function ProductManager() {
     const [avatarImg, setAvatarImg] = useState(defautlAvatar);
     const [textTitle, setTextTitle] = useState('');
     const [textButtonRight, setTextButtonRight] = useState('');
+    const [listCategory, setListCategory] = useState();
+    const [categoryId, setCategoryId] = useState('');
 
     const [data, setData] = useState();
     const [searched, setSearched] = useState("");
     const classes = useStyles();
-
-    const [currProductId, setCurrProductId] = useState("")
 
     const requestSearch = (searchedVal) => {
         const filteredRows = productData?.filter((row) => {
@@ -214,44 +219,80 @@ function ProductManager() {
     const handleOpenDelete = () =>  setDelete(true);
     const handleCloseDelete = () =>  setDelete(false);
 
+    // category
+    const handleChange = (e) => {
+      setType(e.target.value);
+      console.log(e.target.value)
+    };
     //submit product
     const handleSubmit = async (e) => {
       e.preventDefault();
-      const REGISTER_URL = `/api/v1/registerProduct`;
-  
-      if (errMsg === '') {
-        //console.log(avatarImg);
+      if(openInforProduct){
         let data = {};
         data = {
-          name: name,
-          detail: detail,
+          productName: name,
           count: count,
-          cost: cost,
-          type: type,
-          avatar: avatarImg,
+          price: cost,
+          shortDescription: detail,
+          categoryId: type,
         };
         console.log(data);
-        try {
-          const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            // withCredentials: true,
-          });
-          console.log(JSON.stringify(response?.data));
-          console.log(JSON.stringify(response));
-          setSuccess(true);
+        try{
+          UpdateProduct(id, data).then(
+
+          )
+          .catch(err=>{
+            console.log(err)
+          })
         } catch (err) {
           if (!err?.response) {
             setErrMsg('No Server Response');
             setOpen(true);
           } else {
-            setErrMsg('Thêm sản phẩm.');
+            setErrMsg('Cập nhật sản phẩm thành công');
+            console.log(err);
+            setOpen(true);
+          }
+        }
+
+      } else {
+        let data = {};
+        data = {
+          productName: name,
+          count: count,
+          price: cost,
+          shortDescription: detail,
+          longDescription: detail,
+          soldHistory: 0,
+          sizes: {
+                  "type": "color",
+                  "values": [
+                      "black",
+                      "white"
+                  ]
+                  },
+          categoryId: type,
+          imageUrls: [avatarImg]
+        };
+        console.log(data);
+        try{
+          AddProduct(data).then(
+
+          ).catch(err => {
+              console.log(err);
+          });
+        } catch (err) {
+          if (!err?.response) {
+            setErrMsg('No Server Response');
+            setOpen(true);
+          } else {
+            setErrMsg('Thêm sản phẩm thành công');
             console.log(err);
             setOpen(true);
           }
         }
       }
+      handleClose();
     };
 
     //delete product
@@ -266,19 +307,19 @@ function ProductManager() {
       });
       handleCloseDelete();
       handleClose();
-      axiosConfig.get(pathShop).then(async res=>{
-        setShopData(res.data.data)
-        await axiosConfig.get(pathProduct).then(res=>{
-          setProductData(res?.data?.data?.products)
-          setData(res?.data?.data?.products)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-      })
-      .catch(err=>{
-        console.log(err)
-      })
+      // axiosConfig.get(pathShop).then(async res=>{
+      //   setShopData(res.data.data)
+      //   await axiosConfig.get(pathProduct).then(res=>{
+      //     setProductData(res?.data?.data?.products)
+      //     setData(res?.data?.data?.products)
+      //   })
+      //   .catch(err=>{
+      //     console.log(err)
+      //   })
+      // })
+      // .catch(err=>{
+      //   console.log(err)
+      // })
     }
 
     // api
@@ -286,9 +327,10 @@ function ProductManager() {
   const [productData, setProductData] = useState();
 
   let s = window.location.href.split('/')
-  let tmp = '629ddb1583ec9b8c8547522d'
+  let tmp = '629ddb1583ec9b8c8547522c'
   let pathShop = `/shops/profile?shopId=${tmp}`
   let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`
+  let pathListCategory = '/category/get?all=true'
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
@@ -299,12 +341,19 @@ function ProductManager() {
       .catch(err=>{
         console.log(err)
       })
+      await axiosConfig.get(pathListCategory).then(res=>{
+        console.log(res?.data?.data)
+        setListCategory(res?.data?.data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
     })
     .catch(err=>{
       console.log(err)
     })
 
-  },[])
+  },[openInforProduct])
 
 // sort && page
     const [searchTerm, setSearchTerm] = useState('');
@@ -482,7 +531,7 @@ function ProductManager() {
                 >
                   Loại sản phẩm:
                 </label>
-                <input
+                {/* <input
                   id="type"
                   name="type"
                   type="text"
@@ -490,7 +539,23 @@ function ProductManager() {
                   onChange={(e) => setType(e.target.value)}
                   className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
                   required
-                />
+                /> */}
+                  <FormControl className={clsx(stylesProductManger.formInput, stylesProductManger.row)}>
+                    <InputLabel id="demo-simple-select-label"> Loại sản phẩm </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={type}
+                      label="Thể loại"
+                      onChange={handleChange}
+                    >
+                      {listCategory?.map((category, index) => {
+                        return(
+                          <MenuItem value={category?._id} key={category?._id}>{category?.categoryName}</MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
               </div>
 
               { openInforProduct && (
