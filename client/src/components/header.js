@@ -189,7 +189,9 @@ function Header() {
               {(role === 'customer') && (
                   <MenuItem onClick={handleClickOrderHistory}> Lịch sử mua hàng </MenuItem>
               )}
-              <MenuItem onClick={handleClickAddress}>Địa chỉ</MenuItem>
+              {(role === 'customer') && (
+                  <MenuItem onClick={handleClickAddress}>Địa chỉ</MenuItem>
+              )}
               <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>
           </div>
