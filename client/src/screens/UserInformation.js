@@ -34,16 +34,16 @@ function UserInformation(navigation,role){
         <div className={styles.container}>
             <Header navigation={navigation}/>
             <div className={styles.content}>
-                <UserDisplay user_url={user?.avatarUrl == 'avt_default.png' ? avtImage : user?.avatarUrl}  
+                <UserDisplay user_url={user?.avatarUrl != 'avt_default.png' ? user?.avatarUrl : avtImage}  
                     user_name={user?.lastName}
-                    user_age ={user?.birthDay === undefined ? "Chưa cập nhật" : user?.birthDay}
+                    user_age ={user?.dateOfBirth == undefined ? "Chưa cập nhật" : user?.dateOfBirth}
                     user_phone ={user?.phoneNumber}
                 />
                 {/* <AccountInformation user={user}/> */}
                 <AccountInformation role={navigation.role}/>
                 <div className = {styles.wrapLogout}>
 
-                    <button className = {styles.logout} onClick={handleLogout}>Đăng xuất</button>
+                    {/* <button className = {styles.logout} onClick={handleLogout}>Đăng xuất</button> */}
                 </div>
             </div>
             <Footer navigation={navigation}/>

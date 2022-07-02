@@ -70,6 +70,7 @@ function AccountInformation(props){
                                 }else{
                                     updateCustomerProfile({password: newPassword}).then(res => {
                                         console.log("Update info: ", res.data);
+                                        window.location.reload()
                                     })
                                 }
                             }}
@@ -105,6 +106,7 @@ function AccountInformation(props){
                                     }else{
                                         updateCustomerProfile({firstName: newFirstName}).then(res => {
                                             console.log("Update info: ", res.data);
+                                            window.location.reload()
                                         })
                                     }
                                 }}
@@ -138,6 +140,7 @@ function AccountInformation(props){
                                     }else{
                                         updateCustomerProfile({lastName: newLastName}).then(res => {
                                             console.log("Update info: ", res.data);
+                                            window.location.reload()
                                         })
                                     }
                                 }}
@@ -172,6 +175,7 @@ function AccountInformation(props){
                                     }else{
                                         updateCustomerProfile({email: newEmail}).then(res => {
                                             console.log("Update info: ", res.data);
+                                            window.location.reload()
                                         })
                                     }
                                 }}
@@ -242,6 +246,7 @@ function AccountInformation(props){
                                     else{
                                         updateCustomerProfile({phonenumber: newPhone}).then(res => {
                                             console.log("Update info: ", res.data);
+                                            window.location.reload()
                                         })
                                     }
                                 }}
@@ -283,6 +288,7 @@ function AccountInformation(props){
                                     else{
                                         updateCustomerProfile({dateOfBirth: newBirthday}).then(res => {
                                             console.log("Update info: ", res.data);
+                                            window.location.reload()
                                         })
                                     }
                                 }}

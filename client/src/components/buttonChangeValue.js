@@ -3,7 +3,7 @@ import stylesProduct from '../screens/CSS/productInfor.module.css';
 import {useState} from 'react';
 import { Button } from '@mui/material';
 
-function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}) {
+function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct, plus, minus}) {
     const [count, setCount] = useState(startValue);
 
     const handleChange = event => {
@@ -22,7 +22,7 @@ function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}) {
       <div className={stylesProduct.soldInfo}>
         <div className={stylesProduct.button}>
           <Button 
-              onClick={() => setCount(Number(count) - 1 < 1 ? 1 : Number(count) - 1)}
+              onClick={() => {setCount(Number(count) - 1 < 1 ? 1 : Number(count) - 1); minus()}}
           >
               {titleLeft}
           </Button>          
@@ -36,7 +36,7 @@ function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct}) {
         />
         <div className={stylesProduct.button}>
           <Button 
-              onClick={() => setCount(Number(count) + 1 > numberProduct ? Number(count) : Number(count) + 1)}
+              onClick={() => {setCount(Number(count) + 1 > numberProduct ? Number(count) : Number(count) + 1); plus()}}
           >
               {titleRight}
           </Button>          

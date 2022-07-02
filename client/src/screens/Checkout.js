@@ -66,9 +66,11 @@ function Checkout() {
                             <p>Số điện thoại: {address[0]?.phone === null ? '0987654321' : address[0]?.phone}</p>
                         </div>
                         <div className={styles.disaddress}>
-                            {address[0]?.receiverName === null ? 'Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội' : address[0]?.details + ", " + address[0]?.district + ", " + address[0]?.city}
+                            {address[0]?.receiverName === null ? 'Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội' : address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city}
                         </div>
-                        
+                        {/* <button className={styles.button} 
+
+                        >Thay đổi</button> */}
                     </div> 
                 </div> 
                        <OrderProductShip></OrderProductShip>

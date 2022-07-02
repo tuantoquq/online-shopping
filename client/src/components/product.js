@@ -25,8 +25,14 @@ function ProductInformation({navigation}) {
     const [comments,setComment] = useState()
     const [shopData, setShopData] = useState()
     const [quantity, setQuantity] = useState(1)
-    function handleChangeQuantity(value) {
-        setQuantity(value)
+
+    function handle_plus() {
+        setQuantity(quantity + 1)
+    }
+    function handle_minus() {
+        if (quantity > 1) {
+            setQuantity(quantity - 1)
+        }
     }
     let s = window.location.href.split('/')
     let path = `/product/get?productId=${s[s.length-1]}`
@@ -126,7 +132,7 @@ function ProductInformation({navigation}) {
                       titleRight="+"
                       startValue={1}
                       numberProduct={productData?.count}
-          
+                      plus={handle_plus} minus={handle_minus}
                     />       
                   </div>
                   <div className={stylesProduct.soldInfo}>
@@ -139,7 +145,7 @@ function ProductInformation({navigation}) {
                     </div>
                     <div className={stylesProduct.button2}>
                       <Button variant="contained" onClick={() => {
-                        addCartItem({productId: s[s.length-1], quantity: 1}).then(res => {
+                        addCartItem({productId: s[s.length-1], quantity: quantity}).then(res => {
                           console.log(res.data);
                         });
                         navigatePath("/cart")

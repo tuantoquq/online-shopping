@@ -112,3 +112,17 @@ export const getOrderHistory = async () => {
     }
     return response;
 }
+
+export const uploadAvatar = async (avatar) => {
+    let response;
+    try{
+        response = await customerApi.post('/user/auth/upload-file', avatar, {
+            headers: {
+                'Content-Type': 'application/file'
+            }
+        });
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
