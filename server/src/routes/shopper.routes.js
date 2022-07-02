@@ -1,6 +1,6 @@
 import express from 'express';
 import { updateOrderStatus } from '../controller/order.controller.js';
-import { getShopperProfile, updateAvatar } from '../controller/shopper.controller.js';
+import { getShopperProfile, updateAvatar, getAllShopperWithState} from '../controller/shopper.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 import multer from 'multer';
 import { storage } from '../middleware/uploadFile.js';
@@ -17,4 +17,5 @@ shopperRoutes.put(
 );
 
 shopperRoutes.post('/api/v1/shopper/auth/add-shop', verifyToken, addNewShop);
+shopperRoutes.get('/api/v1/shopper/get-shopper-with-state', getAllShopperWithState)
 export default shopperRoutes;
