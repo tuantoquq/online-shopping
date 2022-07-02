@@ -275,17 +275,33 @@ function Search() {
       orderBy: sort,
       currentPage: 1,
     };
+    console.log(filter);
     async function searchProduct() {
       console.log(filter);
       //console.log('Filter changed');
       //request for new data +numPages
       try {
-        const response = await axios.get(PRODUCT_SEARCH_URL, filter, {
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await axios.get(
+          PRODUCT_SEARCH_URL,
+          {
+            query: search,
+            categoryName: categories,
+            // location: locations,
+            // brand: brands,
+            rating: rating,
+            startPrice: fromPriceApplied,
+            endPrice: toPriceApplied,
+            sortBy: sort,
+            orderBy: sort,
+            currentPage: 1,
           },
-          withCredentials: true,
-        });
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+          }
+        );
         console.log(response);
         setProductIdList(response.data.data);
         setNumPages(response.data.maxPage); //numPages was responsed
