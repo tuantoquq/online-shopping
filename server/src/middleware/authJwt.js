@@ -35,19 +35,28 @@ export const verifyToken = async (req, res, next) => {
 };
 
 export const verifyRefreshToken = async (req, res, next) => {
-    let refreshToken = req.headers.authorization.split(' ')[1];
-    if (!refreshToken) {
-        return res.status(httpStatus.FORBIDDEN).send({
+    let bearerToken = req.headers.authorization;
+    if(bearerToken.startWith('Bearer ')){
+        let refreshToken = bearerToken.split(' ')[1];
+        if (!refreshToken) {
+            return res.status(httpStatus.FORBIDDEN).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'No refresh token provided!',
+            });
+        }
+
+        verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                return CatchExpiredTokenError(err, res);
+            }
+            req.userId = decoded.id;
+            next();
+        });
+    }else {
+        return res.status(httpStatus.BAD_REQUEST).send({
             status: apiStatus.AUTH_ERROR,
-            message: 'No refresh token provided!',
+            message: "Invalid token!"
         });
     }
-
-    verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-            return CatchExpiredTokenError(err, res);
-        }
-        req.userId = decoded.id;
-        next();
-    });
+    
 };

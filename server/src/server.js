@@ -7,6 +7,7 @@ import {
     categoryRoutes,
     productRoutes,
     cartItemsRoutes,
+    statisticRoutes
 } from './routes/index.js';
 import cors from 'cors';
 import commentRoutes from './routes/comment.routes.js';
@@ -35,6 +36,7 @@ app.use(deliverAddressRoutes);
 app.use(orderRoutes);
 app.use(shopRoutes);
 app.use(shopperRoutes);
+app.use(statisticRoutes);
 
 const PORT = process.env.SERVER_PORT || 8081;
 
