@@ -14,6 +14,6 @@ export const uploadFile = async (req, res, next) => {
     return res.status(httpStatus.OK).send({
         status: apiStatus.SUCCESS,
         message: 'upload file successfully',
-        data: `http://tipi-shopping.eastasia.cloudapp.azure.com/scontent/images/${req.file.filename}`,
+        data: `${process.env.IMAGE_PRE_PATH}/${req.file.filename}`,
     });
 };

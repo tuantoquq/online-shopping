@@ -10,8 +10,38 @@ import imageTest from '../assets/testproduct.jpg'
 import ProductCategory from '../components/productCategory';
 import ProductPopular from '../components/productPopular';
 import RecommendProduct from '../components/recommendProduct';
+import { useEffect, useState } from "react";
+import axiosConfig from "../config/axios";
+import ShopListProduct from './ShopListProduct';
+
+const defautlAvatar =
+  'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
 
 function ShopHome({navigation}) {
+  const [shopData, setShopData] = useState();
+  const [productData, setProductData] = useState();
+
+  let s = window.location.href.split('/')
+  let tmp = '629ddb1583ec9b8c8547522d'
+  let pathShop = `/shops/profile?shopId=${tmp}`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+  useEffect(()=>{
+    axiosConfig.get(pathShop).then(async res=>{
+      setShopData(res.data.data)
+      await axiosConfig.get(pathProduct).then(res=>{
+        setProductData(res?.data?.data?.products)
+        console.log(productData)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+
+  },[])
+
     return (
       <div className={styles.Home}>
         <Header navigation={navigation}/>
@@ -27,14 +57,14 @@ function ShopHome({navigation}) {
                         <CardActionArea>
                             <CardMedia
                             component="img"
-                            image={imageTest}
+                            image={defautlAvatar}
                             alt="green iguana"
                             />
                         </CardActionArea>
                         </Card>
                     </div>
                     <div className={styleShop.nameshop}>
-                        <h3>Shop Mo Hinh</h3>
+                        <h3>{shopData?.shopName}</h3>
                     </div>
                 </div>
                 <div className={stylesProduct.footFake}>
@@ -44,23 +74,20 @@ function ShopHome({navigation}) {
             <div>
                 <div className={styleShop.colInformation}>
                     <div className={styleShop.colInformation_1}>
-                        <h3>Sản phẩm: 300</h3>
-                    </div>
-                    <div>
-                        <h3>Đánh giá: 4.5 (189 danh gia)</h3>
+                        <h3>Sản phẩm: {productData?.length}</h3>
                     </div>
                 </div>
                 <div className={styleShop.colInformation}>
                     <div className={styleShop.colInformation_1}>
-                        <h3>Địa chỉ: Ha Noi</h3>
+                        <h3>Địa chỉ: {shopData?.address}</h3>
                     </div>
                     <div>
-                        <h3>Đã tham gia: 4 nam truoc</h3>
+                        <h3>Đã tham gia: {shopData?.createAt}</h3>
                     </div>
                 </div>
             </div>
           </div>
-          <div className={styles.wraper}>
+          {/* <div className={styles.wraper}>
             <p className={styles.tdisplay}> Thông tin shop </p>
             <div className={styleShop.inforshop}>
               <div>
@@ -73,16 +100,11 @@ function ShopHome({navigation}) {
             <div className={stylesProduct.footFake}>
                 <p>  </p>
             </div>
-          </div>
-
-          <div className={styles.wraper}>
-            <p className={styles.tdisplay}>Sản phẩm bán chạy</p>
-            <ProductPopular/>
-          </div>     
+          </div> */}
 
           <div className={styles.wraper}>
             <p className={styles.tdisplay}>Tất cả sản phẩm</p>
-            <ProductCategory/>
+            <ShopListProduct listProduct={productData}/>
           </div>
 
 

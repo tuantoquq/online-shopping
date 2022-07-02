@@ -18,6 +18,20 @@ export const addOrder = async (req, res) => {
 
         //get list cart items to order
         let listCartItems = req.body.listCartItems;
+        if(listCartItems.length === 0){
+            return res.status(httpStatus.BAD_REQUEST).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "No items to order!"
+            });
+        }
+        //check cart items is exist
+        for (let i = 0; i < listCartItems.length; i++){
+            await CartItemsService.findCartItemsById(
+                listCartItems[i],
+                userId,
+            );
+        }
+
 
         //create order
         let newOrder = new Order({
@@ -56,7 +70,6 @@ export const addOrder = async (req, res) => {
             let orderProduct = await OrderProductService.addOrderProduct(newOrderProduct);
             listOrderProduct.push(orderProduct);
         }
-        console.log(listOrderProduct);
 
         //delete cart items from carts
         listCartItems.map(async (cartItemsId) => {
@@ -96,8 +109,13 @@ export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
                 status,
             );
         } else {
-            console.log('aaaa');
             listOrder = await OrderService.getListOrderByCustomer(customerId);
+        }
+        for (let i = 0; i< listOrder.length; i++){
+            listOrder[i] = listOrder[i].toObject();
+            let listOrderProduct = await OrderProductService.getListOrderProductOfOrder(listOrder[i]._id);
+            console.log(`index: ${i}: orderId: ${listOrder[i]._id}` ,listOrderProduct.length);
+            listOrder[i].orderProduct = listOrderProduct;
         }
 
         return res.status(httpStatus.OK).send({

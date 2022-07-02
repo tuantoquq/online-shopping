@@ -39,4 +39,37 @@ CustomerService.addCustomer = async (customer) => {
         else return customer;
     });
 };
+
+CustomerService.updateAvatar = async (avtUrl, customerId) => {
+    let response = await Customer.findByIdAndUpdate(
+        { _id: customerId },
+        { avatarUrl: avtUrl },
+        { new: true },
+    );
+    if (!response) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Customer not found with id: ${customerId}!`,
+        );
+    }
+    return response;
+};
+
+CustomerService.getListOrder = async () => {
+    let response = await Customer.findByIdAndUpdate(
+        { _id: customerId },
+        { avatarUrl: avtUrl },
+        { new: true },
+    );
+    if (!response) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Customer not found with id: ${customerId}!`,
+        );
+    }
+    return response;
+};
+
 export default CustomerService;

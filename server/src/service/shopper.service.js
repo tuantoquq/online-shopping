@@ -41,4 +41,19 @@ ShopperService.addShopper = async (shopper) => {
     });
 };
 
+ShopperService.updateAvatar = async (avtUrl, shopperId) => {
+    let response = await Shopper.findByIdAndUpdate(
+        { _id: shopperId },
+        { avatarUrl: avtUrl },
+        { new: true },
+    );
+    if (!response) {
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Shopper not found with id: ${shopperId}!`,
+        );
+    }
+    return response;
+};
 export default ShopperService;

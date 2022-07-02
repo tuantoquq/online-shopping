@@ -21,6 +21,7 @@ import StatisticRevenue from '../screens/adminStatisticRevenue';
 import ShopHome from '../components/shopHome';
 import ProductManager from '../components/productManager';
 import AccountShopper from '../components/accountShopper';
+import BasicTable from '../components/Test';
 
 function RootRoutes() {
   return (
@@ -52,13 +53,15 @@ function RootRoutes() {
       <Route path="/search" element={<Search />} />
       <Route path="/user/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/user/checkout" element={<Checkout/>} />
+      <Route path="/user/checkout" element={<Checkout />} />
 
       <Route path="/product/:teamId" element={<ProductInformation />} />
-      <Route path="/testShop" element={<ShopHome />} />
-      <Route path="/vay" element={<OrderUserManager />} />
+      <Route path="/shop/:shopId" element={<ShopHome />} />
+      <Route path="/user/orderManager" element={<OrderUserManager />} />
       <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
+      <Route path="/test" element={<BasicTable />} />
+      
 
       <Route path="/admin" element={<AdminDashboard />} />
 

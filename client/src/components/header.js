@@ -68,6 +68,13 @@ function Header() {
     }
   };
 
+  const handleClickOrderHistory = () => {
+    setAnchorEl(null);
+    if (role === 'customer') {
+      navigate(`/user/orderManager`);
+    }
+  };
+
   const [user, setUser] = useState({});
   const [query, setQuery] = useState('');
   const navigatePath = function (path) {
@@ -81,7 +88,7 @@ function Header() {
       if (role === 'customer') {
         getCustomerProfile()
           .then((res) => {
-            console.log(res?.data?.data);
+            // console.log(res?.data?.data);
             setUser(res?.data?.data);
           })
           .catch((err) => {
@@ -91,7 +98,7 @@ function Header() {
       if (role === 'shopper') {
         getShopperProfile()
           .then((res) => {
-            console.log(res?.data?.data);
+            // console.log(res?.data?.data);
             setUser(res?.data?.data);
           })
           .catch((err) => {
@@ -174,6 +181,9 @@ function Header() {
               }}
             >
               <MenuItem onClick={handleClickInfo}>Thông tin cá nhân</MenuItem>
+              {(role === 'customer') && (
+                  <MenuItem onClick={handleClickOrderHistory}> Lịch sử mua hàng </MenuItem>
+              )}
               <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>
           </div>
