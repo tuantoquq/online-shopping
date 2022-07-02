@@ -30,4 +30,15 @@ OrderProductService.findById = async (orderProductId) => {
     return orderProduct;
 };
 
+OrderProductService.getListOrderProductOfOrder = async (orderId) => {
+    let listOrderProduct = await OrderProduct.find({orderId: orderId});
+    if(!listOrderProduct){
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.DATABASE_ERROR,
+            `Did not find any order product with orderId: ${orderId}`
+        )
+    }
+    return listOrderProduct;
+}
 export default OrderProductService;

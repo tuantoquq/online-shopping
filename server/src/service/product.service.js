@@ -29,8 +29,18 @@ ProductService.getTop30RecommendProducts = async () => {
     return listProduct;
 };
 
-ProductService.getListProductOfShop = async (shopId) => {
-    let response = await Product.find({ shopId: shopId });
+ProductService.getListProductOfShop = async (shopId, page, size) => {
+    const limit = size ? size : 10;
+    const offset = page ? (page - 1) * limit : 1;
+    let condition = {shopId: shopId}
+    let response = await Product.paginate(condition, {offset, limit}).then((data) => {
+        return {
+            totalProducts: data.totalDocs,
+            products: data.docs,
+            totalPages: data.totalPages,
+            currentPage: parseInt(page ? page : offset)
+        }
+    })
     return response;
 };
 
