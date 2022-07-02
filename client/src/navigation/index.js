@@ -22,6 +22,7 @@ import ShopHome from '../components/shopHome';
 import ProductManager from '../components/productManager';
 import AccountShopper from '../components/accountShopper';
 import AddressInfomation from '../screens/addressInfomation';
+import AdminShopRequest from '../screens/adminShopRequest';
 import AdminShop from '../screens/adminShop';
 // import BasicTable from '../components/Test';
 
@@ -40,6 +41,8 @@ function RootRoutes() {
       <Route path="/shopper/login" element={<Login role="shopper" />} />
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin/shop" element={<AdminShop />} />
+      <Route path="/admin/shop-request" element={<AdminShopRequest />} />
+
 
 
       <Route path="/customer/register" element={<Register role="customer" />} />
