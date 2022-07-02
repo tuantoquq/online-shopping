@@ -273,8 +273,8 @@ function ProductManager() {
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
       await axiosConfig.get(pathProduct).then(res=>{
-        setProductData(res.data.data)
-        setData(res.data.data)
+        setProductData(res?.data?.data?.products)
+        setData(res?.data?.data?.products)
       })
       .catch(err=>{
         console.log(err)
