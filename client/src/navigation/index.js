@@ -21,7 +21,7 @@ import StatisticRevenue from '../screens/adminStatisticRevenue';
 import ShopHome from '../components/shopHome';
 import ProductManager from '../components/productManager';
 import AccountShopper from '../components/accountShopper';
-
+import AddressInfomation from '../screens/addressInfomation';
 function RootRoutes() {
   return (
     <Routes>
@@ -49,6 +49,9 @@ function RootRoutes() {
         path="/admin/infomation"
         element={<UserInformation role="admin" />}
       />
+      <Route path="/user/address" element={<AddressInfomation role="user" />} />
+
+
       <Route path="/search" element={<Search />} />
       <Route path="/user/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />

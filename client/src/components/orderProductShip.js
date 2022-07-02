@@ -37,7 +37,7 @@ function OrderProductShip(){
         });
 
     }, []);
-    console.log(cartItem);
+    // console.log(cartItem);
     return (
         <div className={styles.content}>
             <div className={styles.listProduct}>

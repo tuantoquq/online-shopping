@@ -88,7 +88,19 @@ export const getListAddress = async () => {
     }
     return response;
 }
-
+export const updateAddress = async (address_id, change) => {
+    let response;
+    try{
+        response = await customerApi.put(`/customer/auth/delivery-address/${address_id}`, change, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
 export const addOrder = async (order) => {
     let response;
     try{

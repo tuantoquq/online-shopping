@@ -64,20 +64,20 @@ function Checkout() {
                 <div className={styles.content}>
                     <h3>Địa chỉ nhận hàng</h3> 
                     <div className={styles.displayaddress}>
-                        
-                        <div className={styles.change_button} >
-
-                            <Button onClick={()=>setChanged(!changed) }>Thay đổi</Button>
-                            {!changed &&<div className={styles.disphone}>   
+                    {!changed &&<div className={styles.disphone}>   
                                 <p>{address[0]?.receiverName === null ? 'Nguyễn Văn A (0987654321)': address[0]?.receiverName + " ( " + address[0]?.phone + ") :    " + address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city }</p>
                             </div>}
-                            {changed&&
+                        <div className={styles.change_button} >
+                            
+                            <Button onClick={()=>navigatePath("/user/address") }>Thay đổi</Button>
+                            
+                            {/* {changed&&
                                 address.map(item=>{ 
                                 return <div className={styles.disphone}>   
                                         <p>{address[0]?.receiverName === null ? 'Nguyễn Văn A (0987654321)': address[0]?.receiverName + " ( " + address[0]?.phone + ") :    " + address[0]?.details + ", " + address[0]?.ward+", " + address[0]?.district + ", " + address[0]?.city }</p>
                                     </div>
                                 })
-                            }
+                            } */}
                         </div>
                     </div> 
                 </div> 
@@ -88,13 +88,16 @@ function Checkout() {
                 <div >
                     <button onClick={()=>navigatePath("/cart")}>Trở lại</button>
                     <button onClick={()=>{
-                        navigatePath("/user/orderManager");
+                    navigatePath("/user/orderManager");
+                    if(listCartItems != 0){
                         console.log(listCartItems);
-                        // addOrder({
-                        //     addressId: address[0]._id,
-                        //     listCartItems: listCartItems
-                        // }).then(res => {console.log(res?.data)});
+                        addOrder({
+                            addressId: address[0]._id,
+                            listCartItems: listCartItems
+                        }).then(res => {console.log(res?.data)});
                         listCartItems.map(item=>deleteCartItem(item));
+                    }
+                    
                 }}>Đặt Hàng</button>
                 </div>
             </div>
