@@ -26,6 +26,11 @@ const ShopSchema = new mongoose.Schema(
             default: Date.now(),
             required: true,
         },
+        status: {
+            type: Number,
+            default: 0,
+            required: true
+        }
     },
     {
         versionKey: false,
