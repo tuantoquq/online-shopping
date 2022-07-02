@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCustomerProfile } from '../service/CustomerService.js';
 import avtImage from '../assets/avt_default.png';
+import { Navigate } from 'react-router-dom';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 function UserInformation(navigation, role) {
   const [user, setUser] = useState();
@@ -28,6 +31,26 @@ function UserInformation(navigation, role) {
     // alert('Bạn đã đăng xuất thành công');
     // navigator('/');
   };
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
+  );
+  if (!accessToken) {
+    if (navigation.role === 'user') {
+      return <Navigate to={`/customer/login`}></Navigate>;
+    } else {
+      return <Navigate to={`/admin/login`}></Navigate>;
+    }
+  } else {
+    if (RoleService.getLocalRole() === 'admin' && navigation.role === 'user') {
+      return <Navigate to={'/admin'}></Navigate>;
+    }
+    if (
+      RoleService.getLocalRole() === 'customer' &&
+      navigation.role === 'admin'
+    ) {
+      return <Navigate to={'/'}></Navigate>;
+    }
+  }
   return (
     <div className={styles.container}>
       {navigation.role !== 'admin' && <Header navigation={navigation} />}
@@ -36,11 +59,13 @@ function UserInformation(navigation, role) {
       <div className={styles.content}>
         <UserDisplay
           user_url={
-            user?.avatarUrl == 'avt_default.png' ? avtImage : user?.avatarUrl
+            user?.avatarUrl === 'avt_default.png' ? avtImage : user?.avatarUrl
           }
           user_name={user?.lastName}
           user_age={
-            user?.dateOfBirth === undefined ? 'Chưa cập nhật' : user?.dateOfBirth
+            user?.dateOfBirth === undefined
+              ? 'Chưa cập nhật'
+              : user?.dateOfBirth
           }
           user_phone={user?.phoneNumber}
         />

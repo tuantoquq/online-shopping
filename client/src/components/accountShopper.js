@@ -7,13 +7,16 @@ import MuiAlert from '@mui/material/Alert';
 import ImageUploader from './imageUploader';
 import Header from './header';
 import Footer from './footer';
-import imageTest from '../assets/testproduct.jpg'
+import imageTest from '../assets/testproduct.jpg';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { Tabs } from '@mui/material';
+import { Navigate } from 'react-router-dom';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 function TabInfor(props) {
-  const {value, account } = props;
+  const { value, account } = props;
   const [firstName, setFirstName] = useState('Bùi');
   const [lastName, setLastName] = useState('Minh Tuấn');
   const [email, setEmail] = useState('kiyu@gmail.com');
@@ -88,8 +91,7 @@ function TabInfor(props) {
         }
       }
     }
-  }
-
+  };
 
   useEffect(() => {
     if (errMsg !== '') {
@@ -98,7 +100,7 @@ function TabInfor(props) {
   }, [errMsg]);
   return (
     <div>
-      {value === 0 &&(
+      {value === 0 && (
         <div className={clsx(styles.registerContainer, styles.row)}>
           <div
             className={
@@ -128,13 +130,13 @@ function TabInfor(props) {
                 <div className={clsx(styles.formLeft)}>
                   <div className={clsx(styles.formRow, styles.row)}>
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="firstName"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Họ và tên đệm:
-                        </label>
-                        <input
+                      </label>
+                      <input
                         id="firstName"
                         name="firstName"
                         value={firstName}
@@ -143,17 +145,17 @@ function TabInfor(props) {
                         className={clsx(styles.formInput, styles.row)}
                         placeholder="Họ và tên đệm..."
                         required
-                        />
+                      />
                     </div>
 
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="lastName"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Tên:
-                        </label>
-                        <input
+                      </label>
+                      <input
                         id="lastName"
                         name="lastName"
                         value={lastName}
@@ -162,17 +164,17 @@ function TabInfor(props) {
                         className={clsx(styles.formInput, styles.row)}
                         placeholder="Tên..."
                         required
-                        />
+                      />
                     </div>
 
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="email"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Email:
-                        </label>
-                        <input
+                      </label>
+                      <input
                         id="email"
                         name="email"
                         type="email"
@@ -181,19 +183,19 @@ function TabInfor(props) {
                         className={clsx(styles.formInput, styles.row)}
                         placeholder="Email..."
                         required
-                        />
+                      />
                     </div>
-                    </div>
+                  </div>
 
-                    <div className={clsx(styles.formRow, styles.row)}>
+                  <div className={clsx(styles.formRow, styles.row)}>
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="phone"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Số điện thoại:
-                        </label>
-                        <input
+                      </label>
+                      <input
                         id="phone"
                         name="phone"
                         type="text"
@@ -202,88 +204,88 @@ function TabInfor(props) {
                         className={clsx(styles.formInput, styles.row)}
                         placeholder="Số điện thoại..."
                         required
-                        />
+                      />
                     </div>
 
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="gender"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Giới tính:
-                        </label>
-                        <div
+                      </label>
+                      <div
                         className={clsx(
-                            styles.formRow,
-                            styles.row,
-                            styles.formGender
+                          styles.formRow,
+                          styles.row,
+                          styles.formGender
                         )}
-                        >
+                      >
                         <div>
-                            <input
+                          <input
                             type="radio"
                             id="male"
                             onChange={() => setGender('male')}
                             checked={gender === 'male'}
-                            />
+                          />
 
-                            <label
+                          <label
                             className={clsx(
-                                styles.genderSelection,
-                                styles.formLabel
+                              styles.genderSelection,
+                              styles.formLabel
                             )}
                             htmlFor="male"
-                            >
+                          >
                             Nam
-                            </label>
+                          </label>
                         </div>
 
                         <div>
-                            <input
+                          <input
                             type="radio"
                             id="female"
                             onChange={() => setGender('female')}
                             checked={gender === 'female'}
-                            />
-                            <label
+                          />
+                          <label
                             className={clsx(
-                                styles.genderSelection,
-                                styles.formLabel
+                              styles.genderSelection,
+                              styles.formLabel
                             )}
                             htmlFor="female"
-                            >
+                          >
                             Nữ
-                            </label>
+                          </label>
                         </div>
 
                         <div>
-                            <input
+                          <input
                             type="radio"
                             id="others"
                             onChange={() => setGender('others')}
                             checked={gender === 'others'}
-                            />
-                            <label
+                          />
+                          <label
                             className={clsx(
-                                styles.genderSelection,
-                                styles.formLabel
+                              styles.genderSelection,
+                              styles.formLabel
                             )}
                             htmlFor="others"
-                            >
+                          >
                             Khác
-                            </label>
+                          </label>
                         </div>
-                        </div>
+                      </div>
                     </div>
 
                     <div className={clsx(styles.formField, styles.col3)}>
-                        <label
+                      <label
                         htmlFor="birthday"
                         className={clsx(styles.formLabel, styles.row)}
-                        >
+                      >
                         Ngày sinh:
-                        </label>
-                        <input
+                      </label>
+                      <input
                         id="birthday"
                         name="birthday"
                         min="1900-01-01"
@@ -293,7 +295,7 @@ function TabInfor(props) {
                         onChange={(e) => setBirthday(e.target.value)}
                         className={clsx(styles.formInput, styles.row)}
                         required
-                        />
+                      />
                     </div>
                   </div>
                   <div className={clsx(styles.formRow, styles.row)}>
@@ -354,24 +356,24 @@ function TabInfor(props) {
                     </div>
                   </div>
                   <div className={clsx(styles.formRow, styles.row)}>
-                  <div className={clsx(styles.formField, styles.col3)}>
-                    <label
-                      htmlFor="address"
-                      className={clsx(styles.formLabel, styles.row)}
-                    >
-                      Địa chỉ:
-                    </label>
-                    <input
-                      id="address"
-                      name="address"
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className={clsx(styles.formInput, styles.row)}
-                      placeholder="Địa chỉ..."
-                      required
-                    />
-                  </div>
+                    <div className={clsx(styles.formField, styles.col3)}>
+                      <label
+                        htmlFor="address"
+                        className={clsx(styles.formLabel, styles.row)}
+                      >
+                        Địa chỉ:
+                      </label>
+                      <input
+                        id="address"
+                        name="address"
+                        type="text"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className={clsx(styles.formInput, styles.row)}
+                        placeholder="Địa chỉ..."
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -400,7 +402,7 @@ function TabInfor(props) {
 }
 
 function TabPassword(props) {
-  const {value, account} = props;
+  const { value, account } = props;
   const [firstName] = useState('Bùi');
   const [lastName] = useState('Minh Tuấn');
   const [email] = useState('kiyu@gmail.com');
@@ -430,7 +432,6 @@ function TabPassword(props) {
     setOpen(false);
     setErrMsg('');
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -488,8 +489,7 @@ function TabPassword(props) {
         }
       }
     }
-  }
-
+  };
 
   useEffect(() => {
     if (errMsg !== '') {
@@ -498,7 +498,7 @@ function TabPassword(props) {
   }, [errMsg]);
   return (
     <div>
-      {value === 1 &&(
+      {value === 1 && (
         <div className={clsx(styles.registerContainerPassWorld, styles.row)}>
           <div
             className={
@@ -528,10 +528,10 @@ function TabPassword(props) {
                 <div className={clsx(styles.formLeft)}>
                   <div className={clsx(styles.formRow, styles.row)}>
                     <label
-                        htmlFor="oldPassword"
-                        className={clsx(styles.formLabel, styles.row)}
-                      >
-                        Mật khẩu cũ:
+                      htmlFor="oldPassword"
+                      className={clsx(styles.formLabel, styles.row)}
+                    >
+                      Mật khẩu cũ:
                     </label>
                     <div className={clsx(styles.formField, styles.col3)}>
                       <input
@@ -548,10 +548,10 @@ function TabPassword(props) {
 
                   <div className={clsx(styles.formRow, styles.row)}>
                     <label
-                        htmlFor="newPassword"
-                        className={clsx(styles.formLabel, styles.row)}
-                      >
-                        Mật khẩu mới:
+                      htmlFor="newPassword"
+                      className={clsx(styles.formLabel, styles.row)}
+                    >
+                      Mật khẩu mới:
                     </label>
                     <div className={clsx(styles.formField, styles.col3)}>
                       <input
@@ -568,10 +568,10 @@ function TabPassword(props) {
 
                   <div className={clsx(styles.formRow, styles.row)}>
                     <label
-                        htmlFor="confirmPassword"
-                        className={clsx(styles.formLabel, styles.row)}
-                      >
-                        Nhập lại mật khẩu:
+                      htmlFor="confirmPassword"
+                      className={clsx(styles.formLabel, styles.row)}
+                    >
+                      Nhập lại mật khẩu:
                     </label>
                     <div className={clsx(styles.formField, styles.col3)}>
                       <input
@@ -585,7 +585,6 @@ function TabPassword(props) {
                       />
                     </div>
                   </div>
-
                 </div>
               </div>
               <div className={clsx(styles.formRow, styles.formFooter)}>
@@ -605,7 +604,6 @@ function TabPassword(props) {
   );
 }
 
-
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -613,42 +611,64 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 // const defautlAvatar =
 //   'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
 
-function AccountShopper({navigation, account}) {
-    const [value, setValue] = React.useState(0);
+function AccountShopper({ navigation, account }) {
+  const [value, setValue] = React.useState(0);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-    return (
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
+  );
+  if (!accessToken) {
+    return <Navigate to="/shopper/login"></Navigate>;
+  }
+  if (accessToken) {
+    if (RoleService.getLocalRole() === 'customer') {
+      return <Navigate to="/"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'admin') {
+      return <Navigate to="/admin"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'shopper') {
+      return (
         <div className="account">
-            <Header navigation={navigation} />
+          <Header navigation={navigation} />
 
-            <div className={styles.content} >
-                <div className={styles.wraper}>
-                    <p className={styles.tdisplay}> Quản lý tài khoản </p>
-                    <Box
-                    sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
-                    >
-                        <Tabs
-                          value={value}
-                          onChange={handleChange}
-                          textColor="secondary"
-                          indicatorColor="secondary"
-                          aria-label="secondary tabs example"
-                          orientation="vertical"
-                        >
-                            <Tab value={0} label="Thông tin tài khoản"/>
-                            <Tab value={1} label="Thay đổi mật khẩu" />
-                        </Tabs>
-                        <TabInfor value={value} index={0} account={account}>        
-                        </TabInfor>
-                        <TabPassword value={value} index={1} account={account}>
-                        </TabPassword>
-                    </Box> 
-                </div>
+          <div className={styles.content}>
+            <div className={styles.wraper}>
+              <p className={styles.tdisplay}> Quản lý tài khoản </p>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  bgcolor: 'background.paper',
+                  display: 'flex',
+                }}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  textColor="secondary"
+                  indicatorColor="secondary"
+                  aria-label="secondary tabs example"
+                  orientation="vertical"
+                >
+                  <Tab value={0} label="Thông tin tài khoản" />
+                  <Tab value={1} label="Thay đổi mật khẩu" />
+                </Tabs>
+                <TabInfor value={value} index={0} account={account}></TabInfor>
+                <TabPassword
+                  value={value}
+                  index={1}
+                  account={account}
+                ></TabPassword>
+              </Box>
             </div>
-            <Footer navigation={navigation} />
+          </div>
+          <Footer navigation={navigation} />
         </div>
-    );
+      );
+    }
+  }
 }
 export default AccountShopper;

@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import stylesProductManger from '../screens/CSS/productManager.module.css'
+import stylesProductManger from '../screens/CSS/productManager.module.css';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -23,15 +23,17 @@ import { visuallyHidden } from '@mui/utils';
 import InformationTab from '../components/informationTab';
 import stylesTab from '../screens/CSS/seller_acceptOrder.module.css';
 import axiosConfig from '../config/axios';
-import SearchBar from "material-ui-search-bar";
-import { makeStyles } from "@material-ui/core/styles";
+import SearchBar from 'material-ui-search-bar';
+import { makeStyles } from '@material-ui/core/styles';
 import { deleteProduct } from '../service/ShopperService';
-
+import { Navigate } from 'react-router-dom';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650
-  }
+    minWidth: 650,
+  },
 });
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -54,20 +56,30 @@ function descendingComparator(a, b, orderBy) {
 
 let Order = 'asc' | 'desc';
 
-function getComparator(order, orderBy){
+function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 const headCells = [
-  { id: 'productName', numeric: false, disablePadding: false, label: 'Tên sản phẩm'},
-  { id: 'price', numeric: true, disablePadding: false, label: 'Giá tiền'},
-  { id: 'soldHistory', numeric: true, disablePadding: false, label: 'Đã bán'},
-  { id: 'count', numeric: true, disablePadding: false, label: 'Kho'},
-  { id: 'ratingStar', numeric: true, disablePadding: false, label: 'Đánh giá'},
-  { id: 'updateAt', numeric: false, disablePadding: false, label: 'Cập nhật lần cuối'},
-]
+  {
+    id: 'productName',
+    numeric: false,
+    disablePadding: false,
+    label: 'Tên sản phẩm',
+  },
+  { id: 'price', numeric: true, disablePadding: false, label: 'Giá tiền' },
+  { id: 'soldHistory', numeric: true, disablePadding: false, label: 'Đã bán' },
+  { id: 'count', numeric: true, disablePadding: false, label: 'Kho' },
+  { id: 'ratingStar', numeric: true, disablePadding: false, label: 'Đánh giá' },
+  {
+    id: 'updateAt',
+    numeric: false,
+    disablePadding: false,
+    label: 'Cập nhật lần cuối',
+  },
+];
 
 function stableSort(array, compare) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -82,12 +94,10 @@ function stableSort(array, compare) {
 }
 
 function EnhancedTableHead(props) {
-  const {order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
-  const createSortHandler =
-    (property) => (event) => {
-      onRequestSort(event, property);
-    };
+  const { order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>
@@ -95,7 +105,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align='left'
+            align="left"
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -118,300 +128,331 @@ function EnhancedTableHead(props) {
   );
 }
 
-
 function ProductManager() {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => {
-      setOpenInforProduct(false);
-      setOpen(true);
-      setName('');
-      setDetail('');
-      setCount(1);
-      setCost(0);
-      setType('');
-      setAvatarImg(defautlAvatar);
-      setErrMsg('');
-      setSuccess(false);
-      setTextTitle("Nhập thông tin sản phẩm");
-      setTextButtonRight("Huỷ")
-    };
-    const handleClose = () => {
-      setOpen(false);
-      setOpenInforProduct(false);
-    };
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpenInforProduct(false);
+    setOpen(true);
+    setName('');
+    setDetail('');
+    setCount(1);
+    setCost(0);
+    setType('');
+    setAvatarImg(defautlAvatar);
+    setErrMsg('');
+    setSuccess(false);
+    setTextTitle('Nhập thông tin sản phẩm');
+    setTextButtonRight('Huỷ');
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setOpenInforProduct(false);
+  };
 
-    const [openInforProduct, setOpenInforProduct] = useState(false);
-    const handleOpenInforProduct = (product) => {
-      console.log(product)
-      setOpenInforProduct(true);
-      setOpen(true);
-      setId(product?._id)
-      setName(product?.productName);
-      setDetail(product?.shortDescription);
-      setCount(product?.count);
-      setCost(product?.price);
-      let pathCategory = `/category/get?categoryId=${product?.categoryId}`
-      axiosConfig.get(pathCategory).then(async res=>{
+  const [openInforProduct, setOpenInforProduct] = useState(false);
+  const handleOpenInforProduct = (product) => {
+    console.log(product);
+    setOpenInforProduct(true);
+    setOpen(true);
+    setId(product?._id);
+    setName(product?.productName);
+    setDetail(product?.shortDescription);
+    setCount(product?.count);
+    setCost(product?.price);
+    let pathCategory = `/category/get?categoryId=${product?.categoryId}`;
+    axiosConfig
+      .get(pathCategory)
+      .then(async (res) => {
         setType(res.data.data?.categoryName);
       })
-      .catch(err=>{
-        console.log(err)
-      })
-    
-      setType(product.type);
-      setSolded(product?.soldHistory);
-      setRating(product?.ratingStar);
-      setAvatarImg(product?.imageUrls[0]?.base_url);
-      setErrMsg('');
-      setSuccess(false);
-      setTextTitle("Thông tin sản phẩm");
-      setTextButtonRight("Đóng")
-    };
+      .catch((err) => {
+        console.log(err);
+      });
 
-    const [id, setId] = useState('');
-    const [name, setName] = useState('');
-    const [detail, setDetail] = useState('');
-    const [count, setCount] = useState(0);
-    const [cost, setCost] = useState(0);
-    const [type, setType] = useState('');
-    const [rating, setRating] = useState(0);
-    const [solded, setSolded] = useState(0);
-    const [avatarImg, setAvatarImg] = useState(defautlAvatar);
-    const [textTitle, setTextTitle] = useState('');
-    const [textButtonRight, setTextButtonRight] = useState('');
+    setType(product.type);
+    setSolded(product?.soldHistory);
+    setRating(product?.ratingStar);
+    setAvatarImg(product?.imageUrls[0]?.base_url);
+    setErrMsg('');
+    setSuccess(false);
+    setTextTitle('Thông tin sản phẩm');
+    setTextButtonRight('Đóng');
+  };
 
-    const [data, setData] = useState();
-    const [searched, setSearched] = useState("");
-    const classes = useStyles();
+  const [id, setId] = useState('');
+  const [name, setName] = useState('');
+  const [detail, setDetail] = useState('');
+  const [count, setCount] = useState(0);
+  const [cost, setCost] = useState(0);
+  const [type, setType] = useState('');
+  const [rating, setRating] = useState(0);
+  const [solded, setSolded] = useState(0);
+  const [avatarImg, setAvatarImg] = useState(defautlAvatar);
+  const [textTitle, setTextTitle] = useState('');
+  const [textButtonRight, setTextButtonRight] = useState('');
 
-    const [currProductId, setCurrProductId] = useState("")
+  const [data, setData] = useState();
+  const [searched, setSearched] = useState('');
+  const classes = useStyles();
 
-    const requestSearch = (searchedVal) => {
-        const filteredRows = productData?.filter((row) => {
-        return row.productName.toLowerCase().includes(searchedVal.toLowerCase());
-        });
-        setData(filteredRows);
-    };
+  const [currProductId, setCurrProductId] = useState('');
 
-    const cancelSearch = () => {
-        setSearched("");
-        requestSearch(searched);
-    };
-    // info
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+  const requestSearch = (searchedVal) => {
+    const filteredRows = productData?.filter((row) => {
+      return row.productName.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    setData(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched('');
+    requestSearch(searched);
+  };
+  // info
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false);
+  //console.log(avatarImg);
+
+  const handleCloseAvatar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+    setErrMsg('');
+  };
+
+  const [openDelete, setDelete] = useState(false);
+  const handleOpenDelete = () => setDelete(true);
+  const handleCloseDelete = () => setDelete(false);
+
+  //submit product
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const REGISTER_URL = `/api/v1/registerProduct`;
+
+    if (errMsg === '') {
       //console.log(avatarImg);
-
-    const handleCloseAvatar = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-      setOpen(false);
-      setErrMsg('');
-    };
-
-    const [openDelete, setDelete] = useState(false);
-    const handleOpenDelete = () =>  setDelete(true);
-    const handleCloseDelete = () =>  setDelete(false);
-
-    //submit product
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const REGISTER_URL = `/api/v1/registerProduct`;
-  
-      if (errMsg === '') {
-        //console.log(avatarImg);
-        let data = {};
-        data = {
-          name: name,
-          detail: detail,
-          count: count,
-          cost: cost,
-          type: type,
-          avatar: avatarImg,
-        };
-        console.log(data);
-        try {
-          const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            // withCredentials: true,
-          });
-          console.log(JSON.stringify(response?.data));
-          console.log(JSON.stringify(response));
-          setSuccess(true);
-        } catch (err) {
-          if (!err?.response) {
-            setErrMsg('No Server Response');
-            setOpen(true);
-          } else {
-            setErrMsg('Thêm sản phẩm.');
-            console.log(err);
-            setOpen(true);
-          }
+      let data = {};
+      data = {
+        name: name,
+        detail: detail,
+        count: count,
+        cost: cost,
+        type: type,
+        avatar: avatarImg,
+      };
+      console.log(data);
+      try {
+        const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
+        console.log(JSON.stringify(response?.data));
+        console.log(JSON.stringify(response));
+        setSuccess(true);
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg('No Server Response');
+          setOpen(true);
+        } else {
+          setErrMsg('Thêm sản phẩm.');
+          console.log(err);
+          setOpen(true);
         }
       }
-    };
-
-    //delete product
-    const handleDelete = async (e) => {
-      console.log(id);
-      deleteProduct(id).then(
-          // res => {
-          //     console(res);
-          // }
-      ).catch(err => {
-          console.log(err);
-      });
-      handleCloseDelete();
-      handleClose();
-      axiosConfig.get(pathShop).then(async res=>{
-        setShopData(res.data.data)
-        await axiosConfig.get(pathProduct).then(res=>{
-          setProductData(res?.data?.data?.products)
-          setData(res?.data?.data?.products)
-        })
-        .catch(err=>{
-          console.log(err)
-        })
-      })
-      .catch(err=>{
-        console.log(err)
-      })
     }
+  };
 
-    // api
+  //delete product
+  const handleDelete = async (e) => {
+    console.log(id);
+    deleteProduct(id)
+      .then
+      // res => {
+      //     console(res);
+      // }
+      ()
+      .catch((err) => {
+        console.log(err);
+      });
+    handleCloseDelete();
+    handleClose();
+    axiosConfig
+      .get(pathShop)
+      .then(async (res) => {
+        setShopData(res.data.data);
+        await axiosConfig
+          .get(pathProduct)
+          .then((res) => {
+            setProductData(res?.data?.data?.products);
+            setData(res?.data?.data?.products);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // api
   const [shopData, setShopData] = useState();
   const [productData, setProductData] = useState();
 
-  let s = window.location.href.split('/')
-  let tmp = '629ddb1583ec9b8c8547522d'
-  let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`
-  useEffect(()=>{
-    axiosConfig.get(pathShop).then(async res=>{
-      setShopData(res.data.data)
-      await axiosConfig.get(pathProduct).then(res=>{
-        setProductData(res?.data?.data?.products)
-        setData(res?.data?.data?.products)
+  let s = window.location.href.split('/');
+  let tmp = '629ddb1583ec9b8c8547522d';
+  let pathShop = `/shops/profile?shopId=${tmp}`;
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`;
+  useEffect(() => {
+    axiosConfig
+      .get(pathShop)
+      .then(async (res) => {
+        setShopData(res.data.data);
+        await axiosConfig
+          .get(pathProduct)
+          .then((res) => {
+            setProductData(res?.data?.data?.products);
+            setData(res?.data?.data?.products);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
-      .catch(err=>{
-        console.log(err)
-      })
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  },[])
+  // sort && page
+  const [searchTerm, setSearchTerm] = useState('');
 
-// sort && page
-    const [searchTerm, setSearchTerm] = useState('');
-  
-    const [page, setPage] = useState(0);
-  
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [order, setOrder] = React.useState('asc');
-    const [selected, setSelected] = useState([]);
-    const [orderBy, setOrderBy] = React.useState('id');
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
+  const [page, setPage] = useState(0);
 
-    const handleRequestSort = (
-      event,
-      property,
-    ) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    };
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [order, setOrder] = React.useState('asc');
+  const [selected, setSelected] = useState([]);
+  const [orderBy, setOrderBy] = React.useState('id');
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(event.target.value);
-      setPage(0);
-    };
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    setPage(0);
+  };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productData?.length) : 0;
-    const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-  
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1),
-        );
-      }
-    };
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productData?.length) : 0;
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
 
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+  };
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
+  );
+  if (!accessToken) {
+    return <Navigate to="/shopper/login"></Navigate>;
+  }
+  if (accessToken) {
+    if (RoleService.getLocalRole() === 'customer') {
+      return <Navigate to="/"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'admin') {
+      return <Navigate to="/admin"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'shopper') {
+      return (
+        <div className={styles.Home}>
+          <Header />
 
-    return (
-      <div className={styles.Home}>
-        <Header />
-
-        <Modal
-          open={open}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box  className={stylesProductManger.box}>
+          <Modal
+            open={open}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box className={stylesProductManger.box}>
               <Modal
-              open={openDelete}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
+                open={openDelete}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
               >
-                  <Box  className={stylesProductManger.deletebox}>
-                    <div className={styles.wraper}>  
-                        <p className={stylesProductManger.formdelete}> Xác nhận xoá ? </p>
-                    </div>
-                    <div className={stylesProductManger.button}>
-                      <Button onClick={handleCloseDelete}> Huỷ </Button>
-                      <Button onClick={handleDelete}>Xác nhận</Button>
-                    </div>
-                  </Box>
-            </Modal>
-            <div className={stylesProductManger.wraper}>  
+                <Box className={stylesProductManger.deletebox}>
+                  <div className={styles.wraper}>
+                    <p className={stylesProductManger.formdelete}>
+                      {' '}
+                      Xác nhận xoá ?{' '}
+                    </p>
+                  </div>
+                  <div className={stylesProductManger.button}>
+                    <Button onClick={handleCloseDelete}> Huỷ </Button>
+                    <Button onClick={handleDelete}>Xác nhận</Button>
+                  </div>
+                </Box>
+              </Modal>
+              <div className={stylesProductManger.wraper}>
                 <p> {textTitle} </p>
-            </div>
+              </div>
 
-            <div className={stylesProductManger.row}>
+              <div className={stylesProductManger.row}>
                 <div className={stylesProductManger.flex}>
                   <div className={stylesProductManger.row2}>
-                    { openInforProduct && (
-                    <div className={clsx(stylesProductManger.formRow)}>
-                      <label
-                        htmlFor="id"
-                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
-                      >
-                        ID:
-                      </label>
-                      <input
-                        id="id"
-                        name="id"
-                        value={id}
-                        type="text"
-                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                        required
-                        readOnly
-                      />
-                    </div>
+                    {openInforProduct && (
+                      <div className={clsx(stylesProductManger.formRow)}>
+                        <label
+                          htmlFor="id"
+                          className={clsx(
+                            stylesProductManger.formLabel,
+                            stylesProductManger.row11
+                          )}
+                        >
+                          ID:
+                        </label>
+                        <input
+                          id="id"
+                          name="id"
+                          value={id}
+                          type="text"
+                          className={clsx(
+                            stylesProductManger.formInput,
+                            stylesProductManger.row
+                          )}
+                          required
+                          readOnly
+                        />
+                      </div>
                     )}
-                  
+
                     <div className={clsx(stylesProductManger.formRow)}>
                       <label
                         htmlFor="name"
-                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                        className={clsx(
+                          stylesProductManger.formLabel,
+                          stylesProductManger.row11
+                        )}
                       >
                         Tên sản phẩm:
                       </label>
@@ -421,7 +462,10 @@ function ProductManager() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         type="text"
-                        className={clsx(stylesProductManger.formInput2, stylesProductManger.row)}
+                        className={clsx(
+                          stylesProductManger.formInput2,
+                          stylesProductManger.row
+                        )}
                         placeholder="Tên sản phẩm..."
                         required
                       />
@@ -430,7 +474,10 @@ function ProductManager() {
                     <div className={clsx(stylesProductManger.formRow)}>
                       <label
                         htmlFor="count"
-                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                        className={clsx(
+                          stylesProductManger.formLabel,
+                          stylesProductManger.row11
+                        )}
                       >
                         Số lượng:
                       </label>
@@ -441,7 +488,10 @@ function ProductManager() {
                         min="1"
                         value={count}
                         onChange={(e) => setCount(e.target.value)}
-                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        className={clsx(
+                          stylesProductManger.formInput,
+                          stylesProductManger.row
+                        )}
                         required
                       />
                     </div>
@@ -449,7 +499,10 @@ function ProductManager() {
                     <div className={clsx(stylesProductManger.formRow)}>
                       <label
                         htmlFor="cost"
-                        className={clsx(stylesProductManger.formLabel, stylesProductManger.row11)}
+                        className={clsx(
+                          stylesProductManger.formLabel,
+                          stylesProductManger.row11
+                        )}
                       >
                         Giá tiền:
                       </label>
@@ -460,83 +513,111 @@ function ProductManager() {
                         min="0"
                         value={cost}
                         onChange={(e) => setCost(e.target.value)}
-                        className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                        className={clsx(
+                          stylesProductManger.formInput,
+                          stylesProductManger.row
+                        )}
                         required
                       />
                     </div>
                   </div>
 
-                  <div className={clsx(stylesProductManger.avatarInput, stylesProductManger.col)}>
+                  <div
+                    className={clsx(
+                      stylesProductManger.avatarInput,
+                      stylesProductManger.col
+                    )}
+                  >
                     <ImageUploader
                       avatarImg={avatarImg}
                       onAvatarChange={setAvatarImg}
                     />
                   </div>
-
                 </div>
-              
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
-                  htmlFor="type"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
-                >
-                  Loại sản phẩm:
-                </label>
-                <input
-                  id="type"
-                  name="type"
-                  type="text"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  required
-                />
-              </div>
 
-              { openInforProduct && (
-                <div>
-                  <div className={clsx(stylesProductManger.formRow)}>
-                    <label
-                      htmlFor="rating"
-                      className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
-                    >
-                      Đánh giá:
-                    </label>
-                    <input
-                      id="rating"
-                      name="rating"
-                      value={rating}
-                      type="text"
-                      className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                      required
-                      readOnly
-                    />
-                  </div>
-
-                  <div className={clsx(stylesProductManger.formRow)}>
+                <div className={clsx(stylesProductManger.formRow)}>
                   <label
-                    htmlFor="solded"
-                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
+                    htmlFor="type"
+                    className={clsx(
+                      stylesProductManger.formLabel,
+                      stylesProductManger.row1
+                    )}
                   >
-                    Đã bán:
+                    Loại sản phẩm:
                   </label>
                   <input
-                    id="solded"
-                    name="solded"
-                    value={solded}
+                    id="type"
+                    name="type"
                     type="text"
-                    className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
+                    value={type}
+                    onChange={(e) => setType(e.target.value)}
+                    className={clsx(
+                      stylesProductManger.formInput,
+                      stylesProductManger.row
+                    )}
                     required
-                    readOnly
                   />
-                  </div>
                 </div>
-              )}
 
-              <div className={clsx(stylesProductManger.formRow)}>
+                {openInforProduct && (
+                  <div>
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="rating"
+                        className={clsx(
+                          stylesProductManger.formLabel,
+                          stylesProductManger.row1
+                        )}
+                      >
+                        Đánh giá:
+                      </label>
+                      <input
+                        id="rating"
+                        name="rating"
+                        value={rating}
+                        type="text"
+                        className={clsx(
+                          stylesProductManger.formInput,
+                          stylesProductManger.row
+                        )}
+                        required
+                        readOnly
+                      />
+                    </div>
+
+                    <div className={clsx(stylesProductManger.formRow)}>
+                      <label
+                        htmlFor="solded"
+                        className={clsx(
+                          stylesProductManger.formLabel,
+                          stylesProductManger.row1
+                        )}
+                      >
+                        Đã bán:
+                      </label>
+                      <input
+                        id="solded"
+                        name="solded"
+                        value={solded}
+                        type="text"
+                        className={clsx(
+                          stylesProductManger.formInput,
+                          stylesProductManger.row
+                        )}
+                        required
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className={clsx(stylesProductManger.formRow)}>
                   <label
                     htmlFor="detail"
-                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
+                    className={clsx(
+                      stylesProductManger.formLabel,
+                      stylesProductManger.row1
+                    )}
                   >
                     Mô tả:
                   </label>
@@ -546,42 +627,47 @@ function ProductManager() {
                     type="detail"
                     value={detail}
                     onChange={(e) => setDetail(e.target.value)}
-                    className={clsx(stylesProductManger.formInput2, stylesProductManger.row)}
+                    className={clsx(
+                      stylesProductManger.formInput2,
+                      stylesProductManger.row
+                    )}
                     placeholder="Mô tả..."
                     required
                   />
+                </div>
               </div>
+
+              <div className={stylesProductManger.button}>
+                <Button onClick={handleClose}> {textButtonRight} </Button>
+                {openInforProduct && (
+                  <Button onClick={handleOpenDelete}>Xoá sản phẩm</Button>
+                )}
+                <Button onClick={handleSubmit}>Xác nhận</Button>
+              </div>
+            </Box>
+          </Modal>
+
+          <div className={stylesTab.content}>
+            <div className={stylesTab.tab1}>
+              <InformationTab />
             </div>
 
-            <div className={stylesProductManger.button}>
-              <Button onClick={handleClose}> {textButtonRight} </Button>
-              {openInforProduct && <Button onClick={handleOpenDelete}>Xoá sản phẩm</Button>}
-              <Button onClick={handleSubmit}>Xác nhận</Button>
-            </div>
-            
-          </Box>
-        </Modal>
-
-        
-        <div className={stylesTab.content} >
-            <div className={stylesTab.tab1} >
-              <InformationTab/>
-            </div>
-
-            <div className={stylesTab.tab2} >
+            <div className={stylesTab.tab2}>
               <div className={styles.wraper}>
-                <div className={stylesProductManger.tdisplay}>  
-                    <p>Quản lý sản phẩm</p>
-                    <Button href="#text-buttons" onClick={handleOpen}>Thêm sản phẩm</Button>
+                <div className={stylesProductManger.tdisplay}>
+                  <p>Quản lý sản phẩm</p>
+                  <Button href="#text-buttons" onClick={handleOpen}>
+                    Thêm sản phẩm
+                  </Button>
                 </div>
 
                 <SearchBar
-                    value={searched}
-                    onChange={(searchVal) => requestSearch(searchVal)}
-                    onCancelSearch={() => cancelSearch()}
-                    placeholder="Tìm sản phẩm . . ."
+                  value={searched}
+                  onChange={(searchVal) => requestSearch(searchVal)}
+                  onCancelSearch={() => cancelSearch()}
+                  placeholder="Tìm sản phẩm . . ."
                 />
-                
+
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <EnhancedTableHead
@@ -591,8 +677,13 @@ function ProductManager() {
                       rowCount={data?.length}
                     />
                     <TableBody>
-                      {data?.slice().sort(getComparator(order, orderBy))
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      {data
+                        ?.slice()
+                        .sort(getComparator(order, orderBy))
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
                         .map((product, index) => {
                           const isItemSelected = isSelected(product.id);
                           const labelId = `enhanced-table-checkbox-${index}`;
@@ -600,7 +691,9 @@ function ProductManager() {
                           return (
                             <TableRow
                               hover
-                              onClick={(event) => handleClick(event, product.id)}
+                              onClick={(event) =>
+                                handleClick(event, product.id)
+                              }
                               role="checkbox"
                               aria-checked={isItemSelected}
                               tabIndex={-1}
@@ -608,24 +701,35 @@ function ProductManager() {
                               selected={isItemSelected}
                             >
                               <TableCell component="th" scope="row">
-                                <Button onClick={() => handleOpenInforProduct(product)}>{product?.productName}</Button>
+                                <Button
+                                  onClick={() =>
+                                    handleOpenInforProduct(product)
+                                  }
+                                >
+                                  {product?.productName}
+                                </Button>
                               </TableCell>
-                              <TableCell align="left">{product?.price}</TableCell>
-                              <TableCell align="left">{product?.soldHistory}</TableCell>
-                              <TableCell align="left">{product?.count}</TableCell>
-                              <TableCell align="left">{product?.ratingStar}</TableCell>
-                              <TableCell align="left">{(new Date(product?.updateAt)).toLocaleString()}</TableCell>
+                              <TableCell align="left">
+                                {product?.price}
+                              </TableCell>
+                              <TableCell align="left">
+                                {product?.soldHistory}
+                              </TableCell>
+                              <TableCell align="left">
+                                {product?.count}
+                              </TableCell>
+                              <TableCell align="left">
+                                {product?.ratingStar}
+                              </TableCell>
+                              <TableCell align="left">
+                                {new Date(product?.updateAt).toLocaleString()}
+                              </TableCell>
                             </TableRow>
                           );
                         })}
-                        {emptyRows > 0 && (
-                          <TableRow
-                          >
-
-                          </TableRow>
-                        )}
+                      {emptyRows > 0 && <TableRow></TableRow>}
                     </TableBody>
-                    </Table>
+                  </Table>
                 </TableContainer>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15]}
@@ -637,13 +741,13 @@ function ProductManager() {
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </div>
-              
             </div>
-
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    );
+      );
+    }
   }
-  
-  export default ProductManager;
+}
+
+export default ProductManager;

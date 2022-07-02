@@ -9,6 +9,9 @@ import MultiLineGraph from '../components/multiLineGraph';
 import clsx from 'clsx';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
+import { Navigate } from 'react-router-dom';
 
 function StatisticOrder({ navigation }) {
   const toDay = new Date();
@@ -52,77 +55,97 @@ function StatisticOrder({ navigation }) {
     );
     setNewAccountsLastWeek(newAccountsLastWeek);
     setSelecteDateNewAccounts(newAccountsLastWeek[6]);
-  }, [selectedDate2]);  return (
-    <div className={styles.Home}>
-      {/* <Header navigation={navigation} /> */}
-      <div className={styles.content}>
-        <div className={styles.tab1}>
-          <AdminSidebar select="statistic-order" />
-        </div>
+  }, [selectedDate2]);
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
+  );
+  if (!accessToken) {
+    return <Navigate to="/admin/login"></Navigate>;
+  }
+  if (accessToken) {
+    if (RoleService.getLocalRole() === 'customer') {
+      return <Navigate to="/"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'shopper') {
+      return <Navigate to="/shopper/accept-order"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'admin') {
+      return (
+        <div className={styles.Home}>
+          {/* <Header navigation={navigation} /> */}
+          <div className={styles.content}>
+            <div className={styles.tab1}>
+              <AdminSidebar select="statistic-order" />
+            </div>
 
-        <div className={styles.tab2}>
-          <h3 className={clsx(styles.rowTitle)}> Thống kê số lượt truy cập</h3>
-          <div className={clsx(styles.pageRow)}>
-            <div>
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate1.getMonth() +
-                      1 +
-                      '/' +
-                      selectedDate1.getFullYear()}{' '}
-                  </strong>
-                </span>
-
+            <div className={styles.tab2}>
+              <h3 className={clsx(styles.rowTitle)}>
+                {' '}
+                Thống kê số lượt truy cập
+              </h3>
+              <div className={clsx(styles.pageRow)}>
                 <div>
-                  <span>{thisMonthVisits}</span>
-                </div>
-              </div>
+                  <div>
+                    <span>
+                      <strong>
+                        {selectedDate1.getMonth() +
+                          1 +
+                          '/' +
+                          selectedDate1.getFullYear()}{' '}
+                      </strong>
+                    </span>
 
-              <div>
-                <span>
-                  <strong>
-                    {selectedDate1.getDate() +
-                      '/' +
-                      (selectedDate1.getMonth() + 1) +
-                      '/' +
-                      selectedDate1.getFullYear()}{' '}
-                  </strong>
-                </span>
-                <div>
-                  <span>{selectedDateVisits}</span>
+                    <div>
+                      <span>{thisMonthVisits}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span>
+                      <strong>
+                        {selectedDate1.getDate() +
+                          '/' +
+                          (selectedDate1.getMonth() + 1) +
+                          '/' +
+                          selectedDate1.getFullYear()}{' '}
+                      </strong>
+                    </span>
+                    <div>
+                      <span>{selectedDateVisits}</span>
+                    </div>
+                  </div>
                 </div>
+                <MultiLineGraph
+                  className={clsx(styles.lineGraph)}
+                  id="Số lượt truy cập trong tuần"
+                  day={selectedDate1}
+                  data={visitsLastWeek}
+                  xAxis={['Chấp nhận', 'Từ chối']}
+                  width="450"
+                />
+
+                <LocalizationProvider
+                  className={clsx(styles.calendar)}
+                  dateAdapter={AdapterDateFns}
+                >
+                  <CalendarPicker
+                    className={clsx(styles.calendar)}
+                    openTo="day"
+                    date={selectedDate1}
+                    shouldDisableDate={isFuture}
+                    onChange={(newDate) => {
+                      console.log(newDate);
+                      setSelectedDate1(newDate);
+                    }}
+                  />
+                </LocalizationProvider>
               </div>
             </div>
-            <MultiLineGraph
-              className={clsx(styles.lineGraph)}
-              id="Số lượt truy cập trong tuần"
-              day={selectedDate1}
-              data={visitsLastWeek}
-              xAxis={['Chấp nhận','Từ chối']}
-              width="450"
-            />
-
-            <LocalizationProvider
-              className={clsx(styles.calendar)}
-              dateAdapter={AdapterDateFns}
-            >
-              <CalendarPicker
-                className={clsx(styles.calendar)}
-                openTo="day"
-                date={selectedDate1}
-                shouldDisableDate={isFuture}
-                onChange={(newDate) => {
-                  console.log(newDate);
-                  setSelectedDate1(newDate);
-                }}
-              />
-            </LocalizationProvider>
           </div>
+          {/* <Footer navigation={navigation} /> */}
         </div>
-      </div>
-      {/* <Footer navigation={navigation} /> */}
-    </div>
-  );
+      );
+    }
+  }
 }
 export default StatisticOrder;

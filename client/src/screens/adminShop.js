@@ -8,6 +8,9 @@ import AdminSidebar from '../components/adminSidebar';
 import Grid from '@mui/material/Grid';
 import { Tooltip, IconButton } from '@mui/material';
 import BlockIcon from '@mui/icons-material/Block';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
+import { Navigate } from 'react-router-dom';
 
 export default function AdminShop() {
   const [rows, setRows] = useState([]);
@@ -90,21 +93,37 @@ export default function AdminShop() {
       })
       .catch((err) => console.log(err));
   }, []);
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <AdminSidebar select={2} />
-        </Grid>
-        <Grid item xs={9}>
-          <MUIDataTable
-            title={'Danh sách cửa hàng'}
-            data={rows}
-            columns={columns}
-            options={options}
-          />
-        </Grid>
-      </Grid>
-    </Box>
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
   );
+  if (!accessToken) {
+    return <Navigate to="/admin/login"></Navigate>;
+  }
+  if (accessToken) {
+    if (RoleService.getLocalRole() === 'customer') {
+      return <Navigate to="/"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'shopper') {
+      return <Navigate to="/shopper/accept-order"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'admin') {
+      return (
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <AdminSidebar select={2} />
+            </Grid>
+            <Grid item xs={9}>
+              <MUIDataTable
+                title={'Danh sách cửa hàng'}
+                data={rows}
+                columns={columns}
+                options={options}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      );
+    }
+  }
 }
