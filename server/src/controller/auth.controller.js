@@ -127,6 +127,12 @@ export const loginCustomer = async (req, res) => {
 
         //get customer by email
         let customer = await CustomerService.findCustomerByEmail(req.body.email);
+        if(customer.isBlock === 1){
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'Your Account is Block!',
+            });
+        }
         const passwordIsValid = compareSync(req.body.password, customer.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -270,6 +276,12 @@ export const loginShopper = async (req, res) => {
 
         //get shopper by email
         let shopper = await ShopperService.findShopperByEmail(req.body.email);
+        if(shopper.isBlock === 1){
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'Your Account is Block!',
+            });
+        }
         const passwordIsValid = compareSync(req.body.password, shopper.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({

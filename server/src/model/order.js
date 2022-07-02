@@ -15,6 +15,10 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    reasonReject: {
+        type: String,
+        required: false
+    },
     phone: {
         type: String,
         required: true,

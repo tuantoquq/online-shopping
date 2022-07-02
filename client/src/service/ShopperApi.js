@@ -39,10 +39,10 @@ instance.interceptors.response.use(
           const rs = await axios.post(
             BASE_API_URL + '/shopper/refresh-token',
             {
-              refreshToken: TokenService.getLocalRefreshToken(ROLE.shopper),
-            },
-            {
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${TokenService.getLocalRefreshToken(ROLE.shopper)}`  
+              },
             }
           );
           if (rs.data.status === 0) {
