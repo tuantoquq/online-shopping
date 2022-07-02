@@ -112,6 +112,12 @@ function Header() {
       }
     }
   }, []);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (query !== '') {
+      navigate('/search/' + query);
+    }
+  };
 
   return (
     <div className={styles.Header}>
@@ -123,7 +129,7 @@ function Header() {
           className={`${styles.textColor} ${styles.textDate}`}
         >{`${dayCurr}, ${dateCurr}`}</label>
 
-        <div className={styles.divSearch}>
+        <form className={styles.divSearch} onSubmit={handleSubmit}>
           <input
             type="text"
             value={query}
@@ -131,19 +137,15 @@ function Header() {
             placeholder="Nhập nội dung..."
             className={styles.search}
           />
-          <img
-            src={searchImage}
-            className={styles.image}
-            alt="search"
-            onClick={() => {
-              if (query !== '') {
-                navigate('/search', {
-                  state: { search: query },
-                });
-              }
-            }}
-          />
-        </div>
+          <button className={styles.searchBtn}>
+            <img
+              src={searchImage}
+              className={styles.image}
+              alt="search"
+              type="submit"
+            />
+          </button>
+        </form>
         {!accessToken && (
           <div className={styles.divUser}>
             <img
@@ -186,8 +188,11 @@ function Header() {
               }}
             >
               <MenuItem onClick={handleClickInfo}>Thông tin cá nhân</MenuItem>
-              {(role === 'customer') && (
-                  <MenuItem onClick={handleClickOrderHistory}> Lịch sử mua hàng </MenuItem>
+              {role === 'customer' && (
+                <MenuItem onClick={handleClickOrderHistory}>
+                  {' '}
+                  Lịch sử mua hàng{' '}
+                </MenuItem>
               )}
               {(role === 'customer') && (
                   <MenuItem onClick={handleClickAddress}>Địa chỉ</MenuItem>
@@ -203,13 +208,7 @@ function Header() {
           <ul className={`${styles.textColor} ${styles.narMenu}`}>
             {listTopic.map((topic) => (
               <li>
-                <p
-                  onClick={() =>
-                    navigate('/search', {
-                      state: { search: topic[0] },
-                    })
-                  }
-                >
+                <p onClick={() => navigate('/search/' + topic[0])}>
                   {topic[0]}
                 </p>
               </li>
