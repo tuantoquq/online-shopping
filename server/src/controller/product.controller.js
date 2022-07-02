@@ -90,6 +90,7 @@ export const getProductById = async (req, res) => {
 // };
 
 export const filterProduct = async (req, res) => {
+    console.log(req.params);
     try {
         let currentPage = req.body.currentPage ? req.body.currentPage : 1;
         let maxItem = req.body.maxItem ? req.body.maxItem : 20;

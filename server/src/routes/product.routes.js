@@ -29,7 +29,7 @@ productRoutes.put(
 );
 
 // productRoutes.get('/api/v1/product/search', productController.search);
-productRoutes.get('/api/v1/product/filter', filterProduct);
+productRoutes.post('/api/v1/product/filter', filterProduct);
 productRoutes.get('/api/v1/product/top-6-selling', getTop6SellingProduct);
 productRoutes.get('/api/v1/product/top-30-recommend', getTop30RecommendProducts);
 productRoutes.post(
