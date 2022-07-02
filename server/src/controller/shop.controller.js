@@ -1,5 +1,6 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
+import Shop from '../model/shop.js';
 import ProductService from '../service/product.service.js';
 import ShopService from '../service/shop.service.js';
 
@@ -76,3 +77,43 @@ export const getListProductOfShop = async (req, res) => {
         });
     }
 };
+
+export const addNewShop = async (req, res) => {
+    let shopperId;
+    try{
+        shopperId = req.userId;
+        
+        //check exist shop
+        try{
+            await ShopService.findShopByShopperId(shopperId);
+        }catch(err){
+            if(err instanceof CustomError){
+                let shopRequest = new Shop({
+                    shopName: req.body.shopName,
+                    shopperId: shopperId,
+                    address: req.body.address,
+                    status: 0,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now()
+                });
+                let newShop = await ShopService.addNewShop(shopRequest);
+                return res.status(httpStatus.OK).send({
+                    status: apiStatus.SUCCESS,
+                    message: "Add new shop successfully! Please waiting admin accept this request",
+                    data: newShop
+                });
+            }
+        }
+
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: "Each shopper can open only 1 shop!"
+        });
+
+    }catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
