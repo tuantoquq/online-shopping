@@ -3,20 +3,19 @@ import AdminHeader from '../components/adminHeader';
 import Footer from '../components/footer';
 import styles from '../components/CSS/UserInformation.module.css';
 import UserDisplay from '../components/userDisplay.js';
-import Address from '../components/Address';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCustomerProfile } from '../service/CustomerService.js';
 import avtImage from '../assets/avt_default.png';
-
-function UserInformation(navigation, role) {
+import Address from '../components/Address';
+function AddressInformation(navigation, role) {
   const [user, setUser] = useState();
   const navigator = useNavigate();
 
   useEffect(() => {
     getCustomerProfile()
       .then((res) => {
-        console.log(res?.data?.data);
+        // console.log(res?.data?.data);
         setUser(res?.data?.data);
       })
       .catch((err) => {
@@ -34,7 +33,7 @@ function UserInformation(navigation, role) {
       {navigation.role === 'admin' && <AdminHeader />}
 
       <div className={styles.content}>
-        <UserDisplay
+        {/* <UserDisplay
           user_url={
             user?.avatarUrl == 'avt_default.png' ? avtImage : user?.avatarUrl
           }
@@ -43,17 +42,14 @@ function UserInformation(navigation, role) {
             user?.dateOfBirth === undefined ? 'Chưa cập nhật' : user?.dateOfBirth
           }
           user_phone={user?.phoneNumber}
-        />
+        /> */}
         {/* <AccountInformation user={user}/> */}
         <Address role={navigation.role} />
         <div className={styles.wrapLogout}>
-          {/* <button className={styles.logout} onClick={handleLogout}>
-            Đăng xuất
-          </button> */}
         </div>
       </div>
       <Footer navigation={navigation} />
     </div>
   );
 }
-export default UserInformation;
+export default AddressInformation;

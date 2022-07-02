@@ -58,7 +58,12 @@ function Header() {
     setAnchorEl(null);
     navigate('/');
   };
-
+  const handleClickAddress = () => {
+    setAnchorEl(null);
+    if (role === 'customer') {
+      navigate(`/user/address`);
+    }
+  };
   const handleClickInfo = () => {
     setAnchorEl(null);
     if (role === 'customer') {
@@ -183,6 +188,9 @@ function Header() {
               <MenuItem onClick={handleClickInfo}>Thông tin cá nhân</MenuItem>
               {(role === 'customer') && (
                   <MenuItem onClick={handleClickOrderHistory}> Lịch sử mua hàng </MenuItem>
+              )}
+              {(role === 'customer') && (
+                  <MenuItem onClick={handleClickAddress}>Địa chỉ</MenuItem>
               )}
               <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
             </Menu>

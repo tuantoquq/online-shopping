@@ -106,3 +106,23 @@
 .locked {
   color: red;
 }
+.modalTitle {
+  width: 100%;
+  padding: 0px 0px 40px 0px;
+  color: #1565c0;
+  font-weight: 600;
+}
+.modalTextField {
+  width: 100%;
+  padding: 0px 0px 40px 0px;
+}
+.modalButton {
+  width: 100%;
+  padding: 32px 0px 0px 0px;
+  display: flex;
+  justify-content: right;
+  .modalBtn {
+    margin-left: 12px;
+    padding: 8px;
+  }
+}
