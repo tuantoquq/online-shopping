@@ -2,6 +2,7 @@ import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
 import CustomerService from '../service/customer.service.js';
 import OrderService from '../service/order.service.js';
+import Customer from '../model/customer.js';
 
 export const getCustomerProfile = async (req, res) => {
     try {
@@ -80,3 +81,28 @@ export const updateAvatar = async (req, res, next) => {
         });
     }
 };
+
+
+export const getAllCustomer = async (req, res,next) => {
+    try{
+        let customer = await Customer.find()
+        let message
+        if(!customer){
+            message = "Empty message"
+        }
+        else{
+            message = "Success"
+        }
+        return res.status(httpStatus.OK).json({
+            message: message,
+            data: customer
+        })
+    }
+    catch(e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+
+}

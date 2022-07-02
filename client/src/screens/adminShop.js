@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import MUIDataTable from 'mui-datatables';
 import AdminSidebar from '../components/adminSidebar';
 import Grid from '@mui/material/Grid';
+import { Tooltip, IconButton } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
 
 export default function AdminShop() {
   const [rows, setRows] = useState([]);
@@ -35,17 +37,35 @@ export default function AdminShop() {
       label: 'Trạng thái',
     },
   ];
+
+  const block = (shop_id) => {
+    console.log(shop_id);
+  };
   const options = {
     filter: false,
     print: false,
     selectableRows: 'single',
     responsive: 'standard',
-    selectableRows: false,
+    selectableRows: true,
+    textLabels: {},
+    customToolbarSelect: (selectedRows) => (
+      <>
+        <Tooltip title="Kích hoạt tiến trình">
+          <IconButton
+            onClick={() => {
+              block(rows[selectedRows.data[0].dataIndex]['shopName']);
+            }}
+          >
+            <BlockIcon />
+          </IconButton>
+        </Tooltip>
+      </>
+    ),
   };
   useEffect(() => {
     axiosConfig({
       method: 'get',
-      url: '/shops',
+      url: `/shops?limit=${total}`,
     })
       .then((res) => {
         let total = res.data.data.totalShops;
@@ -74,11 +94,11 @@ export default function AdminShop() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <AdminSidebar />
+          <AdminSidebar select={2} />
         </Grid>
         <Grid item xs={9}>
           <MUIDataTable
-            title={'Lịch sử tiến trình'}
+            title={'Danh sách cửa hàng'}
             data={rows}
             columns={columns}
             options={options}
