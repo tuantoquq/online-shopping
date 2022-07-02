@@ -19,7 +19,7 @@ customerRoutes.post('/api/v1/customer/auth/update', verifyToken, updateInforCust
 customerRoutes.get('/api/v1/customer/shop-info', getShopInfo);
 customerRoutes.put(
     '/api/v1/customer/auth/update-avatar',
-    [upload.array('files'), verifyToken],
+    [upload.single('file'), verifyToken],
     updateAvatar,
 );
 export default customerRoutes;
