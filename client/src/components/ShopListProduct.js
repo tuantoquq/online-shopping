@@ -23,7 +23,7 @@ function ShopListProduct({ listProduct }) {
 
   const handleChange = (e, p) => {
     setPage(p);
-    _DATA.jump(p);
+    _DATA?.jump(p);
   };
 
   return (
@@ -34,7 +34,7 @@ function ShopListProduct({ listProduct }) {
           columns={{ xs: 4, sm: 8, md: 12 }}
           style={{ padding: "10px" }}
         >
-          {_DATA.currentData()?.map((product, index) => {
+          {_DATA?.currentData()?.map((product, index) => {
             let product_name = product?.productName
               .split(" ")
               .slice(0, 5)

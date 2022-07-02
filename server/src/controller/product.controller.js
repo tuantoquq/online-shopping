@@ -211,48 +211,6 @@ export const filterProduct = async (req, res) => {
             data: productIds,
             maxPage: countPage,
         });
-
-        // let categoryName = req.body.categoryName;
-        // let category = await Category.findOne({ categoryName: categoryName });
-        // if (!category) {
-        //     return res.status(httpStatus.OK).json({
-        //         status: apiStatus.INVALID_PARAM,
-        //         message: 'Category not found',
-        //     });
-        // } else {
-        //     let sortBy = req.body.sortBy ? req.body.sortBy : null;
-        //     let products = null;
-        //     console.log(sortBy);
-        //     if (sortBy == null) {
-        //         products = await Product.find({ categoryId: category._id })
-        //             .skip(skip)
-        //             .limit(maxItem);
-        //     } else {
-        //         let orderBy = req.body.orderBy == 'desc' ? -1 : 1;
-        //         if (sortBy == 'price') {
-        //             products = await Product.find({})
-        //                 .sort({ price: orderBy })
-        //                 .skip(skip)
-        //                 .limit(maxItem);
-        //         } else if (sortBy == 'pho bien') {
-        //             products = await Product.find({})
-        //                 .sort({ soldHistory: orderBy })
-        //                 .skip(skip)
-        //                 .limit(maxItem);
-        //         } else if (sortBy == 'moi nhat') {
-        //             products = await Product.find({})
-        //                 .sort({ createAt: -1 })
-        //                 .skip(skip)
-        //                 .limit(maxItem);
-        //         }
-        //     }
-        //     if (!products) {
-        //         return res.status(httpStatus.OK).json({
-        //             status: apiStatus.INVALID_PARAM,
-        //             message: "We don't have any product belong to this category",
-        //         });
-        //     }
-        // }
     } catch (e) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
             status: apiStatus.OTHER_ERROR,
@@ -302,7 +260,12 @@ export const addProduct = async (req, res, next) => {
         let shopperId = req.userId;
         //check exist shop with shopper id
         let shop = await ShopService.findShopByShopperId(shopperId);
-
+        if(shop.status !== 1){
+            return res.status(httpStatus.BAD_GATEWAY).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "Your shop is waiting for admin accept register! Try later."
+            });
+        }
         //upload images
         let imageFiles = req.files;
         //check file extensions

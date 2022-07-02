@@ -17,15 +17,21 @@ import clsx from 'clsx';
 import axios from '../config/axios';
 import MuiAlert from '@mui/material/Alert';
 import ImageUploader from '../components/imageUploader';
-import imageTest from '../assets/testproduct.jpg'
 import TablePagination from '@mui/material/TablePagination';
-import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 import InformationTab from '../components/informationTab';
 import stylesTab from '../screens/CSS/seller_acceptOrder.module.css';
 import axiosConfig from '../config/axios';
+import SearchBar from "material-ui-search-bar";
+import { makeStyles } from "@material-ui/core/styles";
+
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650
+  }
+});
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -54,12 +60,12 @@ function getComparator(order, orderBy){
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Tên sản phẩm'},
-  { id: 'cost', numeric: true, disablePadding: false, label: 'Giá tiền'},
-  { id: 'solded', numeric: true, disablePadding: false, label: 'Đã bán'},
+  { id: 'productName', numeric: false, disablePadding: false, label: 'Tên sản phẩm'},
+  { id: 'price', numeric: true, disablePadding: false, label: 'Giá tiền'},
+  { id: 'soldHistory', numeric: true, disablePadding: false, label: 'Đã bán'},
   { id: 'count', numeric: true, disablePadding: false, label: 'Kho'},
-  { id: 'rating', numeric: true, disablePadding: false, label: 'Đánh giá'},
-  { id: 'lastUpdate', numeric: false, disablePadding: false, label: 'Cập nhật lần cuối'},
+  { id: 'ratingStar', numeric: true, disablePadding: false, label: 'Đánh giá'},
+  { id: 'updateAt', numeric: false, disablePadding: false, label: 'Cập nhật lần cuối'},
 ]
 
 function stableSort(array, compare) {
@@ -88,7 +94,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align='right'
+            align='left'
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -114,13 +120,13 @@ function EnhancedTableHead(props) {
 
 function ProductManager() {
     // const posts = [
-    //   {id: "1", name: "Mo hinh 1", cost: 30000, solded: 3, count: 100, rating: 4.3, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-    //   {id: "2", name: "Mo hinh 2", cost: 40000, solded: 1, count: 130, rating: 4.7, detail: "Mo hinh best", type: "Do choi", lastUpdate: "12:20:20 21/06/2022"},
-    //   {id: "3", name: "Mo hinh 3", cost: 50000, solded: 2, count: 160, rating: 4.5, detail: "Mo hinh nho nhan", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-    //   {id: "4", name: "Mo hinh 4", cost: 60000, solded: 3, count: 120, rating: 4.4, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-    //   {id: "5", name: "Mo hinh x", cost: 10000, solded: 3, count: 190, rating: 4.6, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 21/06/2022"},
-    //   {id: "6", name: "Mo hinh 6", cost: 40000, solded: 9, count: 130, rating: 4.8, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 22/06/2022"},
-    //   {id: "7", name: "Mo hinh 7", cost: 40000, solded: 7, count: 110, rating: 4.1, detail: "Mo hinh de thuong", type: "Do choi", lastUpdate: "12:20:21 19/06/2022"}
+    //   {id: "1", productName: "Mo hinh 1", price: 30000, soldHistory: 3, count: 100, ratingStar: 4.3, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
+    //   {id: "2", productName: "Mo hinh 2", price: 40000, soldHistory: 1, count: 130, ratingStar: 4.7, detail: "Mo hinh best", type: "Do choi", updateAt: "12:20:20 21/06/2022"},
+    //   {id: "3", productName: "Mo hinh 3", price: 50000, soldHistory: 2, count: 160, ratingStar: 4.5, detail: "Mo hinh nho nhan", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
+    //   {id: "4", productName: "Mo hinh 4", price: 60000, soldHistory: 3, count: 120, ratingStar: 4.4, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
+    //   {id: "5", productName: "Mo hinh x", price: 10000, soldHistory: 3, count: 190, ratingStar: 4.6, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
+    //   {id: "6", productName: "Mo hinh 6", price: 40000, soldHistory: 9, count: 130, ratingStar: 4.8, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 22/06/2022"},
+    //   {id: "7", productName: "Mo hinh 7", price: 40000, soldHistory: 7, count: 110, ratingStar: 4.1, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 19/06/2022"}
     // ];
 
     const [open, setOpen] = useState(false);
@@ -183,6 +189,21 @@ function ProductManager() {
     const [textTitle, setTextTitle] = useState('');
     const [textButtonRight, setTextButtonRight] = useState('');
 
+    const [data, setData] = useState();
+    const [searched, setSearched] = useState("");
+    const classes = useStyles();
+
+    const requestSearch = (searchedVal) => {
+        const filteredRows = productData?.filter((row) => {
+        return row.productName.toLowerCase().includes(searchedVal.toLowerCase());
+        });
+        setData(filteredRows);
+    };
+
+    const cancelSearch = () => {
+        setSearched("");
+        requestSearch(searched);
+    };
     // info
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
@@ -245,14 +266,15 @@ function ProductManager() {
   const [productData, setProductData] = useState();
 
   let s = window.location.href.split('/')
-  let tmp = '629ddb1583ec9b8c8547522d'
+  let tmp = '629ddb1583ec9b8c8547522c'
   let pathShop = `/shops/profile?shopId=${tmp}`
   let pathProduct = `/shops/list-products?shopId=${tmp}`
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
       await axiosConfig.get(pathProduct).then(res=>{
-        setProductData(res.data.data)
+        setProductData(res?.data?.data?.products)
+        setData(res?.data?.data?.products)
       })
       .catch(err=>{
         console.log(err)
@@ -530,32 +552,15 @@ function ProductManager() {
               <div className={styles.wraper}>
                 <div className={stylesProductManger.tdisplay}>  
                     <p>Quản lý sản phẩm</p>
-                    {/* search */}
-                    <div className={clsx(stylesProductManger.searchBar)}>
-                      <SearchIcon className={clsx(stylesProductManger.searchIcon)} />
-                      <input
-                        className={clsx(stylesProductManger.searchInput)}
-                        type="text"
-                        placeholder="Tìm sản phẩm . . ."
-                        spellCheck={false}
-                        value={searchTerm}
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                          return setSearchTerm(e.target.value);
-                        }}
-                      />
-                      {searchTerm && (
-                        <button
-                          className={clsx(stylesProductManger.clearButton)}
-                          onClick={() => setSearchTerm('')}
-                        >
-                          <CloseIcon className={clsx(stylesProductManger.clearIcon)} />
-                        </button>
-                      )}
-                    </div>
-
                     <Button href="#text-buttons" onClick={handleOpen}>Thêm sản phẩm</Button>
                 </div>
+
+                <SearchBar
+                    value={searched}
+                    onChange={(searchVal) => requestSearch(searchVal)}
+                    onCancelSearch={() => cancelSearch()}
+                    placeholder="Tìm sản phẩm . . ."
+                />
                 
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -563,10 +568,10 @@ function ProductManager() {
                       order={order}
                       orderBy={orderBy}
                       onRequestSort={handleRequestSort}
-                      rowCount={productData?.length}
+                      rowCount={data?.length}
                     />
                     <TableBody>
-                      {productData?.slice().sort(getComparator(order, orderBy))
+                      {data?.slice().sort(getComparator(order, orderBy))
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((product, index) => {
                           const isItemSelected = isSelected(product.id);
@@ -585,11 +590,11 @@ function ProductManager() {
                               <TableCell component="th" scope="row">
                                 <Button onClick={() => handleOpenInforProduct(product)}>{product?.productName}</Button>
                               </TableCell>
-                              <TableCell align="right">{product?.price}</TableCell>
-                              <TableCell align="right">{product?.soldHistory}</TableCell>
-                              <TableCell align="right">{product?.count}</TableCell>
-                              <TableCell align="right">{product?.ratingStar}</TableCell>
-                              <TableCell align="right">{product?.updateAt}</TableCell>
+                              <TableCell align="left">{product?.price}</TableCell>
+                              <TableCell align="left">{product?.soldHistory}</TableCell>
+                              <TableCell align="left">{product?.count}</TableCell>
+                              <TableCell align="left">{product?.ratingStar}</TableCell>
+                              <TableCell align="left">{product?.updateAt}</TableCell>
                             </TableRow>
                           );
                         })}
@@ -601,40 +606,11 @@ function ProductManager() {
                         )}
                     </TableBody>
                     </Table>
-                  {/* <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell> ID </TableCell>
-                        <TableCell align="right"> Sản phẩm </TableCell>
-                        <TableCell align="right"> Giá tiền </TableCell>
-                        <TableCell align="right"> Đã bán </TableCell>
-                        <TableCell align="right"> Kho </TableCell>
-                        <TableCell align="right"> Đánh giá </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {posts.map((product) => (
-                        <TableRow
-                          key={product.id}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {product.id}
-                          </TableCell>
-                          <TableCell align="right"><Button onClick={() => handleOpenInforProduct(product)}>{product.name}</Button></TableCell>
-                          <TableCell align="right">{product.cost}</TableCell>
-                          <TableCell align="right">{product.solded}</TableCell>
-                          <TableCell align="right">{product.count}</TableCell>
-                          <TableCell align="right">{product.rating}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table> */}
                 </TableContainer>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 15]}
                   component="div"
-                  count={productData?.length}
+                  count={data?.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

@@ -60,6 +60,8 @@ function RootRoutes() {
       <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/information" element={<AccountShopper />} />
 
+      
+
       <Route path="/admin" element={<AdminDashboard />} />
 
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />
