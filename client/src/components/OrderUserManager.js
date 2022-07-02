@@ -28,26 +28,28 @@ function TabPanel(props) {
     const { children, value, index, productOrders, ...other } = props;
 
     const orderId = [
-      {id: 1, status:"Cho xac nhan"},
-      {id: 2, status:"Cho lay hang"},
-      {id: 3, status:"Dang giao"},
-      {id: 4, status:"Da giao"},
-      {id: 5, status:"Da huy"}
+      {id: 0, status:"Chờ xác nhận"},
+      {id: 1, status:"Chờ lấy hàng"},
+      {id: 2, status:"Đã giao"},
+      {id: -1, status:"Đã huỷ"}
     ]
-    var listOrder = productOrders.filter((productOrder) => (value === productOrder.id || value === 0))
+
+
+    var listOrder = productOrders?.filter((productOrder) => (value === productOrder?.orderStatus || value === -2))
     return (
       <div>
         {value === index && (
-            listOrder.length > 0 ? listOrder.map((productOrder) => {
+            listOrder?.length > 0 ? listOrder.map((productOrder) => {
               return(
                 <div>
                     <OrderUserItem 
-                      productOrder={productOrder}
+                      productOrder={productOrder?.orderProduct}
+                      status = {orderId.find(st => st.id === productOrder?.orderStatus)}
                     />
                 </div>
               )
             }) : <div className={styleOrderUser.noProduct}>
-                  <Card sx={{ maxWidth: 200 }}>
+                  <Card sx={{ maxWidth: 300 }}>
                     <CardActionArea>
                       <CardMedia
                         component="img"
@@ -88,7 +90,6 @@ function OrderUserManager({navigation}){
   useEffect(() => {
     getOrderHistory().then(
         res => {
-            console.log(res?.data?.data);
             setOrderData(res?.data?.data);
         }
     ).catch(err => {
@@ -114,24 +115,21 @@ function OrderUserManager({navigation}){
                         aria-label="secondary tabs example"
                         orientation="vertical"
                         >
-                            <Tab value={0} label="Tất cả"/>
-                            <Tab value={1} label="Chờ xác nhận" />
-                            <Tab value={2} label="Chờ lấy hàng"/>
-                            <Tab value={3} label="Đang giao"/>
-                            <Tab value={4} label="Đã giao"/>
-                            <Tab value={5} label="Đã hủy"/>
+                            <Tab value={-2} label="Tất cả"/>
+                            <Tab value={0} label="Chờ xác nhận" />
+                            <Tab value={1} label="Chờ lấy hàng"/>
+                            <Tab value={2} label="Đã giao"/>
+                            <Tab value={-1} label="Đã hủy"/>
                         </Tabs>
-                        <TabPanel value={value} index={0} productOrders={orders}>        
+                        <TabPanel value={value} index={-2} productOrders={orderData}>        
                         </TabPanel>
-                        <TabPanel value={value} index={1} productOrders={orders}>
+                        <TabPanel value={value} index={0} productOrders={orderData}>
                         </TabPanel>
-                        <TabPanel value={value} index={2} productOrders={orders}>
+                        <TabPanel value={value} index={1} productOrders={orderData}>
                         </TabPanel>
-                        <TabPanel value={value} index={3} productOrders={orders}>
+                        <TabPanel value={value} index={2} productOrders={orderData}>
                         </TabPanel>
-                        <TabPanel value={value} index={4} productOrders={orders}>
-                        </TabPanel>
-                        <TabPanel value={value} index={5} productOrders={orders}>
+                        <TabPanel value={value} index={-1} productOrders={orderData}>
                         </TabPanel>
                 </Box> 
                 </div>

@@ -28,6 +28,8 @@ function ShopHome({navigation}) {
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
+      let date = new Date(shopData?.createAt);
+      console.log(date.toLocaleTimeString())
       await axiosConfig.get(pathProduct).then(res=>{
         setProductData(res?.data?.data?.products)
         console.log(productData)
