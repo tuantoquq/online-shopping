@@ -8,9 +8,9 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/material';
 import LinkToProduct from '../components/inforProduct';
-import { useEffect, useState } from "react";
-import axiosConfig from "../config/axios";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axiosConfig from '../config/axios';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCategory({ category }) {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function ProductCategory({ category }) {
       container
       spacing={{ xs: 2, md: 3 }}
       columns={{ xs: 4, sm: 8, md: 12 }}
-      style={{ padding: "5px" }}
+      style={{ padding: '5px' }}
     >
       {category?.map((item, index) => (
         <Grid
@@ -28,11 +28,7 @@ function ProductCategory({ category }) {
           sm={1}
           md={2}
           key={index}
-          onClick={() =>
-            navigate("/search", {
-              state: { search: item.categoryName },
-            })
-          }
+          onClick={() => navigate('/search/' + item.categoryName)}
         >
           <Card sx={{ maxWidth: 345, height: 200 }}>
             <CardActionArea>
