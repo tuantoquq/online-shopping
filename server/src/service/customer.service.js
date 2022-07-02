@@ -56,4 +56,15 @@ CustomerService.updateAvatar = async (avtUrl, customerId) => {
     return response;
 };
 
+CustomerService.blockCustomer = async (email) => {
+    let customer = await Customer.findOneAndUpdate({email: email}, {isBlock: 1}, {new: true});
+    if(!customer){
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Customer not found with email: ${email}!`,
+        );
+    }
+    return customer;
+}
 export default CustomerService;

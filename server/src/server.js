@@ -17,6 +17,7 @@ import orderRoutes from './routes/order.routes.js';
 import morgan from 'morgan';
 import shopRoutes from './routes/shop.routes.js';
 import shopperRoutes from './routes/shopper.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
 app.use(cors());
@@ -37,6 +38,7 @@ app.use(orderRoutes);
 app.use(shopRoutes);
 app.use(shopperRoutes);
 app.use(statisticRoutes);
+app.use(adminRoutes);
 
 const PORT = process.env.SERVER_PORT || 8081;
 
