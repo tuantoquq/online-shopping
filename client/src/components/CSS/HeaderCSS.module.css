@@ -208,3 +208,8 @@
       display:flex;
     }
   } */
+
+.searchBtn{
+    background-color: transparent;
+    border: none;
+}

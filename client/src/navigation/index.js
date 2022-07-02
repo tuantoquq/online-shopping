@@ -22,6 +22,7 @@ import ShopHome from '../components/shopHome';
 import ProductManager from '../components/productManager';
 import AccountShopper from '../components/accountShopper';
 import AddressInfomation from '../screens/addressInfomation';
+import AdminShopRequest from '../screens/adminShopRequest';
 import AdminShop from '../screens/adminShop';
 // import BasicTable from '../components/Test';
 
@@ -40,11 +41,11 @@ function RootRoutes() {
       <Route path="/shopper/login" element={<Login role="shopper" />} />
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin/shop" element={<AdminShop />} />
-
+      <Route path="/admin/shop-request" element={<AdminShopRequest />} />
 
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
-      <Route path="/search" element={<Search searchTerm="" />} />
+      <Route path="/search/:search" element={<Search />} />
 
       <Route
         path="/user/infomation"
@@ -54,11 +55,10 @@ function RootRoutes() {
         path="/admin/infomation"
         element={<UserInformation role="admin" />}
       />
+      <Route path="/search/:search" element={<Search />} />
 
       <Route path="/user/address" element={<AddressInfomation role="user" />} />
 
-
-      <Route path="/search" element={<Search />} />
       <Route path="/user/orderhistory" element={<OrderHistory />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/user/checkout" element={<Checkout />} />
@@ -69,7 +69,6 @@ function RootRoutes() {
       <Route path="/shopper/ProductManager" element={<ProductManager />} />
       <Route path="/shopper/infomation" element={<AccountShopper />} />
       {/* <Route path="/test" element={<BasicTable />} /> */}
-      
 
       <Route path="/admin" element={<AdminDashboard />} />
 

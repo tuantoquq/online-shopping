@@ -9,6 +9,9 @@ import AdminHeader from '../components/adminHeader';
 import LineGraph from '../components/lineGraph';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import TokenService from '../service/TokenService';
+import RoleService from '../service/RoleService';
+import { Navigate } from 'react-router-dom';
 
 function AdminDashboard(props) {
   const width = window.screen.width - 370;
@@ -57,41 +60,55 @@ function AdminDashboard(props) {
   //   setNewAccountsLastWeek(newAccountsLastWeek);
   //   setSelecteDateNewAccounts(newAccountsLastWeek[6]);
   // }, [selectedDate2]);
-
-  return (
-    <div>
-      <AdminHeader />
-      <div className={clsx(styles.pageContainer)}>
-        <AdminSidebar select="statstic_visits" />
-        <div className={clsx(styles.pageBody)}>
-          <div className={clsx(styles.pageRow)}>
-            <DateRangePicker
-              initialSettings={{
-                startDate: format(startDate, 'MM/dd/yyyy'),
-                endDate: format(endDate, 'MM/dd/yyyy'),
-              }}
-              onApply={(e, p) => {
-                setEndDate(p.endDate._d);
-                setStartDate(p.startDate._d);
-              }}
-            >
-              <input className={clsx(styles.dateRangeInput)} />
-            </DateRangePicker>
-            <LineGraph
-              className={clsx(styles.lineGraph)}
-              id="visits"
-              startDate={startDate}
-              endDate={endDate}
-              lines={[visted, newAccount]}
-              xAxis={['Số lượt truy cập', 'Số lượt đăng kí mới']}
-              width={width}
-              height={height}
-            />
+  const accessToken = TokenService.getLocalAccessToken(
+    RoleService.getLocalRole()
+  );
+  if (!accessToken) {
+    return <Navigate to="/admin/login"></Navigate>;
+  }
+  if (accessToken) {
+    if (RoleService.getLocalRole() === 'customer') {
+      return <Navigate to="/"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'shopper') {
+      return <Navigate to="/shopper/accept-order"></Navigate>;
+    }
+    if (RoleService.getLocalRole() === 'admin') {
+      return (
+        <div>
+          <AdminHeader />
+          <div className={clsx(styles.pageContainer)}>
+            <AdminSidebar select="statstic_visits" />
+            <div className={clsx(styles.pageBody)}>
+              <div className={clsx(styles.pageRow)}>
+                <DateRangePicker
+                  initialSettings={{
+                    startDate: format(startDate, 'MM/dd/yyyy'),
+                    endDate: format(endDate, 'MM/dd/yyyy'),
+                  }}
+                  onApply={(e, p) => {
+                    setEndDate(p.endDate._d);
+                    setStartDate(p.startDate._d);
+                  }}
+                >
+                  <input className={clsx(styles.dateRangeInput)} />
+                </DateRangePicker>
+                <LineGraph
+                  className={clsx(styles.lineGraph)}
+                  id="visits"
+                  startDate={startDate}
+                  endDate={endDate}
+                  lines={[visted, newAccount]}
+                  xAxis={['Số lượt truy cập', 'Số lượt đăng kí mới']}
+                  width={width}
+                  height={height}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      );
+    }
+  }
 }
-
 export default AdminDashboard;

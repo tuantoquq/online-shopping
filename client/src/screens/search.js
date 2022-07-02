@@ -19,16 +19,13 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import ManageSearchOutlinedIcon from '@mui/icons-material/ManageSearchOutlined';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { useLocation } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function Search() {
-  const location = useLocation();
-  const search = location.state.search;
-  console.log(search);
+  let { search } = useParams();
   //request data with search term;
   const PRODUCT_SEARCH_URL = `/product/filter`;
 
@@ -45,6 +42,10 @@ function Search() {
   const allRating = useRef([5, 4, 3, 2, 1]);
   const allSort = useRef([
     {
+      value: 'pho bien',
+      showed: 'Bán chạy',
+    },
+    {
       value: 'rating',
       showed: 'Đánh giá',
     },
@@ -52,10 +53,7 @@ function Search() {
       value: 'moi nhat',
       showed: 'Mới nhất',
     },
-    {
-      value: 'pho bien',
-      showed: 'Bán chạy',
-    },
+
     {
       value: 'lowerPrice',
       showed: 'Giá từ thấp đến cao',
@@ -105,6 +103,7 @@ function Search() {
   const [rating, setRating] = useState(0);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('pho bien');
+  const [loading, setLoading] = useState(true);
 
   //Categories
   const handleCategories = (category) => {
@@ -133,65 +132,9 @@ function Search() {
     }
   }
 
-  // //Locations
-  // const handleLocations = (location) => {
-  //   setLocations((prev) => {
-  //     const isChecked = locations.includes(location);
-  //     if (isChecked) {
-  //       return locations.filter((item) => item !== location);
-  //     } else {
-  //       return [...prev, location];
-  //     }
-  //   });
-  // };
-
-  // function handleSeeLessLocations() {
-  //   const len = allLocations.length;
-  //   setShowedLocations(allLocations.slice(0, 5));
-  //   const checkedUnshowed = allLocations
-  //     .slice(5, len)
-  //     .filter((item) => locations.find((location) => location === item));
-  //   //console.log(checkedUnshowed);
-  //   if (checkedUnshowed.length !== 0) {
-  //     for (const location of checkedUnshowed) {
-  //       //console.log(location);
-  //       setLocations(locations.filter((item) => item !== location));
-  //     }
-  //   }
-  // }
-
-  // // Brands
-  // const handleBrands = (brand) => {
-  //   setBrands((prev) => {
-  //     const isChecked = brands.includes(brand);
-  //     if (isChecked) {
-  //       return brands.filter((item) => item !== brand);
-  //     } else {
-  //       return [...prev, brand];
-  //     }
-  //   });
-  // };
-
-  // function handleSeeLessBrands() {
-  //   const len = allBrands.length;
-  //   setShowedBrands(allBrands.slice(0, 5));
-  //   const checkedUnshowed = allBrands
-  //     .slice(5, len)
-  //     .filter((item) => brands.find((brand) => brand === item));
-  //   //console.log(checkedUnshowed);
-  //   if (checkedUnshowed.length !== 0) {
-  //     for (const brand of checkedUnshowed) {
-  //       //console.log(brand);
-  //       setBrands(brands.filter((item) => item !== brand));
-  //     }
-  //   }
-  // }
-
   function handleApply(apply) {
     //console.log('Set apply to', apply);
     if (apply === true) {
-      //console.log(fromPrice === '');
-      //console.log(toPrice);
       const from = Number(fromPrice);
       const to = Number(toPrice);
 
@@ -208,8 +151,8 @@ function Search() {
       }
     }
     if (apply === false) {
-      setFromPriceApplied(null);
-      setToPriceApplied(null);
+      setFromPriceApplied(undefined);
+      setToPriceApplied(undefined);
       setApply(apply);
     }
   }
@@ -227,54 +170,55 @@ function Search() {
     setFromPrice('');
     setToPrice('');
     setApply(false);
-    setFromPriceApplied(null);
-    setToPriceApplied(null);
+    setFromPriceApplied(undefined);
+    setToPriceApplied(undefined);
     setSort('related');
-  }
-  function getProductIdList(filter, page) {
-    //request
-
-    function randomId() {
-      return Math.floor(Math.random() * 12 + 1);
-    }
-    let productIds = [];
-    for (let i = 0; i < 12; i++) {
-      productIds.push(randomId());
-    } //sample data
-    //console.log(productIds);
-    return productIds;
   }
 
   //data and request data
   const [productIdList, setProductIdList] = useState([]);
-  const [shopId] = useState((search) => getShopId(search));
+  const [shopId, setShopId] = useState('');
 
   // console.log(productIdList);
 
-  function getShopId(searchTerm) {
-    //request
-    const responseData = Math.floor(Math.random() * 10) + 1;
-    return responseData;
-  }
-
-  // useEffect(() => {
-  //   setCategories(allCategories.slice(0, 5));
-  // }, [allCategories]);
+  useEffect(() => {
+    async function searchShop() {
+      //console.log('Filter changed');
+      //request for new data +numPages
+      try {
+        const response = await axios.get(
+          `/shops?limit=1&offset=1&name=${search}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          }
+        );
+        // console.log(response);
+        setShopId(response.data.data.listShop[0]._id);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    searchShop();
+  }, [search]);
 
   useEffect(() => {
     //console.log('filter change');
+    setLoading(true);
     const filter = {
       query: search,
       categoryName: categories.length > 0 ? categories : undefined,
       startPrice: fromPriceApplied ? fromPriceApplied : undefined,
       endPrice: toPriceApplied ? toPriceApplied : undefined,
-      orderBy: sort,
-      sortBy: 'desc',
+      orderBy: sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
+      sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
       currentPage: 1,
     };
-    console.log(filter);
-    async function searchProduct() {
-      console.log(filter);
+    // console.log(filter);
+    const searchProduct = async () => {
+      // console.log(filter);
       //console.log('Filter changed');
       //request for new data +numPages
       try {
@@ -284,15 +228,16 @@ function Search() {
           },
           // withCredentials: true,
         });
-        console.log(response);
-        setProductIdList(response.data.data);
+        // console.log(response);
+        setProductIdList([...response.data.data]);
         setNumPages(response.data.maxPage); //numPages was responsed
       } catch (err) {
         console.log(err);
       }
-    }
+    };
     searchProduct();
     setPage(1);
+    setLoading(false);
   }, [
     search,
     categories,
@@ -306,18 +251,19 @@ function Search() {
 
   useEffect(() => {
     //Request for new data
+    setLoading(true);
     const filter = {
       query: search,
       categoryName: categories.length > 0 ? categories : undefined,
       startPrice: fromPriceApplied ? fromPriceApplied : undefined,
       endPrice: toPriceApplied ? toPriceApplied : undefined,
-      orderBy: sort,
-      sortBy: 'desc',
+      orderBy: sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
+      sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
       currentPage: page,
     };
-    console.log(filter);
-    async function searchProduct() {
-      console.log(filter);
+    // console.log(filter);
+    const searchProduct = async () => {
+      // console.log(filter);
       //console.log('Filter changed');
       //request for new data +numPages
       try {
@@ -327,15 +273,16 @@ function Search() {
           },
           // withCredentials: true,
         });
-        console.log(response);
-        setProductIdList(response.data.data);
+        // console.log(response);
+        setProductIdList([...response.data.data]);
         setNumPages(response.data.maxPage); //numPages was responsed
       } catch (err) {
         console.log(err);
       }
-    }
+    };
     searchProduct();
     setPage(page);
+    setLoading(false);
   }, [page]);
 
   return (
@@ -589,13 +536,15 @@ function Search() {
           </Button>
         </div>
         <div className={clsx(styles.searchBody)}>
-          <div className={clsx(styles.shopContainer)}>
-            <span className={clsx(styles.searchedTitle)}>
-              <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
-              Shop liên quan đến '<strong> {search}</strong>'
-            </span>
-            <ShopCard id={shopId} />
-          </div>
+          {shopId && (
+            <div className={clsx(styles.shopContainer)}>
+              <span className={clsx(styles.searchedTitle)}>
+                <StorefrontOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
+                Shop liên quan đến '<strong> {search}</strong>'
+              </span>
+              <ShopCard id={shopId} />
+            </div>
+          )}
           <div>
             <span className={clsx(styles.searchedTitle)}>
               <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
@@ -625,13 +574,19 @@ function Search() {
                   ))}
                 </div>
               </div>
-              <div className={clsx(styles.productContainer)}>
-                {productIdList.map((value, index) => (
-                  <Grid item xs={1} sm={1} md={1} key={index}>
-                    <ProductCard productId={value} />
-                  </Grid>
-                ))}
-              </div>
+              {productIdList.length === 0 ? (
+                <div className={clsx(styles.productContainer)}>
+                  Không tìm thấy kết quả nào
+                </div>
+              ) : (
+                <div className={clsx(styles.productContainer)}>
+                  {productIdList.map((value, index) => (
+                    <Grid item xs={1} sm={1} md={1} key={index}>
+                      <ProductCard productId={value} />
+                    </Grid>
+                  ))}
+                </div>
+              )}
               {numPages > 1 && (
                 <div className={clsx(styles.pagination)}>
                   <Stack spacing={2}>

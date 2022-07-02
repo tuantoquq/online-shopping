@@ -51,6 +51,11 @@ const ShopperSchema = new mongoose.Schema(
             type: Number, // 0: waiting , 1: accepted,  2: denied
             required: true,
         },
+        isBlock: {
+            type: Number, // 0: active , 1: block
+            required: true,
+            default: 0
+        },
         createdAt: {
             type: Date,
             default: Date.now(),
