@@ -76,14 +76,14 @@ statisticController.countShop = async (req, res) => {
         const {startDate, endDate } = req.body 
         let query = [
             {
-                $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
+                $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
             {
-                $match: { "status": "success" }
+                $match: { "status": 1 }
             },
             {   
                 $group: {
-                        "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
                         } 
@@ -93,7 +93,8 @@ statisticController.countShop = async (req, res) => {
                 $sort: { "_id" : 1 }
             }
         ]
-        const result = await Customer.aggregate(query)
+        console.log(query)
+        const result = await Shop.aggregate(query)
         return res.status(httpStatus.OK).json({
             data: result,
             status: apiStatus.SUCCESS
@@ -113,14 +114,14 @@ statisticController.countShopRegister = async (req, res) => {
         const {startDate, endDate } = req.body 
         let query = [
             {
-                $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
+                $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
             {
-                $match: { "status": "pending" }
+                $match: { "status": 0 }
             },
             {   
                 $group: {
-                        "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
                         } 
@@ -130,7 +131,7 @@ statisticController.countShopRegister = async (req, res) => {
                 $sort: { "_id" : 1 }
             }
         ]
-        const result = await Customer.aggregate(query)
+        const result = await Shop.aggregate(query)
         return res.status(httpStatus.OK).json({
             data: result,
             status: apiStatus.SUCCESS
