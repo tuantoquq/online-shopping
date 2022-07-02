@@ -265,14 +265,11 @@ function Search() {
     //console.log('filter change');
     const filter = {
       query: search,
-      categoryName: categories,
-      // location: locations,
-      // brand: brands,
-      rating: rating,
-      startPrice: fromPriceApplied,
-      endPrice: toPriceApplied,
-      sortBy: sort,
+      categoryName: categories.length > 0 ? categories : undefined,
+      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+      endPrice: toPriceApplied ? toPriceApplied : undefined,
       orderBy: sort,
+      sortBy: 'desc',
       currentPage: 1,
     };
     console.log(filter);
@@ -311,14 +308,11 @@ function Search() {
     //Request for new data
     const filter = {
       query: search,
-      categoryName: categories,
-      // location: locations,
-      // brand: brands,
-      rating: rating,
-      startPrice: fromPriceApplied,
-      endPrice: toPriceApplied,
-      sortBy: sort,
+      categoryName: categories.length > 0 ? categories : undefined,
+      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+      endPrice: toPriceApplied ? toPriceApplied : undefined,
       orderBy: sort,
+      sortBy: 'desc',
       currentPage: page,
     };
     console.log(filter);
@@ -327,16 +321,12 @@ function Search() {
       //console.log('Filter changed');
       //request for new data +numPages
       try {
-        const response = await axios.get(
-          PRODUCT_SEARCH_URL,
-          JSON.stringify(filter),
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            // withCredentials: true,
-          }
-        );
+        const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
         console.log(response);
         setProductIdList(response.data.data);
         setNumPages(response.data.maxPage); //numPages was responsed
