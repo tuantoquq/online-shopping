@@ -26,18 +26,18 @@ import axiosConfig from '../config/axios';
 import SearchBar from 'material-ui-search-bar';
 import { makeStyles } from '@material-ui/core/styles';
 import { deleteProduct } from '../service/ShopperService';
-
+<<<<<<< HEAD
 import { UpdateProduct } from '../service/ShopperService';
 import { AddProduct } from '../service/ShopperService';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+=======
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
-
+>>>>>>> main
 
 const useStyles = makeStyles({
   table: {
@@ -158,6 +158,7 @@ function ProductManager() {
     setOpenInforProduct(false);
   };
 
+<<<<<<< HEAD
     const [openInforProduct, setOpenInforProduct] = useState(false);
     const handleOpenInforProduct = (product) => {
       console.log(product)
@@ -199,6 +200,37 @@ function ProductManager() {
     const [textButtonRight, setTextButtonRight] = useState('');
     const [listCategory, setListCategory] = useState();
     const [categoryId, setCategoryId] = useState('');
+=======
+  const [openInforProduct, setOpenInforProduct] = useState(false);
+  const handleOpenInforProduct = (product) => {
+    console.log(product);
+    setOpenInforProduct(true);
+    setOpen(true);
+    setId(product?._id);
+    setName(product?.productName);
+    setDetail(product?.shortDescription);
+    setCount(product?.count);
+    setCost(product?.price);
+    let pathCategory = `/category/get?categoryId=${product?.categoryId}`;
+    axiosConfig
+      .get(pathCategory)
+      .then(async (res) => {
+        setType(res.data.data?.categoryName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setType(product.type);
+    setSolded(product?.soldHistory);
+    setRating(product?.ratingStar);
+    setAvatarImg(product?.imageUrls[0]?.base_url);
+    setErrMsg('');
+    setSuccess(false);
+    setTextTitle('Thông tin sản phẩm');
+    setTextButtonRight('Đóng');
+  };
+>>>>>>> main
 
   const [id, setId] = useState('');
   const [name, setName] = useState('');
@@ -212,11 +244,20 @@ function ProductManager() {
   const [textTitle, setTextTitle] = useState('');
   const [textButtonRight, setTextButtonRight] = useState('');
 
+<<<<<<< HEAD
+    const requestSearch = (searchedVal) => {
+        const filteredRows = productData?.filter((row) => {
+        return row.productName.toLowerCase().includes(searchedVal.toLowerCase());
+        });
+        setData(filteredRows);
+    };
+=======
   const [data, setData] = useState();
   const [searched, setSearched] = useState('');
   const classes = useStyles();
 
   const [currProductId, setCurrProductId] = useState('');
+>>>>>>> main
 
   const requestSearch = (searchedVal) => {
     const filteredRows = productData?.filter((row) => {
@@ -253,6 +294,7 @@ function ProductManager() {
 
     if (errMsg === '') {
       //console.log(avatarImg);
+<<<<<<< HEAD
 
     const handleCloseAvatar = (event, reason) => {
       if (reason === 'clickaway') {
@@ -367,6 +409,38 @@ function ProductManager() {
       // .catch(err=>{
       //   console.log(err)
       // })
+=======
+      let data = {};
+      data = {
+        name: name,
+        detail: detail,
+        count: count,
+        cost: cost,
+        type: type,
+        avatar: avatarImg,
+      };
+      console.log(data);
+      try {
+        const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
+        console.log(JSON.stringify(response?.data));
+        console.log(JSON.stringify(response));
+        setSuccess(true);
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg('No Server Response');
+          setOpen(true);
+        } else {
+          setErrMsg('Thêm sản phẩm.');
+          console.log(err);
+          setOpen(true);
+        }
+      }
+>>>>>>> main
     }
   };
 
@@ -407,6 +481,7 @@ function ProductManager() {
   const [shopData, setShopData] = useState();
   const [productData, setProductData] = useState();
 
+<<<<<<< HEAD
   let s = window.location.href.split('/')
   let tmp = '629ddb1583ec9b8c8547522c'
   let pathShop = `/shops/profile?shopId=${tmp}`
@@ -435,9 +510,34 @@ function ProductManager() {
     })
 
   },[openInforProduct])
+=======
+  let s = window.location.href.split('/');
+  let tmp = '629ddb1583ec9b8c8547522d';
+  let pathShop = `/shops/profile?shopId=${tmp}`;
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`;
+  useEffect(() => {
+    axiosConfig
+      .get(pathShop)
+      .then(async (res) => {
+        setShopData(res.data.data);
+        await axiosConfig
+          .get(pathProduct)
+          .then((res) => {
+            setProductData(res?.data?.data?.products);
+            setData(res?.data?.data?.products);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // sort && page
   const [searchTerm, setSearchTerm] = useState('');
+>>>>>>> main
 
   const [page, setPage] = useState(0);
 
@@ -644,6 +744,7 @@ function ProductManager() {
                     />
                   </div>
                 </div>
+<<<<<<< HEAD
               
               <div className={clsx(stylesProductManger.formRow)}>
                 <label
@@ -678,6 +779,8 @@ function ProductManager() {
                     </Select>
                   </FormControl>
               </div>
+=======
+>>>>>>> main
 
                 <div className={clsx(stylesProductManger.formRow)}>
                   <label
