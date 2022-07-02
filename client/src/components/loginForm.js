@@ -174,7 +174,7 @@ function LoginForm(props) {
         setErrMsg('Email hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
-        setErrMsg('Đăng nhập thất bại.');
+        setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
         setOpen(true);
       }
       errRef.current.focus();
