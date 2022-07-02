@@ -10,20 +10,34 @@ import { Tooltip, IconButton } from '@mui/material';
 import BlockIcon from '@mui/icons-material/Block';
 
 
-export default function AdminShop() {
-    const [rows, setRows] = useState([])
-    console.log(rows)
+export default function AdminShopRequest() {
+    const [data, setData] = useState([])
 
     const columns = [
         {
-            name: "shopName",
+            name: "firstName",
             options: {
                 filter: true
             },
-            label: 'Tên cửa hàng'
+            label: 'Họ và tên'
         },
         {
-            name: "address",
+            name: "email",
+            options: {
+                filter: true
+            },
+            label: 'Email',
+        },
+
+        {
+            name: "phoneNumber",
+            options: {
+                filter: true
+            },
+            label: 'Số điện thoại'
+        },
+        {
+            name: "issuePlace",
             options: {
                 filter: true
             },
@@ -31,17 +45,17 @@ export default function AdminShop() {
         },
 
         {
-            name: "status",
+            name: "updatedAt",
             options: {
                 filter: true
             },
-            label: 'Trạng thái'
+            label: 'Ngày tạo'
         }
 
     ];
 
-    const block = (shop_id) =>{
-        console.log(shop_id)
+    const block = (email) =>{
+        console.log(email)
 
     }
     const options = {
@@ -56,9 +70,7 @@ export default function AdminShop() {
                 <Tooltip title="Kích hoạt tiến trình">
                     <IconButton
                         onClick={() => {
-
-                            block(rows[selectedRows.data[0].dataIndex]['shopName']);
-
+                            block(data[selectedRows.data[0].dataIndex]['email']);
                         }}
 
                     >
@@ -70,45 +82,33 @@ export default function AdminShop() {
 
         )
     };
+    
     useEffect(() => {
         axiosConfig({
             method: 'get',
-            url: '/shops'
-        })
+            url: '/shopper/get-shopper-with-state?state=0'
+          })
             .then(res => {
-                let total = res.data.data.totalShops
-                console.log(total)
-                axiosConfig({
-                    method: 'get',
-                    url: `/shops?limit=${total}`
-                })
-                    .then(res => {
-                        setRows(res.data.data.listShop.map(item=>{
-                            let status = item.status ===1 ?'Active':'InActive'
-                            return {
-                                'shopName':item.shopName,
-                                'address':item.address,
-                                'status':status
-                            }
-                        }))
-                    })
-                    .catch(err => console.log(err))
-
-
+              let shopperRequest = res.data.data            
+                for( let i = 0;i< shopperRequest.length;i++){
+                    shopperRequest[i]['updatedAt'] =  new Date(shopperRequest[i]['updatedAt']).toLocaleString()
+                }
+              setData([ ...shopperRequest])
+  
             })
             .catch(err => console.log(err))
-
     }, [])
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={3}>
-                    <AdminSidebar select={2}/>
+                    <AdminSidebar select={3}/>
                 </Grid>
                 <Grid item xs={9}>
                     <MUIDataTable
-                        title={"Danh sách cửa hàng"}
-                        data={rows}
+                        title={"Đăng ký bán hàng"}
+                        data={data}
                         columns={columns}
                         options={options}
 
