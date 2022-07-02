@@ -301,7 +301,12 @@ export const addProduct = async (req, res, next) => {
         let shopperId = req.userId;
         //check exist shop with shopper id
         let shop = await ShopService.findShopByShopperId(shopperId);
-
+        if(shop.status !== 1){
+            return res.status(httpStatus.BAD_GATEWAY).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "Your shop is waiting for admin accept register! Try later."
+            });
+        }
         //upload images
         let imageFiles = req.files;
         //check file extensions

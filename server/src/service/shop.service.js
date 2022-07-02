@@ -48,4 +48,17 @@ ShopService.findShopByShopperId = async (shopperId) => {
     return shop;
 };
 
+ShopService.addNewShop = async (shopRequest) => {
+    await shopRequest.save((err, shop) => {
+        if(err){
+            throw new CustomError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                apiStatus.DATABASE_ERROR,
+                `Error when save shop: ${err.message}`
+            );
+        }
+        return shop;
+    });
+    
+}
 export default ShopService;

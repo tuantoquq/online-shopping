@@ -4,6 +4,7 @@ import { getShopperProfile, updateAvatar } from '../controller/shopper.controlle
 import { verifyToken } from '../middleware/authJwt.js';
 import multer from 'multer';
 import { storage } from '../middleware/uploadFile.js';
+import { addNewShop } from '../controller/shop.controller.js';
 
 const shopperRoutes = express.Router();
 const upload = multer({ storage: storage });
@@ -14,4 +15,6 @@ shopperRoutes.put(
     [upload.single('file'), verifyToken],
     updateAvatar,
 );
+
+shopperRoutes.post('/api/v1/shopper/auth/add-shop', verifyToken, addNewShop);
 export default shopperRoutes;
