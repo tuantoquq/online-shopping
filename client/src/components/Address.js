@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './CSS/AccountInformation.module.css'
 import clsx from "clsx";
-import {updateCustomerProfile, getCustomerProfile} from '../service/CustomerService.js';
+import {updateAddress, getListAddress} from '../service/CustomerService.js';
 
-function AccountInformation(props){
+function Address(props){
     const role = props.role;
-    const [newFirstName, setNewFirstName] = useState();
-    const [newLastName, setNewLastName] = useState();
+    const [listAddress, setListAddress] = useState([]);
+    const [newName, setNewName] = useState();
     const [newPhone, setNewPhone] = useState();
-    const [newBirthday, setNewBirthday] = useState(new Date());
-    const [newEmail, setNewEmail] = useState();
-    const [newPassword, setNewPassword] = useState();
-    const [currentUser, setCurrentUser] = useState();
-    const [newAddress, setNewAddress] = useState();
+    const [newCity, setNewCity] = useState();
+    const [newDistrict, setNewDistrict] = useState();
+    const [newWard, setNewWard] = useState();
+    const [newDetail, setNewDetail] = useState();
     useEffect(() => {
-        getCustomerProfile().then(res=>{setCurrentUser(res?.data?.data)})
+        getListAddress().then(res=>{setListAddress(res?.data?.data)})
+        console.log(listAddress)
     },[props])
     const displayUpdate = (id)=>{
         const res = document.getElementById(id)
@@ -30,61 +30,18 @@ function AccountInformation(props){
     return (
         <div className={styles.container}>
             {role === "user"&&(
-                <h2>Thông tin tài khoản khách hàng</h2>
+                <h2>Thông tin địa chỉ khách hàng</h2>
             )}
             {role === "admin"&&(
-                <h2>Thông tin tài khoản admin </h2>
+                <h2>Thông tin địa chỉ admin </h2>
             )}
             <div className={styles.content}>
-                <div className={styles.group}>
-                    <div className={styles.infor}>
-                        <label className={styles.column}>Tài khoản</label>
-                        <label className={styles.midColumn}>{currentUser?.firstName + ' ' + currentUser?.lastName}</label>
-                        <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                            
-                        ></label>
-                    </div>
-                </div>
-
-                <div className={styles.group}>
-                    <div className={styles.infor}>
-                        <label className={styles.column}>Mật khẩu</label>
-                        <input type="password" disabled="disabled" value={"aaaaaa"}  className={styles.midColumn}/>
-                        <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                            onClick={()=>displayUpdate(2)}
-                        >Thay đổi</label>
-                    </div>
-                    <div className={styles.update} id={2}>
-                        <lable className={styles.column}>
-                            Cập nhật thông tin
-                        </lable>
-                        <input placeholder='Nhập thông tin...' type='password'
-                            className={clsx(styles.midColumn,styles.inputUpdate)}
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
-                            onClick={() => {
-                                if(newPassword == null){
-                                    alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
-                                }else{
-                                    updateCustomerProfile({password: newPassword}).then(res => {
-                                        console.log("Update info: ", res.data);
-                                        window.location.reload()
-                                    })
-                                }
-                            }}
-                        >Lưu thay đổi</lable>
-
-
-                    </div>
-                </div>
             {role === "user"&&(      
                 <div>            
                     <div className={styles.group}>
                         <div className={styles.infor}>
-                            <label className={styles.column}>Họ và tên đệm</label>
-                            <label className={styles.midColumn}>{currentUser?.firstName}</label>
+                            <label className={styles.column}>Tên người nhận</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.receiverName}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={()=>displayUpdate(3)}
                             >Thay đổi</label>
@@ -96,135 +53,32 @@ function AccountInformation(props){
                             <input placeholder='Nhập thông tin...'
                                 className={clsx(styles.midColumn,styles.inputUpdate)
                                 }
-                                value={newFirstName}
-                                onChange={(e) => setNewFirstName(e.target.value)}
+                                value={newName}
+                                onChange={(e) => setNewName(e.target.value)}
                             />
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
-                                    if(newFirstName == null){
+                                    if(newName == null){
                                         alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else{
-                                        updateCustomerProfile({firstName: newFirstName}).then(res => {
+                                        updateAddress(listAddress[0]?._id, {receiverName: newName}).then(res => {
                                             console.log("Update info: ", res.data);
                                             window.location.reload()
                                         })
                                     }
                                 }}
                             >Lưu thay đổi</lable>
-
-
                         </div>
                     </div>
                     <div className={styles.group}>
                         <div className={styles.infor}>
-                            <label className={styles.column}>Tên</label>
-                            <label className={styles.midColumn}>{currentUser?.lastName}</label>
+                            <label className={styles.column}>Điện thoại</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.phone}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={()=>displayUpdate(4)}
                             >Thay đổi</label>
                         </div>
                         <div className={styles.update} id={4}>
-                            <lable className={styles.column}>
-                                Cập nhật thông tin
-                            </lable>
-                            <input placeholder='Nhập thông tin...'
-                                className={clsx(styles.midColumn,styles.inputUpdate)
-                                }
-                                value={newLastName}
-                                onChange={(e) => setNewLastName(e.target.value)}
-                            />
-                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={() => {
-                                    if(newLastName == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
-                                    }else{
-                                        updateCustomerProfile({lastName: newLastName}).then(res => {
-                                            console.log("Update info: ", res.data);
-                                            window.location.reload()
-                                        })
-                                    }
-                                }}
-                            >Lưu thay đổi</lable>
-
-
-                        </div>
-                    </div>
-                    <div className={styles.group}>
-                        <div className={styles.infor}>
-                            <label className={styles.column}>Email</label>
-                            <label className={styles.midColumn}>{currentUser?.email}</label>
-                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(5)}
-                            >Thay đổi</label>
-                        </div>
-                        <div className={styles.update} id={5}>
-                            <lable className={styles.column}>
-                                Cập nhật thông tin
-                            </lable>
-                            <input placeholder='Nhập thông tin...'
-                                className={clsx(styles.midColumn,styles.inputUpdate)}
-                                value={newEmail}
-                                onChange={(e) => setNewEmail(e.target.value)}
-                            />
-                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={() =>{
-                                    if(newEmail == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
-                                    }else if(newEmail == currentUser?.email){
-                                        window.location.reload();
-                                    }else{
-                                        updateCustomerProfile({email: newEmail}).then(res => {
-                                            console.log("Update info: ", res.data);
-                                            window.location.reload()
-                                        })
-                                    }
-                                }}
-                            >Lưu thay đổi</lable>
-
-
-                        </div>
-                    </div>
-                    
-                    {/* <div className={styles.group}>
-                        <div className={styles.infor}>
-                            <label className={styles.column}>Địa chỉ</label>
-                            <label className={styles.midColumn}>{currentUser?.address}</label>
-                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(8)}
-                            >Thay đổi</label>
-                        </div>
-                        <div className={styles.update} id={8}>
-                            <lable className={styles.column}>
-                                Cập nhật thông tin
-                            </lable>
-                            <input placeholder='Nhập thông tin...'
-                                className={clsx(styles.midColumn,styles.inputUpdate)}
-                                value={newAddress}
-                                onChange={(e) => setNewAddress(e.target.value)}
-                            />
-                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={() => {
-                                    if(newAddress == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
-                                    }else{
-                                        updateCustomerProfile({deliveryAddress: newAddress}).then(res => {
-                                            console.log("Update info: ", res.data);
-                                        })
-                                    }
-                                }}
-                            >Lưu thay đổi</lable>
-                        </div>
-                    </div> */}
-
-                    <div className={styles.group}>
-                        <div className={styles.infor}>
-                            <label className={styles.column}>Điện thoại</label>
-                            <label className={styles.midColumn}>{currentUser?.phoneNumber}</label>
-                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(6)}
-                            >Thay đổi</label>
-                        </div>
-                        <div className={styles.update} id={6}>
                             <lable className={styles.column}>
                                 Cập nhật thông tin
                             </lable>
@@ -244,7 +98,7 @@ function AccountInformation(props){
                                         alert("Số điện thoại không hợp lệ")
                                     } 
                                     else{
-                                        updateCustomerProfile({phonenumber: newPhone}).then(res => {
+                                        updateAddress(listAddress[0]?._id,{phone: newPhone}).then(res => {
                                             console.log("Update info: ", res.data);
                                             window.location.reload()
                                         })
@@ -253,40 +107,31 @@ function AccountInformation(props){
                             >Lưu thay đổi</lable>
                         </div>
                     </div>
-
                     <div className={styles.group}>
                         <div className={styles.infor}>
-                            <label className={styles.column}>Ngày sinh</label>
-                            <label className={styles.midColumn}>{currentUser?.dateOfBirth}</label>
+                            <label className={styles.column}>Tỉnh Thành</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.city}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(7)}
+                                onClick={()=>displayUpdate(5)}
                             >Thay đổi</label>
                         </div>
-                        <div className={styles.update} id={7}>
+                        <div className={styles.update} id={5}>
                             <lable className={styles.column}>
                                 Cập nhật thông tin
                             </lable>
-                            {/* <DatePicker  
-                                className={styles.Column} 
-                                selected={newBirthday}
-                                onChange={(date) => setNewBirthday(date)} 
-                            /> */}
-                            <input
-                                id="birthday"
-                                name="birthday"
-                                type="date"
-                                value={newBirthday}
-                                onChange={(e) => setNewBirthday(e.target.value)}
+                            <input placeholder='Nhập thông tin...'
                                 className={clsx(styles.midColumn,styles.inputUpdate)}
-                                required
+                                value={newCity}
+                                onChange={(e) => setNewCity(e.target.value)}
+                                
                             />
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
-                                    if(newBirthday == null){
+                                    if(newCity == null){
                                         alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
-                                        updateCustomerProfile({dateOfBirth: newBirthday}).then(res => {
+                                        updateAddress(listAddress[0]?._id,{city: newCity}).then(res => {
                                             console.log("Update info: ", res.data);
                                             window.location.reload()
                                         })
@@ -295,6 +140,109 @@ function AccountInformation(props){
                             >Lưu thay đổi</lable>
                         </div>
                     </div>
+                    
+                    <div className={styles.group}>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Quận Huyện</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.district}</label>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={()=>displayUpdate(6)}
+                            >Thay đổi</label>
+                        </div>
+                        <div className={styles.update} id={6}>
+                            <lable className={styles.column}>
+                                Cập nhật thông tin
+                            </lable>
+                            <input placeholder='Nhập thông tin...'
+                                className={clsx(styles.midColumn,styles.inputUpdate)}
+                                value={newDistrict}
+                                onChange={(e) => setNewDistrict(e.target.value)}
+                                
+                            />
+                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={() => {
+                                    if(newDistrict == null){
+                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                    }
+                                    else{
+                                        updateAddress(listAddress[0]?._id,{district: newDistrict}).then(res => {
+                                            console.log("Update info: ", res.data);
+                                            window.location.reload()
+                                        })
+                                    }
+                                }}
+                            >Lưu thay đổi</lable>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.group}>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Phường Xã</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.ward}</label>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={()=>displayUpdate(5)}
+                            >Thay đổi</label>
+                        </div>
+                        <div className={styles.update} id={5}>
+                            <lable className={styles.column}>
+                                Cập nhật thông tin
+                            </lable>
+                            <input placeholder='Nhập thông tin...'
+                                className={clsx(styles.midColumn,styles.inputUpdate)}
+                                value={newWard}
+                                onChange={(e) => setNewWard(e.target.value)}
+                                
+                            />
+                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={() => {
+                                    if(newWard == null){
+                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                    }
+                                    else{
+                                        updateAddress(listAddress[0]?._id,{ward: newWard}).then(res => {
+                                            console.log("Update info: ", res.data);
+                                            window.location.reload()
+                                        })
+                                    }
+                                }}
+                            >Lưu thay đổi</lable>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.group}>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Địa chỉ</label>
+                            <label className={styles.midColumn}>{listAddress[0]?.details}</label>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={()=>displayUpdate(6)}
+                            >Thay đổi</label>
+                        </div>
+                        <div className={styles.update} id={6}>
+                            <lable className={styles.column}>
+                                Cập nhật thông tin
+                            </lable>
+                            <input placeholder='Nhập thông tin...'
+                                className={clsx(styles.midColumn,styles.inputUpdate)}
+                                value={newDetail}
+                                onChange={(e) => setNewDetail(e.target.value)}
+                                
+                            />
+                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={() => {
+                                    if(newWard == null){
+                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                    }
+                                    else{
+                                        updateAddress(listAddress[0]?._id,{details: newDetail}).then(res => {
+                                            console.log("Update info: ", res.data);
+                                            window.location.reload()
+                                        })
+                                    }
+                                }}
+                            >Lưu thay đổi</lable>
+                        </div>
+                    </div>
+    
                 </div>
                 )}
             </div>
@@ -305,4 +253,4 @@ function AccountInformation(props){
     )
 
 }
-export default AccountInformation
+export default Address

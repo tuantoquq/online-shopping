@@ -68,14 +68,16 @@ function Cart() {
                     <div className={styles.comp1}>
                         <div className={styles.displayMoney}>
                             <p className={styles.disTotalPrice}>Tổng số tiền:</p>
-                            <p className={styles.totalPrice}> {totalPrice}</p>
+                            <p className={styles.totalPrice}> {cartItem != 0 ? totalPrice : 0}</p>
                         </div>
 
                     </div>
                     <div >
                         <button>Trở lại</button>
                         <button
-                        onClick={() =>navigatePath("/user/checkout")}>Thanh toán</button>
+                        onClick={() => {if(cartItem.length >0){
+                            navigatePath('/user/checkout')
+                        } }}>Thanh toán</button>
                     </div>
                 </div>
             <Footer/>

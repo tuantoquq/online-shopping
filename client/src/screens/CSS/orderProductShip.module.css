@@ -8,11 +8,16 @@
 }
 .disaddress{
     position: absolute;
-    right: 10%;
+    right: 30%;
 }
 .content{
     margin-bottom: 10px;
     border: solid 1px rgb(43, 21, 21);
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.change_button{
+    position: absolute;
+    right: 10%;
 }

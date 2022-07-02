@@ -37,7 +37,7 @@ function OrderProductShip(){
         });
 
     }, []);
-
+    // console.log(cartItem);
     return (
         <div className={styles.content}>
             <div className={styles.listProduct}>
@@ -52,7 +52,7 @@ function OrderProductShip(){
             <div className={styles.comp1}>
             <div className={styles.displayMoney}>
                     <p className={styles.disTotalPrice}>Chi phí vận chuyển:</p>
-                    <p className={styles.totalPrice}>10.000</p>
+                    <p className={styles.totalPrice}>{cartItem.length !=0 ? 10000: 0}</p>
                 </div>
                 <div className={styles.displayMoney}>
                     <p className={styles.disTotalPrice}>Tổng số tiền:</p>
