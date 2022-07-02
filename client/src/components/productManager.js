@@ -25,6 +25,7 @@ import stylesTab from '../screens/CSS/seller_acceptOrder.module.css';
 import axiosConfig from '../config/axios';
 import SearchBar from "material-ui-search-bar";
 import { makeStyles } from "@material-ui/core/styles";
+import { deleteProduct } from '../service/ShopperService';
 
 
 const useStyles = makeStyles({
@@ -119,16 +120,6 @@ function EnhancedTableHead(props) {
 
 
 function ProductManager() {
-    // const posts = [
-    //   {id: "1", productName: "Mo hinh 1", price: 30000, soldHistory: 3, count: 100, ratingStar: 4.3, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
-    //   {id: "2", productName: "Mo hinh 2", price: 40000, soldHistory: 1, count: 130, ratingStar: 4.7, detail: "Mo hinh best", type: "Do choi", updateAt: "12:20:20 21/06/2022"},
-    //   {id: "3", productName: "Mo hinh 3", price: 50000, soldHistory: 2, count: 160, ratingStar: 4.5, detail: "Mo hinh nho nhan", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
-    //   {id: "4", productName: "Mo hinh 4", price: 60000, soldHistory: 3, count: 120, ratingStar: 4.4, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
-    //   {id: "5", productName: "Mo hinh x", price: 10000, soldHistory: 3, count: 190, ratingStar: 4.6, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 21/06/2022"},
-    //   {id: "6", productName: "Mo hinh 6", price: 40000, soldHistory: 9, count: 130, ratingStar: 4.8, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 22/06/2022"},
-    //   {id: "7", productName: "Mo hinh 7", price: 40000, soldHistory: 7, count: 110, ratingStar: 4.1, detail: "Mo hinh de thuong", type: "Do choi", updateAt: "12:20:21 19/06/2022"}
-    // ];
-
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
       setOpenInforProduct(false);
@@ -192,6 +183,8 @@ function ProductManager() {
     const [data, setData] = useState();
     const [searched, setSearched] = useState("");
     const classes = useStyles();
+
+    const [currProductId, setCurrProductId] = useState("")
 
     const requestSearch = (searchedVal) => {
         const filteredRows = productData?.filter((row) => {
@@ -261,14 +254,41 @@ function ProductManager() {
       }
     };
 
+    //delete product
+    const handleDelete = async (e) => {
+      console.log(id);
+      deleteProduct(id).then(
+          // res => {
+          //     console(res);
+          // }
+      ).catch(err => {
+          console.log(err);
+      });
+      handleCloseDelete();
+      handleClose();
+      axiosConfig.get(pathShop).then(async res=>{
+        setShopData(res.data.data)
+        await axiosConfig.get(pathProduct).then(res=>{
+          setProductData(res?.data?.data?.products)
+          setData(res?.data?.data?.products)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    }
+
     // api
   const [shopData, setShopData] = useState();
   const [productData, setProductData] = useState();
 
   let s = window.location.href.split('/')
-  let tmp = '629ddb1583ec9b8c8547522c'
+  let tmp = '629ddb1583ec9b8c8547522d'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       setShopData(res.data.data)
@@ -357,7 +377,7 @@ function ProductManager() {
                     </div>
                     <div className={stylesProductManger.button}>
                       <Button onClick={handleCloseDelete}> Huỷ </Button>
-                      <Button onClick={handleSubmit}>Xác nhận</Button>
+                      <Button onClick={handleDelete}>Xác nhận</Button>
                     </div>
                   </Box>
             </Modal>
@@ -594,7 +614,7 @@ function ProductManager() {
                               <TableCell align="left">{product?.soldHistory}</TableCell>
                               <TableCell align="left">{product?.count}</TableCell>
                               <TableCell align="left">{product?.ratingStar}</TableCell>
-                              <TableCell align="left">{product?.updateAt}</TableCell>
+                              <TableCell align="left">{(new Date(product?.updateAt)).toLocaleString()}</TableCell>
                             </TableRow>
                           );
                         })}

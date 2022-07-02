@@ -2,7 +2,7 @@ import Header from './header';
 import Footer from './footer';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
+import { CardActionArea, darken } from '@mui/material';
 import styles from '../screens/CSS/home.module.css';
 import styleShop from '../screens/CSS/shop.module.css';
 import stylesProduct from '../screens/CSS/productInfor.module.css';
@@ -24,15 +24,17 @@ function ShopHome({navigation}) {
   let s = window.location.href.split('/')
   let tmp = '629ddb1583ec9b8c8547522d'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
-      setShopData(res.data.data)
-      let date = new Date(shopData?.createAt);
+      let data = res.data.data
+      let date = new Date(data?.createAt);
+      setShopData({...data,'createAt':date.toLocaleString()})
+
+      console.log(data?.createAt)
       console.log(date.toLocaleTimeString())
       await axiosConfig.get(pathProduct).then(res=>{
         setProductData(res?.data?.data?.products)
-        console.log(productData)
       })
       .catch(err=>{
         console.log(err)
