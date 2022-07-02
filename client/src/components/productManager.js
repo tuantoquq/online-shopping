@@ -186,20 +186,6 @@ function ProductManager() {
       setTextButtonRight("Đóng")
     };
 
-    const [id, setId] = useState('');
-    const [name, setName] = useState('');
-    const [detail, setDetail] = useState('');
-    const [count, setCount] = useState(0);
-    const [cost, setCost] = useState(0);
-    const [type, setType] = useState('');
-    const [rating, setRating] = useState(0);
-    const [solded, setSolded] = useState(0);
-    const [avatarImg, setAvatarImg] = useState(defautlAvatar);
-    const [textTitle, setTextTitle] = useState('');
-    const [textButtonRight, setTextButtonRight] = useState('');
-    const [listCategory, setListCategory] = useState();
-    const [categoryId, setCategoryId] = useState('');
-
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [detail, setDetail] = useState('');
@@ -211,6 +197,8 @@ function ProductManager() {
   const [avatarImg, setAvatarImg] = useState(defautlAvatar);
   const [textTitle, setTextTitle] = useState('');
   const [textButtonRight, setTextButtonRight] = useState('');
+  const [listCategory, setListCategory] = useState();
+  const [categoryId, setCategoryId] = useState('');
 
   const [data, setData] = useState();
   const [searched, setSearched] = useState('');
@@ -243,131 +231,83 @@ function ProductManager() {
   };
 
   const [openDelete, setDelete] = useState(false);
-  const handleOpenDelete = () => setDelete(true);
-  const handleCloseDelete = () => setDelete(false);
+  const handleOpenDelete = () =>  setDelete(true);
+  const handleCloseDelete = () =>  setDelete(false);
 
+    // category
+  const handleChange = (e) => {
+    setType(e.target.value);
+    console.log(e.target.value)
+  };
   //submit product
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const REGISTER_URL = `/api/v1/registerProduct`;
+    if(openInforProduct){
+      let data = {};
+      data = {
+        productName: name,
+        count: count,
+        price: cost,
+        shortDescription: detail,
+        categoryId: type,
+      };
+      console.log(data);
+      try{
+        UpdateProduct(id, data).then(
 
-    if (errMsg === '') {
-      //console.log(avatarImg);
-
-    const handleCloseAvatar = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-      setOpen(false);
-      setErrMsg('');
-    };
-
-    const [openDelete, setDelete] = useState(false);
-    const handleOpenDelete = () =>  setDelete(true);
-    const handleCloseDelete = () =>  setDelete(false);
-
-    // category
-    const handleChange = (e) => {
-      setType(e.target.value);
-      console.log(e.target.value)
-    };
-    //submit product
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if(openInforProduct){
-        let data = {};
-        data = {
-          productName: name,
-          count: count,
-          price: cost,
-          shortDescription: detail,
-          categoryId: type,
-        };
-        console.log(data);
-        try{
-          UpdateProduct(id, data).then(
-
-          )
-          .catch(err=>{
-            console.log(err)
-          })
-        } catch (err) {
-          if (!err?.response) {
-            setErrMsg('No Server Response');
-            setOpen(true);
-          } else {
-            setErrMsg('Cập nhật sản phẩm thành công');
-            console.log(err);
-            setOpen(true);
-          }
-        }
-
-      } else {
-        let data = {};
-        data = {
-          productName: name,
-          count: count,
-          price: cost,
-          shortDescription: detail,
-          longDescription: detail,
-          soldHistory: 0,
-          sizes: {
-                  "type": "color",
-                  "values": [
-                      "black",
-                      "white"
-                  ]
-                  },
-          categoryId: type,
-          imageUrls: [avatarImg]
-        };
-        console.log(data);
-        try{
-          AddProduct(data).then(
-
-          ).catch(err => {
-              console.log(err);
-          });
-        } catch (err) {
-          if (!err?.response) {
-            setErrMsg('No Server Response');
-            setOpen(true);
-          } else {
-            setErrMsg('Thêm sản phẩm thành công');
-            console.log(err);
-            setOpen(true);
-          }
-        }
-      }
-      handleClose();
-    };
-
-    //delete product
-    const handleDelete = async (e) => {
-      console.log(id);
-      deleteProduct(id).then(
-          // res => {
-          //     console(res);
-          // }
-      ).catch(err => {
+        )
+        .catch(err=>{
+          console.log(err)
+        })
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg('No Server Response');
+          setOpen(true);
+        } else {
+          setErrMsg('Cập nhật sản phẩm thành công');
           console.log(err);
-      });
-      handleCloseDelete();
-      handleClose();
-      // axiosConfig.get(pathShop).then(async res=>{
-      //   setShopData(res.data.data)
-      //   await axiosConfig.get(pathProduct).then(res=>{
-      //     setProductData(res?.data?.data?.products)
-      //     setData(res?.data?.data?.products)
-      //   })
-      //   .catch(err=>{
-      //     console.log(err)
-      //   })
-      // })
-      // .catch(err=>{
-      //   console.log(err)
-      // })
+          setOpen(true);
+        }
+      }
+
+    } else {
+      let data = {};
+      data = {
+        productName: name,
+        count: count,
+        price: cost,
+        shortDescription: detail,
+        longDescription: detail,
+        soldHistory: 0,
+        sizes: {
+                "type": "color",
+                "values": [
+                    "black",
+                    "white"
+                ]
+                },
+        categoryId: type,
+        imageUrls: [avatarImg]
+      };
+      console.log(data);
+      try{
+        AddProduct(data).then(
+
+        ).catch(err => {
+            console.log(err);
+        });
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg('No Server Response');
+          setOpen(true);
+        } else {
+          setErrMsg('Thêm sản phẩm thành công');
+          console.log(err);
+          setOpen(true);
+        }
+      }
     }
+    handleClose();
   };
 
   //delete product
@@ -652,56 +592,23 @@ function ProductManager() {
                 >
                   Loại sản phẩm:
                 </label>
-                {/* <input
-                  id="type"
-                  name="type"
-                  type="text"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className={clsx(stylesProductManger.formInput, stylesProductManger.row)}
-                  required
-                /> */}
-                  <FormControl className={clsx(stylesProductManger.formInput, stylesProductManger.row)}>
-                    <InputLabel id="demo-simple-select-label"> Loại sản phẩm </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={type}
-                      label="Thể loại"
-                      onChange={handleChange}
-                    >
-                      {listCategory?.map((category, index) => {
-                        return(
-                          <MenuItem value={category?._id} key={category?._id}>{category?.categoryName}</MenuItem>
-                        )
-                      })}
-                    </Select>
-                  </FormControl>
-              </div>
-
-                <div className={clsx(stylesProductManger.formRow)}>
-                  <label
-                    htmlFor="type"
-                    className={clsx(
-                      stylesProductManger.formLabel,
-                      stylesProductManger.row1
-                    )}
-                  >
-                    Loại sản phẩm:
-                  </label>
-                  <input
-                    id="type"
-                    name="type"
-                    type="text"
+                <FormControl className={clsx(stylesProductManger.formInput, stylesProductManger.row)}>
+                  <InputLabel id="demo-simple-select-label"> Loại sản phẩm </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
                     value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className={clsx(
-                      stylesProductManger.formInput,
-                      stylesProductManger.row
-                    )}
-                    required
-                  />
-                </div>
+                    label="Thể loại"
+                    onChange={handleChange}
+                  >
+                    {listCategory?.map((category, index) => {
+                      return(
+                        <MenuItem value={category?._id} key={category?._id}>{category?.categoryName}</MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
 
                 {openInforProduct && (
                   <div>
