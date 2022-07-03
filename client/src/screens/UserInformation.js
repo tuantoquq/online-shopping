@@ -3,7 +3,7 @@ import AdminHeader from '../components/adminHeader';
 import Footer from '../components/footer';
 import styles from '../components/CSS/UserInformation.module.css';
 import UserDisplay from '../components/userDisplay.js';
-import Address from '../components/Address';
+import AccountInformation from '../components/AccountInformation.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCustomerProfile } from '../service/CustomerService.js';
@@ -70,7 +70,7 @@ function UserInformation(navigation, role) {
           user_phone={user?.phoneNumber}
         />
         {/* <AccountInformation user={user}/> */}
-        <Address role={navigation.role} />
+        <AccountInformation role={navigation.role} />
         <div className={styles.wrapLogout}>
           {/* <button className={styles.logout} onClick={handleLogout}>
             Đăng xuất
