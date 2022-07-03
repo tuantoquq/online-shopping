@@ -160,6 +160,12 @@ statisticController.countRevenue = async (req, res) => {
                         {
                             $match: {
                                 createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) }
+                            },
+
+                        },
+                        {
+                            $sort: {
+                                createdAt: 1
                             }
                         }
                     ],
@@ -256,7 +262,12 @@ export default statisticController;
 //             "pipeline": [
 //                 {
 //                     $match: {
-//                         createdAt: { $gte: new Date("2022-07-03"), $lte: new Date("2022-07-22") }
+//                         createdAt: { $gte: new Date("2022-05-03"), $lte: new Date("2022-07-22") }
+//                     }
+//                 },
+//                 {
+//                     $sort: {
+//                         createdAt: 1
 //                     }
 //                 }
 //             ],
