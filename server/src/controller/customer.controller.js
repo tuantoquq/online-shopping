@@ -83,7 +83,7 @@ export const updateAvatar = async (req, res, next) => {
 };
 
 
-export const getAllCustomer = async (req, res,next) => {
+export const getAllCustomer = async (req, res) => {
     try{
         let customer = await Customer.find()
         let message
@@ -98,7 +98,7 @@ export const getAllCustomer = async (req, res,next) => {
             data: customer
         })
     }
-    catch(e) {
+    catch(err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,

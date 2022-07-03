@@ -59,7 +59,7 @@ function ProductCard(props) {
       }
     }
     getProduct();
-  }, []);
+  }, [id]);
 
   return (
     <Link
@@ -107,4 +107,4 @@ function ProductCard(props) {
     </Link>
   );
 }
-export default memo(ProductCard);
+export default ProductCard;

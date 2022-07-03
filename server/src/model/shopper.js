@@ -48,8 +48,13 @@ const ShopperSchema = new mongoose.Schema(
             required: true,
         },
         state: {
-            type: Number, // 0: waiting , 1: accepted,  2: denied
+            type: Number, // 0: waiting , 1: accepted,  -1: denied
             required: true,
+        },
+        isBlock: {
+            type: Number, // 0: active , 1: block
+            required: true,
+            default: 0
         },
         createdAt: {
             type: Date,

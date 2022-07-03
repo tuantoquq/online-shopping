@@ -34,9 +34,10 @@ instance.interceptors.response.use(
         originalConfig._retry = true;
         try {
           const rs = await axios.post(BASE_API_URL + "/customer/refresh-token", {
-            refreshToken: TokenService.getLocalRefreshToken(ROLE.customer),
-          }, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${TokenService.getLocalRefreshToken(ROLE.customer)}` 
+            }
           });
           if (rs.data.status === 0) {
             const accessToken = rs.data.data.token;

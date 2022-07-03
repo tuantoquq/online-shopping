@@ -33,3 +33,31 @@ export const deleteProduct = async (id) => {
   }
   return response;
 };
+
+export const UpdateProduct = async (id, product) => {
+  let response;
+  try {
+    response = await shopperApi.put(`/product/auth/update/${id}`, product, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};
+
+export const AddProduct = async (product) => {
+  let response;
+  try {
+    response = await shopperApi.post(`/shopper/auth/add-product`, product, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};

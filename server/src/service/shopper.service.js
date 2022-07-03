@@ -30,15 +30,8 @@ ShopperService.findShopperByEmail = async (email) => {
 };
 
 ShopperService.getAllWithState = async (state) => {
-    let shopper = await Shopper.find({state: state})
-    if (!shopper) {
-        throw new CustomError(
-            httpStatus.NOT_FOUND,
-            apiStatus.DATABASE_ERROR,
-            `Shopper not found with state`,
-        );
-    }
-    return shopper;
+    let shoppers = await Shopper.find({state: state})
+    return shoppers;
 }
 
 ShopperService.addShopper = async (shopper) => {
@@ -68,4 +61,27 @@ ShopperService.updateAvatar = async (avtUrl, shopperId) => {
     }
     return response;
 };
+
+ShopperService.blockShopper = async (email) => {
+    let shopper = await Shopper.findOneAndUpdate({email: email}, {isBlock: 1}, {new: true});
+    if(!shopper){
+        throw new CustomError(
+            httpStatus.NOT_FOUND,
+            apiStatus.DATABASE_ERROR,
+            `Shopper not found with email: ${email}!`,
+        );
+    }
+    return shopper;
+}
+
+ShopperService.changeStateShopper = async (shopperId, state) => {
+    let shopper = await Shopper.findByIdAndUpdate(shopperId, {state: state}, {new: true});
+    if(!shopper){
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.INVALID_PARAM,
+            `Did not find shopper with id: ${shopperId}`
+        );
+    }
+}
 export default ShopperService;

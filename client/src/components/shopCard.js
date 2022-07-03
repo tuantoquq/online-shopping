@@ -3,54 +3,60 @@ import React, { useState, useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import styles from './CSS/ShopCardCSS.module.scss';
+import axios from '../config/axios';
 
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import productSampleImage1 from '../assets/Product/productSampleImage1.jpeg';
 
 function shopCard({ id }) {
   //console.log('render shop ' + id);
+  const [shopInfo, setShopInfo] = useState({});
 
-  const getShopInfo = (shopId) => {
-    /* //request for data
-    try {
-      const response = await axios.post(
-        GET_PRODUCT_URL,
-        JSON.stringify({ id: id }),
-        {
+  useEffect(() => {
+    async function getShop() {
+      //console.log('Filter changed');
+      //request for new data +numPages
+      let numProducts = 0;
+      try {
+        const response = await axios.get(`/shops/list-products?shopId=${id}`, {
           headers: {
             'Content-Type': 'application/json',
           },
           // withCredentials: true,
-        }
-      );
-      return response?.data;
-    } catch (err) {
-      console.log(err);
-      return null;
+        });
+        console.log(response);
+        numProducts = response.data.data.totalProducts;
+      } catch (err) {
+        console.log(err);
+      }
+      try {
+        const response = await axios.get(`/shops/profile?shopId=${id}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // withCredentials: true,
+        });
+        console.log(response);
+        const shopData = {
+          name: response.data.data.shopName,
+          location: response.data.data.address,
+          numProducts: numProducts,
+          description: response.data.data.createdAt,
+          rate: 3 + Math.floor(Math.random() * 20) / 10,
+        };
+        setShopInfo(shopData);
+      } catch (err) {
+        console.log(err);
+      }
     }
-    */
-    const responsData = {
-      id: shopId,
-      image: productSampleImage1,
-      name: 'The Keycap Zone',
-      description: 'Bàn phím cơ uy tín nhất Hà Nội',
-      numProducts: 225,
-      rate: 3.4,
-      location: 'Hà Nội',
-    };
-    return responsData;
-  };
-
-  const [shopInfo, setShopInfo] = useState((id) => getShopInfo(id));
-
-  useEffect(() => {
-    setShopInfo(getShopInfo(id));
+    if (id) {
+      getShop();
+    }
   }, [id]);
 
   return (
-    <Link to="/" styles="text-decoration: none">
+    <Link to={`/shop/${id}`} styles="text-decoration: none">
       <div className={clsx(styles.shopCard)}>
         <div className={clsx(styles.shopCardLeft)}>
           <div className={clsx(styles.shopImageContainer)}>

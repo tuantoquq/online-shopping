@@ -75,8 +75,10 @@ export const updateInforCustomer = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
+            // eslint-disable-next-line no-prototype-builtins
             } else if (property == 'password' && req.body.hasOwnProperty('password')) {
                 var customerCheck = await Customer.findById(customerId);
                 var passwordIsValid = compareSync(
@@ -127,6 +129,12 @@ export const loginCustomer = async (req, res) => {
 
         //get customer by email
         let customer = await CustomerService.findCustomerByEmail(req.body.email);
+        if(customer.isBlock === 1){
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'Your Account is Block!',
+            });
+        }
         const passwordIsValid = compareSync(req.body.password, customer.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -270,6 +278,12 @@ export const loginShopper = async (req, res) => {
 
         //get shopper by email
         let shopper = await ShopperService.findShopperByEmail(req.body.email);
+        if(shopper.isBlock === 1){
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'Your Account is Block!',
+            });
+        }
         const passwordIsValid = compareSync(req.body.password, shopper.password);
         if (!passwordIsValid) {
             return res.status(httpStatus.UNAUTHORIZED).send({
@@ -337,8 +351,10 @@ export const updateInforShopper = async (req, res) => {
 
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
+            // eslint-disable-next-line no-prototype-builtins
             if (property != 'password' && req.body.hasOwnProperty(property)) {
                 dataUpdate[property] = req.body[property];
+            // eslint-disable-next-line no-prototype-builtins
             } else if (property == 'password' && req.body.hasOwnProperty('password')) {
                 var shopper = await Shopper.findById(shopperId);
                 var passwordIsValid = compareSync(req.body['password'], shopper.password);
