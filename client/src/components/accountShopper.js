@@ -99,7 +99,7 @@ function TabInfor(props) {
       setGender(res?.data?.data?.gender);
       setCmnd(res?.data?.data?.cccd);
       setNoiCap(res?.data?.data?.issuePlace);
-      setNgayCap(res?.data?.data?.issueDate);
+      // setNgayCap(res?.data?.data?.issueDate);
       setAvatarImg(res?.data?.data?.avatarUrl)
     })
   },[])
