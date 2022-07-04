@@ -149,14 +149,26 @@ export const filterProduct = async (req, res) => {
                         $match: { categoryId: { $in: categoriIds } },
                     });
                 } else if (property == 'startPrice') {
-                    query.push({
-                        $match: {
-                            price: {
-                                $lte: req.body['endPrice'],
-                                $gte: req.body['startPrice'],
+                    if (req.body.hasOwnProperty('endPrice')){
+                        query.push({
+                            $match: {
+                                price: {
+                                    $lte: req.body['endPrice'],
+                                    $gte: req.body['startPrice'],
+                                },
                             },
-                        },
-                    });
+                        });
+                    }
+                    else{
+                        query.push({
+                            $match: {
+                                price: {
+                                    $gte: req.body['startPrice'],
+                                },
+                            },
+                        });
+                    }
+                    
                 } else if (property == 'minRating') {
                     query.push({
                         $match: { ratingStar: { $gte: req.body['minRating'] } },

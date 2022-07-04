@@ -8,6 +8,7 @@ import AdminSidebar from '../components/adminSidebar';
 import AdminHeader from '../components/adminHeader';
 import LineGraph from '../components/lineGraph';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import axios from '../config/axios';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
@@ -29,26 +30,73 @@ function AdminDashboard(props) {
 
   useEffect(() => {
     //request for data
-    let data1 = [];
-    let data2 = [];
+    let date = [];
     if (startDate && endDate) {
       let start = startDate;
-      let i = 2;
-      while (format(start, 'MM/dd/yyyy') !== format(endDate, 'MM/dd/yyyy')) {
-        data1.push(Math.floor(i * Math.abs(Math.sin(i) + 3)));
-        data2.push(Math.floor(i * Math.abs(Math.cos(i) + 3)));
+      while (
+        format(start, 'yyyy-MM-dd') !==
+        format(add(endDate, { days: 1 }), 'yyyy-MM-dd')
+      ) {
+        date.push(start);
         start = add(start, { days: 1 });
-        // console.log(start);
-        i = i + 1;
       }
-      data1.push(Math.floor(i * Math.abs(Math.sin(i) + 3)));
-      data2.push(Math.floor(i * Math.abs(Math.cos(i) + 3)));
-
-      // console.log(timeRange);
     }
+
+    axios
+      .post(
+        '/statistic/countCustomer',
+        {
+          startDate: format(startDate, 'yyyy-MM-dd'),
+          endDate: format(endDate, 'yyyy-MM-dd'),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        const data1 = date.map((i) => {
+          for (const e of res.data.data) {
+            // console.log(e._id);
+            if (e._id === format(i, 'yyyy-MM-dd')) {
+              return e.count;
+            }
+          }
+          return 0;
+        });
+        setVisited(data1);
+      })
+      .catch((err) => console.log(err));
+
+    axios
+      .post(
+        '/statistic/countShop',
+        {
+          startDate: format(startDate, 'yyyy-MM-dd'),
+          endDate: format(endDate, 'yyyy-MM-dd'),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        const data2 = date.map((i) => {
+          for (const e of res.data.data) {
+            // console.log(e._id);
+            if (e._id === format(i, 'yyyy-MM-dd')) {
+              return e.count;
+            }
+          }
+          return 0;
+        });
+        setNewAccount(data2);
+      })
+      .catch((err) => console.log(err));
+
     //respons data
-    setVisited(data1);
-    setNewAccount(data2);
   }, [startDate, endDate]);
 
   // useEffect(() => {
@@ -99,7 +147,7 @@ function AdminDashboard(props) {
                   startDate={startDate}
                   endDate={endDate}
                   lines={[visted, newAccount]}
-                  xAxis={['Số lượt truy cập', 'Số lượt đăng kí mới']}
+                  xAxis={['Số tài khoản khách hàng mới', 'Số cửa hàng mới']}
                   width={width}
                   height={height}
                 />
