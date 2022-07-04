@@ -48,7 +48,7 @@ function ProductInformation({navigation}) {
           console.log(err)
         })
 
-        let pathComment = '/comments?productId=629e16a6af24631642b44151'
+        let pathComment = `/comments?productId=${s[s.length-1]}`
         await axiosConfig.get(pathComment).then(res=>{
           setComment(res.data.data)
           // comments?.map((comment) => {console.log(comment)})

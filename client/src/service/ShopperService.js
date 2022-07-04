@@ -51,10 +51,8 @@ export const UpdateProduct = async (id, product) => {
 export const AddProduct = async (product) => {
   let response;
   try {
-    response = await shopperApi.post(`/shopper/auth/add-product`, product, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    response = await shopperApi.post('/shopper/auth/add-product', product, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
   } catch (err) {
     console.log(err);
