@@ -6,7 +6,6 @@ import axios from '../config/axios';
 import Header from '../components/header';
 import ProductCard from '../components/productCard';
 import ShopCard from '../components/shopCard';
-
 import Rating from '@mui/material/Rating';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -172,7 +171,7 @@ function Search() {
     setApply(false);
     setFromPriceApplied(undefined);
     setToPriceApplied(undefined);
-    setSort('related');
+    setSort('pho bien');
   }
 
   //data and request data

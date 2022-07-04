@@ -107,4 +107,4 @@ function ProductCard(props) {
     </Link>
   );
 }
-export default ProductCard;
+export default memo(ProductCard);

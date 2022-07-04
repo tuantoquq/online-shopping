@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import clsx from 'clsx';
 import styles from './CSS/ShopCardCSS.module.scss';
 import axios from '../config/axios';
-
+import DefaultAvatar from '../assets/avatar/defaultAvatar.png';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -25,7 +26,7 @@ function shopCard({ id }) {
           },
           // withCredentials: true,
         });
-        console.log(response);
+        // console.log(response);
         numProducts = response.data.data.totalProducts;
       } catch (err) {
         console.log(err);
@@ -42,8 +43,13 @@ function shopCard({ id }) {
           name: response.data.data.shopName,
           location: response.data.data.address,
           numProducts: numProducts,
-          description: response.data.data.createdAt,
+          description:
+            'Ngày tham gia: ' +
+            format(new Date(response.data.data.createAt), 'dd/MM/yyyy'),
           rate: 3 + Math.floor(Math.random() * 20) / 10,
+          image: response.data.data.avartarUrl
+            ? response.data.data.avartarUrl
+            : DefaultAvatar,
         };
         setShopInfo(shopData);
       } catch (err) {
