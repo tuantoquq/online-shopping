@@ -250,6 +250,7 @@ function ProductManager() {
         price: cost,
         shortDescription: detail,
         categoryId: type,
+        imageUrls: []
       };
       console.log(data);
       try{
@@ -271,24 +272,45 @@ function ProductManager() {
       }
 
     } else {
-      let data = {};
+      let data = {}
+      // var data = new FormData();
+      // data.append('productName', name);
+      // data.append('shortDescription', detail);
+      // data.append('longDescription', detail);
+      // data.append('price', cost);
+      // data.append('soldHistory', 0);
+      // data.append('sizes', {
+      //   "type": "color",
+      //   "values": [
+      //       "black",
+      //       "white"
+      //       ]
+      //   },);
+      // data.append('count', count);
+      // data.append('files', []);
+      // data.append('categoryId', type);
       data = {
         productName: name,
-        count: count,
-        price: cost,
         shortDescription: detail,
         longDescription: detail,
+        price: cost,
         soldHistory: 0,
         sizes: {
                 "type": "color",
                 "values": [
                     "black",
                     "white"
-                ]
+                    ]
                 },
+        count: count,
         categoryId: type,
-        imageUrls: [avatarImg]
+        files: []
       };
+      var form_data = new FormData();
+      for ( var key in data ) {
+          form_data.append(key, data[key]);
+      }
+      console.log(form_data)
       console.log(data);
       try{
         AddProduct(data).then(
@@ -348,9 +370,9 @@ function ProductManager() {
   const [productData, setProductData] = useState();
 
   let s = window.location.href.split('/')
-  let tmp = '629ddb1583ec9b8c8547522c'
+  let tmp = '629ddb1783ec9b8c85475236'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=10`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
   let pathListCategory = '/category/get?all=true'
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
@@ -363,7 +385,6 @@ function ProductManager() {
         console.log(err)
       })
       await axiosConfig.get(pathListCategory).then(res=>{
-        console.log(res?.data?.data)
         setListCategory(res?.data?.data)
       })
       .catch(err=>{
