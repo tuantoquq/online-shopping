@@ -17,6 +17,29 @@ function OrderItem({productId, quantity, cartId, handle}) {
       })
 
     },[])
+
+    useEffect(()=>{
+      if(itemCount === 0){
+        setItemCount(1);
+        updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
+          handle();
+        // console.log(res);
+      });
+      }
+    },[itemCount])
+    const handleChange = event => {
+      if (isNaN(event.target.value)) {
+        return;
+      }
+      const result = event.target.value.replace(/\D/g, '');
+      if(Number(result) >= productData?.count){
+        setItemCount(productData?.count);
+      }
+      else{
+        setItemCount(Number(result));
+      }
+
+    };
     return (
       <div className={styles.content}>
           <div className={styles.listProduct}>
@@ -25,8 +48,20 @@ function OrderItem({productId, quantity, cartId, handle}) {
               <div className={styles.left_comp}>
                   <div className={styles.comp1}>
                       <p>{productData?.productName}</p>
-                      <p>Giá sản phẩm : {productData?.price}</p>
-                      <p>Số lượng: {itemCount}</p>
+                      <p>Số lượng:</p>
+                      <input 
+                            className={styles.input} 
+                            value={itemCount}
+                            type="text" 
+                            onChange={handleChange}
+                            onBlur={()=>{
+                                updateCartItem({cartItemsId:cartId, quantity: itemCount}).then(res => {
+                                handle();
+                              console.log(res);
+                            });
+                            }}
+                        />
+                      {/* <p>Số lượng: {itemCount}</p> */}
                   </div>
                   
                   <div className={styles.count}>
@@ -35,7 +70,7 @@ function OrderItem({productId, quantity, cartId, handle}) {
                         onClick={() => {
                           setItemCount(Math.max(itemCount - 1, 1));
                           updateCartItem({cartItemsId:cartId, quantity: Math.max(itemCount - 1, 1)}).then(res => {
-                              handle();
+                              // handle();
                             // console.log(res);
                           });
                         }}
