@@ -31,7 +31,7 @@ function AdminSidebar({ select }) {
               })}
               onClick={() => setSelected('statstic_visits')}
             >
-              <span>Thống kê truy cập </span>
+              <span>Thống kê tài khoản </span>
             </Link>
             <Link
               to="/admin/statistic-revenue"
