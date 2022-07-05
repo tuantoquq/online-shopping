@@ -63,3 +63,17 @@ export const AddProduct = async (product) => {
   }
   return response;
 };
+
+export const getOrder = async (status) => {
+  let response;
+  try {
+    response = await shopperApi({
+      url:`/shopper/auth/list-order?status=${status}`,
+      method:'get',
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};
