@@ -37,6 +37,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const useStyles = makeStyles({
@@ -158,33 +160,33 @@ function ProductManager() {
     setOpenInforProduct(false);
   };
 
-    const [openInforProduct, setOpenInforProduct] = useState(false);
-    const handleOpenInforProduct = (product) => {
-      console.log(product)
-      setOpenInforProduct(true);
-      setOpen(true);
-      setId(product?._id)
-      setName(product?.productName);
-      setDetail(product?.shortDescription);
-      setCount(product?.count);
-      setCost(product?.price);
-      // let pathCategory = `/category/get?categoryId=${product?.categoryId}`
-      // axiosConfig.get(pathCategory).then(async res=>{
-      //   setType(res.data.data?.categoryName);
-      // })
-      // .catch(err=>{
-      //   console.log(err)
-      // })
-    
-      setType(product?.categoryId);
-      setSolded(product?.soldHistory);
-      setRating(product?.ratingStar);
-      setAvatarImg(product?.imageUrls[0]?.base_url);
-      setErrMsg('');
-      setSuccess(false);
-      setTextTitle("Thông tin sản phẩm");
-      setTextButtonRight("Đóng")
-    };
+  const [openInforProduct, setOpenInforProduct] = useState(false);
+  const handleOpenInforProduct = (product) => {
+    console.log(product)
+    setOpenInforProduct(true);
+    setOpen(true);
+    setId(product?._id)
+    setName(product?.productName);
+    setDetail(product?.shortDescription);
+    setCount(product?.count);
+    setCost(product?.price);
+    // let pathCategory = `/category/get?categoryId=${product?.categoryId}`
+    // axiosConfig.get(pathCategory).then(async res=>{
+    //   setType(res.data.data?.categoryName);
+    // })
+    // .catch(err=>{
+    //   console.log(err)
+    // })
+
+    setType(product?.categoryId);
+    setSolded(product?.soldHistory);
+    setRating(product?.ratingStar);
+    setAvatarImg(product?.imageUrls[0]?.base_url);
+    setErrMsg('');
+    setSuccess(false);
+    setTextTitle("Thông tin sản phẩm");
+    setTextButtonRight("Đóng")
+  };
 
   const [id, setId] = useState('');
   const [name, setName] = useState('');
@@ -231,10 +233,10 @@ function ProductManager() {
   };
 
   const [openDelete, setDelete] = useState(false);
-  const handleOpenDelete = () =>  setDelete(true);
-  const handleCloseDelete = () =>  setDelete(false);
+  const handleOpenDelete = () => setDelete(true);
+  const handleCloseDelete = () => setDelete(false);
 
-    // category
+  // category
   const handleChange = (e) => {
     setType(e.target.value);
     console.log(e.target.value)
@@ -242,7 +244,7 @@ function ProductManager() {
   //submit product
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(openInforProduct){
+    if (openInforProduct) {
       let data = {};
       data = {
         productName: name,
@@ -253,13 +255,14 @@ function ProductManager() {
         imageUrls: []
       };
       console.log(data);
-      try{
+      try {
         UpdateProduct(id, data).then(
+          
 
         )
-        .catch(err=>{
-          console.log(err)
-        })
+          .catch(err => {
+            console.log(err)
+          })
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
@@ -289,34 +292,50 @@ function ProductManager() {
       // data.append('count', count);
       // data.append('files', []);
       // data.append('categoryId', type);
+      // data = {
+      //   productName: name,
+      //   shortDescription: detail,
+      //   longDescription: detail,
+      //   price: cost,
+      //   soldHistory: 0,
+      //   sizes: {
+      //     "type": "color",
+      //     "values": [
+      //       "black",
+      //       "white"
+      //     ]
+      //   },
+      //   count: count,
+      //   categoryId: type,
+      //   files: null
+      // };
       data = {
-        productName: name,
-        shortDescription: detail,
-        longDescription: detail,
-        price: cost,
-        soldHistory: 0,
-        sizes: {
-                "type": "color",
-                "values": [
-                    "black",
-                    "white"
-                    ]
-                },
-        count: count,
-        categoryId: type,
-        files: []
+        productName: 'aaaa',
+        shortDescription: 'aaaaaa',
+        longDescription: 'aaaaaa',
+        price: 10000,
+        soldHistory: 100,
+        sizes: { "type": "color", "values": ["black", "white"] },
+        count: 100,
+        categoryId: '629ddae383ec9b8c85475215',
+        files: null
       };
       var form_data = new FormData();
-      for ( var key in data ) {
-          form_data.append(key, data[key]);
+      for (var key in data) {
+        form_data.append(key, data[key]);
       }
       console.log(form_data)
       console.log(data);
-      try{
-        AddProduct(data).then(
+      try {
+        AddProduct(form_data).then(res =>{
+          toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
 
+        }
+          
         ).catch(err => {
-            console.log(err);
+          toast.error("Thêm sản phẩm thật bại!",{theme: "colored" })
+
+          console.log(err);
         });
       } catch (err) {
         if (!err?.response) {
@@ -374,28 +393,28 @@ function ProductManager() {
   let pathShop = `/shops/profile?shopId=${tmp}`
   let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
   let pathListCategory = '/category/get?all=true'
-  useEffect(()=>{
-    axiosConfig.get(pathShop).then(async res=>{
+  useEffect(() => {
+    axiosConfig.get(pathShop).then(async res => {
       setShopData(res.data.data)
-      await axiosConfig.get(pathProduct).then(res=>{
+      await axiosConfig.get(pathProduct).then(res => {
         setProductData(res?.data?.data?.products)
         setData(res?.data?.data?.products)
       })
-      .catch(err=>{
-        console.log(err)
-      })
-      await axiosConfig.get(pathListCategory).then(res=>{
+        .catch(err => {
+          console.log(err)
+        })
+      await axiosConfig.get(pathListCategory).then(res => {
         setListCategory(res?.data?.data)
       })
-      .catch(err=>{
+        .catch(err => {
+          console.log(err)
+        })
+    })
+      .catch(err => {
         console.log(err)
       })
-    })
-    .catch(err=>{
-      console.log(err)
-    })
 
-  },[openInforProduct])
+  }, [openInforProduct])
 
   // sort && page
   const [searchTerm, setSearchTerm] = useState('');
@@ -605,31 +624,31 @@ function ProductManager() {
                     />
                   </div>
                 </div>
-              
-              <div className={clsx(stylesProductManger.formRow)}>
-                <label
-                  htmlFor="type"
-                  className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
-                >
-                  Loại sản phẩm:
-                </label>
-                <FormControl className={clsx(stylesProductManger.formInput, stylesProductManger.row)}>
-                  <InputLabel id="demo-simple-select-label"> Loại sản phẩm </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={type}
-                    label="Thể loại"
-                    onChange={handleChange}
+
+                <div className={clsx(stylesProductManger.formRow)}>
+                  <label
+                    htmlFor="type"
+                    className={clsx(stylesProductManger.formLabel, stylesProductManger.row1)}
                   >
-                    {listCategory?.map((category, index) => {
-                      return(
-                        <MenuItem value={category?._id} key={category?._id}>{category?.categoryName}</MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
-              </div>
+                    Loại sản phẩm:
+                  </label>
+                  <FormControl className={clsx(stylesProductManger.formInput, stylesProductManger.row)}>
+                    <InputLabel id="demo-simple-select-label"> Loại sản phẩm </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={type}
+                      label="Thể loại"
+                      onChange={handleChange}
+                    >
+                      {listCategory?.map((category, index) => {
+                        return (
+                          <MenuItem value={category?._id} key={category?._id}>{category?.categoryName}</MenuItem>
+                        )
+                      })}
+                    </Select>
+                  </FormControl>
+                </div>
 
                 {openInforProduct && (
                   <div>
@@ -815,6 +834,8 @@ function ProductManager() {
               </div>
             </div>
           </div>
+          <ToastContainer />
+
           <Footer />
         </div>
       );
