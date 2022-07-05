@@ -7,8 +7,21 @@ import OrderProduct from '../components/orderProduct';
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
+import { useEffect, useState } from 'react';
+import { getOrder } from '../service/ShopperService';
 
 function AcceptOrder({ navigation }) {
+  const [data,setData] = useState([])
+  useEffect(()=>{
+    getOrder(0)
+    .then(res =>{
+      setData(res.data.data)
+      console.log(res.data.data)
+    })
+    .catch(err => console.log(err))
+
+  },[])
+
   const accessToken = TokenService.getLocalAccessToken(
     RoleService.getLocalRole()
   );
@@ -33,10 +46,8 @@ function AcceptOrder({ navigation }) {
 
             <div className={styles.tab2}>
               <Search />
-              <OrderProduct type={0} />
-              {/* <OrderProduct type = {1}/>
-              <OrderProduct type = {2}/>
-              <OrderProduct type = {2}/> */}
+              <OrderProduct type={0} data={data}/>
+
             </div>
           </div>
           <Footer navigation={navigation} />

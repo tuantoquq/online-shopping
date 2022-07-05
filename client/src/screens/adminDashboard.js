@@ -32,10 +32,10 @@ function AdminDashboard(props) {
     //request for data
     let date = [];
     if (startDate && endDate) {
-      let start = startDate;
+      let start = add(startDate, { days: 1 });
       while (
         format(start, 'yyyy-MM-dd') !==
-        format(add(endDate, { days: 1 }), 'yyyy-MM-dd')
+        format(add(endDate, { days: 2 }), 'yyyy-MM-dd')
       ) {
         date.push(start);
         start = add(start, { days: 1 });

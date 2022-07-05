@@ -145,9 +145,21 @@ export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
     try {
-        let { status, orderId } = req.body;
-        if (status === 1 || status === -1) {
-            let order = await OrderService.updateOrder(orderId, status);
+        let { status, orderId, reasonReject} = req.body;
+        if (status === 1 || status === -1 || status === 2) {
+            let order;
+            if(status === -1){
+                if(reasonReject === undefined || reasonReject === ""){
+                    return res.status(httpStatus.BAD_REQUEST).send({
+                        status: apiStatus.INVALID_PARAM,
+                        message: 'Reason to reject is required',
+                    });
+                }
+                order = await OrderService.rejectOrder(orderId, reasonReject);
+            }else {
+                order = await OrderService.updateOrder(orderId, status);
+            }
+            
             return res.status(httpStatus.OK).send({
                 status: apiStatus.SUCCESS,
                 message: 'update order status successfully',
@@ -159,6 +171,7 @@ export const updateOrderStatus = async (req, res) => {
             message: 'Request status not valid',
         });
     } catch (err) {
+        console.log(err)
         if (err instanceof CustomError) {
             return res.status(err.httpStatus).send({
                 status: err.apiStatus,

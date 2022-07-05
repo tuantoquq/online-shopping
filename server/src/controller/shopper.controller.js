@@ -1,6 +1,7 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
 import OrderService from '../service/order.service.js';
+import OrderProductService from '../service/orderProduct.service.js';
 import ShopService from '../service/shop.service.js';
 import ShopperService from '../service/shopper.service.js';
 
@@ -115,14 +116,13 @@ export const getAllOrderWithStatus = async (req, res) => {
         let status = req.query.status;
         let shop = await ShopService.findShopByShopperId(shopperId);
 
-        if(status === 2) {
-            return res.status(httpStatus.BAD_REQUEST).send({
-                status: apiStatus.SUCCESS,
-                message: "You can only manage order in status CREATE, ACCEPT and CANCEL",
-            });
-        }
-
         let listOrder = await OrderService.getListOrderByShopId(shop._id, status);
+        for (let i = 0; i< listOrder.length; i++){
+            listOrder[i] = listOrder[i].toObject();
+            let listOrderProduct = await OrderProductService.getListOrderProductOfOrder(listOrder[i]._id);
+            console.log(`index: ${i}: orderId: ${listOrder[i]._id}` ,listOrderProduct.length);
+            listOrder[i].orderProduct = listOrderProduct;
+        }
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: "get list order with status successfully",

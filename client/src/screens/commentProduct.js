@@ -3,11 +3,16 @@ import styles from './CSS/commentProduct.module.css';
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
+import Button from '@mui/material/Button';
+
 
 function CommentProduct() {
   const accessToken = TokenService.getLocalAccessToken(
     RoleService.getLocalRole()
   );
+  const submit = ()=>{
+
+  }
   if (!accessToken) {
     return <Navigate to="/customer/login"></Navigate>;
   }
@@ -22,11 +27,7 @@ function CommentProduct() {
       return (
         <div>
           <CommentItem />
-          <CommentItem />
-          <div className={styles.controlButton}>
-            <button>Trở lại</button>
-            <button>Hoàn thành</button>
-          </div>
+          
         </div>
       );
     }
