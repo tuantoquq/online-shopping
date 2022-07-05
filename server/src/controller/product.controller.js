@@ -305,7 +305,7 @@ export const addProduct = async (req, res, next) => {
             codes: productCode,
             productUrl: `http://localhost:3000/products?pid=${productId}`,
             count: parseInt(req.body.count),
-            sizes: JSON.parse(req.body.sizes),
+            sizes: req.body.sizes,
             ratingStar: 0,
             ratingCount: 0,
             categoryId: category._id,
@@ -320,6 +320,7 @@ export const addProduct = async (req, res, next) => {
             data: newProduct,
         });
     } catch (err) {
+        console.log(err)
         if (err instanceof CustomError) {
             return res.status(err.httpStatus).send({
                 status: err.apiStatus,
