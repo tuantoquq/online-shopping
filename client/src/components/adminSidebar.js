@@ -89,7 +89,7 @@ function AdminSidebar({ select }) {
             <Link
               to="/admin/shop"
               className={clsx(styles.listItemButton, {
-                [styles.selectedItem]: selected === 2,
+                [styles.selectedItem]: selected === 'shop',
               })}
               onClick={() => setSelected(2)}
             >
@@ -99,11 +99,11 @@ function AdminSidebar({ select }) {
             <Link
               to="/admin/shop-request"
               className={clsx(styles.listItemButton, {
-                [styles.selectedItem]: selected === 3,
+                [styles.selectedItem]: selected === 'shop-request',
               })}
               onClick={() => setSelected(3)}
             >
-              <span>Đăng kí bán hàng </span>
+              <span>Yêu cầu đăng kí bán hàng </span>
             </Link>
           </div>
         </div>

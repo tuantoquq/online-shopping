@@ -25,6 +25,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { changeShopperState } from '../service/AdminService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -61,23 +62,36 @@ function ShopperLists(props) {
   };
 
   const handleChangeStatus = () => {
-    let tmp = data;
-    if (tmp[itemIndex].status === 'Blocked') {
-      tmp[itemIndex].status = 'Active';
-    } else {
-      tmp[itemIndex].status = 'Blocked';
-    }
-    setData(tmp);
+    changeShopperState(
+      selectedItem.id,
+      selectedItem.status === 'Active' ? -1 : 1
+    )
+      .then((res) => {
+        // console.log(res);
+        let tmp = data;
+        if (tmp[itemIndex].status === 'Blocked') {
+          tmp[itemIndex].status = 'Active';
+        } else {
+          tmp[itemIndex].status = 'Blocked';
+        }
+        setData(tmp);
 
-    setErrMsg({
-      status: 'success',
-      message:
-        selectedItem.status === 'Blocked'
-          ? 'Khóa tài khoản thành công'
-          : 'Mở khóa tài khoản thành công',
-    });
-    setOpenModal(false);
-    // setData(tmp);
+        setErrMsg({
+          status: 'success',
+          message:
+            selectedItem.status === 'Blocked'
+              ? 'Khóa tài khoản thành công'
+              : 'Mở khóa tài khoản thành công',
+        });
+        setOpenModal(false);
+      })
+      .catch((err) => {
+        setErrMsg({
+          status: 'error',
+          message: err.message,
+        });
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -95,7 +109,7 @@ function ShopperLists(props) {
     })
       .then((res) => {
         console.log(res.data.data);
-        let shopperActive = res.data.data.map((item) => {
+        return res.data.data.map((item) => {
           const status = item.isBlock === 0 ? 'Active' : 'Blocked';
           const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
           const avatarUrl =
@@ -105,10 +119,6 @@ function ShopperLists(props) {
           const dateOfBirth = item.dateOfBirth
             ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
             : null;
-          const issueDate = item.issueDate
-            ? format(new Date(item.issueDate), 'dd/MM/yyyy')
-            : null;
-
           return {
             id: item._id,
             cccd: item.cccd,
@@ -117,12 +127,11 @@ function ShopperLists(props) {
             phoneNumber: item.phoneNumber,
             fullname: item.firstName + ' ' + item.lastName,
             gender: gender,
-            role: 'Người bán hàng',
             status: status,
             dateOfBirth: dateOfBirth,
             createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-            updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-            issueDate: issueDate,
+            updatedAt: format(new Date(item.updatedAt), 'dd/MM/yyyy'),
+            issueDate: item.issueDate,
             issuePlace: item.issuePlace,
           };
         });
@@ -130,12 +139,12 @@ function ShopperLists(props) {
       .then((shopperActive) => {
         axiosConfig({
           method: 'get',
-          url: '/shopper/get-shopper-with-state?state=0',
+          url: '/shopper/get-shopper-with-state?state=-1  ',
         })
           .then((res) => {
             console.log(res.data.data);
             let shopperBlocked = res.data.data.map((item) => {
-              const status = item.isBlock === 0 ? 'Active' : 'Blocked';
+              const status = item.state === 1 ? 'Active' : 'Blocked';
               const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
               const avatarUrl =
                 item.avatarUrl === 'avt_default.png'
@@ -143,9 +152,6 @@ function ShopperLists(props) {
                   : item.avatarUrl;
               const dateOfBirth = item.dateOfBirth
                 ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
-                : null;
-              const issueDate = item.issueDate
-                ? format(new Date(item.issueDate), 'dd/MM/yyyy')
                 : null;
 
               return {
@@ -156,16 +162,15 @@ function ShopperLists(props) {
                 phoneNumber: item.phoneNumber,
                 fullname: item.firstName + ' ' + item.lastName,
                 gender: gender,
-                role: 'Người bán hàng',
                 status: status,
                 dateOfBirth: dateOfBirth,
                 createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
                 updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-                issueDate: issueDate,
+                issueDate: item.issueDate,
                 issuePlace: item.issuePlace,
               };
             });
-            setData([...shopperActive, ...shopperBlocked]);
+            setData([...shopperBlocked, ...shopperActive]);
           })
           .catch((err) => console.log(err));
       })
@@ -210,8 +215,8 @@ function ShopperLists(props) {
       label: 'Họ và tên',
     },
     {
-      name: 'dateOfBirth',
-      label: 'Ngày sinh',
+      name: 'cccd',
+      label: 'CMND/CCCD',
       options: {
         search: false,
       },
@@ -389,10 +394,10 @@ function ShopperLists(props) {
             </Fade>
           </Modal>
           <div className={clsx(styles.pageContainer)}>
-            <AdminSidebar select="customers" />
+            <AdminSidebar select="shoppers" />
             <div className={clsx(styles.pageBody)}>
               <MUIDataTable
-                title={'Thông tin khách hàng'}
+                title={'Thông tin người bán hàng'}
                 data={data}
                 columns={columns}
                 options={options}

@@ -22,6 +22,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { changeUserStatus } from '../service/AdminService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -59,64 +60,34 @@ function CustomerLists(props) {
   };
 
   const handleChangeStatus = () => {
-    // axiosConfig({
-    //   method: 'get',
-    //   url: '/customer/getall',
-    // })
-    //   .then((res) => {
-    //     console.log(res.data.data);
-    //     return res.data.data.map((item) => {
-    //       const status = item.isBlock === 0 ? 'Active' : 'Blocked';
-    //       const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
-    //       const avatarUrl =
-    //         item.avatarUrl === 'avt_default.png'
-    //           ? DefaultAvatar
-    //           : item.avatarUrl;
-    //       const dateOfBirth = item.dateOfBirth
-    //         ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
-    //         : null;
+    changeUserStatus(selectedItem.email, 'customer', selectedItem.status)
+      .then((res) => {
+        // console.log(res);
+        let tmp = data;
+        if (tmp[itemIndex].status === 'Blocked') {
+          tmp[itemIndex].status = 'Active';
+        } else {
+          tmp[itemIndex].status = 'Blocked';
+        }
+        setData(tmp);
 
-    //       return {
-    //         id: item._id,
-    //         email: item.email,
-    //         phoneNumber: item.phoneNumber,
-    //         fullname: item.firstName + ' ' + item.lastName,
-    //         gender: gender,
-    //         status: status,
-    //         avatarUrl: avatarUrl,
-    //         createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-    //         updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-    //         dateOfBirth: dateOfBirth,
-    //       };
-    //     });
-    //   })
-    //   .then((customerList) => {
-    //     setData(customerList);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setErrMsg({
-    //       type: 'error',
-    //       message: err,
-    //     });
-    //   });
+        setErrMsg({
+          status: 'success',
+          message:
+            selectedItem.status === 'Blocked'
+              ? 'Khóa tài khoản thành công'
+              : 'Mở khóa tài khoản thành công',
+        });
+        setOpenModal(false);
+      })
+      .catch((err) => {
+        setErrMsg({
+          status: 'error',
+          message: err.message,
+        });
+        console.log(err);
+      });
 
-    let tmp = data;
-    if (tmp[itemIndex].status === 'Blocked') {
-      tmp[itemIndex].status = 'Active';
-    } else {
-      tmp[itemIndex].status = 'Blocked';
-    }
-    setData(tmp);
-
-    setErrMsg({
-      status: 'success',
-      message:
-        selectedItem.status === 'Blocked'
-          ? 'Khóa tài khoản thành công'
-          : 'Mở khóa tài khoản thành công',
-    });
-    setOpenModal(false);
     // setData(tmp);
   };
 
@@ -149,7 +120,6 @@ function CustomerLists(props) {
           return {
             id: item._id,
             email: item.email,
-            cccd: item.cccd,
             phoneNumber: item.phoneNumber,
             fullname: item.firstName + ' ' + item.lastName,
             gender: gender,

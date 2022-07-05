@@ -14,13 +14,16 @@ function LineGraph({ id, startDate, endDate, lines, xAxis, width, height }) {
   });
   useEffect(() => {
     let timeRange = [];
-    let start = startDate;
-    while (format(start, 'MM/dd/yyyy') !== format(endDate, 'MM/dd/yyyy')) {
+    let start = add(startDate, { days: 1 });
+    while (
+      format(start, 'MM/dd/yyyy') !==
+      format(add(endDate, { days: 2 }), 'MM/dd/yyyy')
+    ) {
       timeRange.push(start);
       // console.log(start);
       start = add(start, { days: 1 });
     }
-    timeRange.push(endDate);
+    // timeRange.push(endDate);
     setSelectedTime(timeRange.map((day) => format(day, 'MM/dd/yyyy')));
     // console.log(timeRange);
   }, [startDate, endDate]);
