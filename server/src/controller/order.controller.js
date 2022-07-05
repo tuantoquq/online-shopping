@@ -7,6 +7,7 @@ import Order from '../model/order.js';
 import CartItemsService from '../service/cartItems.service.js';
 import OrderProduct from '../model/orderProduct.js';
 import ProductService from '../service/product.service.js';
+import mongoose from 'mongoose';
 
 export const addOrder = async (req, res) => {
     try {
@@ -24,14 +25,31 @@ export const addOrder = async (req, res) => {
                 message: "No items to order!"
             });
         }
+        let carts = [];
+        let products = [];
+        let setShop = new Set();
         //check cart items is exist
         for (let i = 0; i < listCartItems.length; i++){
-            await CartItemsService.findCartItemsById(
+            let cartItems = await CartItemsService.findCartItemsById(
                 listCartItems[i],
                 userId,
             );
+
+            //get current product
+            let product = await ProductService.findProductById(cartItems.productId);
+            setShop.add(product.shopId.toString());
+            carts.push(cartItems);
+            products.push(product);
         }
 
+        if(setShop.size > 1){
+            return res.status(httpStatus.BAD_REQUEST).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "You can only buy products in one shop for each order"
+            });
+        }
+
+        let [shopId] = setShop;
 
         //create order
         let newOrder = new Order({
@@ -40,31 +58,25 @@ export const addOrder = async (req, res) => {
             receiverName: address.receiverName,
             phone: address.phone,
             deliveryAddress: `${address.details}, ${address.ward}, ${address.district}, ${address.city}`,
+            shopId: new mongoose.Types.ObjectId(shopId)
         });
 
         const order = await OrderService.addOrder(newOrder);
 
         //create order products
         let listOrderProduct = [];
-        for (let i = 0; i < listCartItems.length; i++) {
-            //get cartItems from id
-            let cartItems = await CartItemsService.findCartItemsById(
-                listCartItems[i],
-                userId,
-            );
 
-            //get current product
-            let product = await ProductService.findProductById(cartItems.productId);
+        for (let i = 0; i < listCartItems.length; i++) {
 
             //create new order product
             let newOrderProduct = new OrderProduct({
                 orderId: order._id,
-                productId: product._id,
-                productName: product.productName,
-                size: cartItems.size,
-                count: cartItems.count,
-                currentPrice: product.price,
-                productImageUrl: product.imageUrls[0].base_url,
+                productId: products[i]._id,
+                productName: products[i].productName,
+                size: carts[i].size,
+                count: carts[i].count,
+                currentPrice: products[i].price,
+                productImageUrl: products[i].imageUrls[0].base_url,
             });
 
             let orderProduct = await OrderProductService.addOrderProduct(newOrderProduct);
