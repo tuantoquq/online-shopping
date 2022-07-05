@@ -1,7 +1,8 @@
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
+import OrderService from '../service/order.service.js';
+import ShopService from '../service/shop.service.js';
 import ShopperService from '../service/shopper.service.js';
-import Shopper from '../model/shopper.js';
 
 export const getShopperProfile = async (req, res) => {
     try {
@@ -59,7 +60,7 @@ export const updateAvatar = async (req, res, next) => {
 };
 
 
-export const getAllShopperWithState = async (req, res,next) => {
+export const getAllShopperWithState = async (req, res) => {
     try{
         let state = req.query.state
         console.log(state)
@@ -76,7 +77,7 @@ export const getAllShopperWithState = async (req, res,next) => {
             data: shopper
         })
     }
-    catch(e) {
+    catch(err) {
         return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
             status: apiStatus.OTHER_ERROR,
             message: err.message,
@@ -84,3 +85,60 @@ export const getAllShopperWithState = async (req, res,next) => {
     }
 
 }
+
+export const getShopInformationOfShopper = async (req, res) => {
+    try{
+        let shopperId = req.userId;
+        let shop = await ShopService.findShopByShopperId(shopperId);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get shop info of shopper successfully",
+            data: shop
+        });
+    }catch(err){
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
+
+export const getAllOrderWithStatus = async (req, res) => {
+    try{
+        let shopperId = req.userId;
+        let status = req.query.status;
+        let shop = await ShopService.findShopByShopperId(shopperId);
+
+        if(status === 2) {
+            return res.status(httpStatus.BAD_REQUEST).send({
+                status: apiStatus.SUCCESS,
+                message: "You can only manage order in status CREATE, ACCEPT and CANCEL",
+            });
+        }
+
+        let listOrder = await OrderService.getListOrderByShopId(shop._id, status);
+        return res.status(httpStatus.OK).send({
+            status: apiStatus.SUCCESS,
+            message: "get list order with status successfully",
+            data: listOrder
+        });
+    }catch(err){
+        if (err instanceof CustomError) {
+            return res.status(err.httpStatus).send({
+                status: err.apiStatus,
+                message: err.message,
+            });
+        }
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
+
