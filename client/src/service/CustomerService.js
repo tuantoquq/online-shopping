@@ -138,3 +138,14 @@ export const uploadAvatar = async (avatar) => {
     }
     return response;
 }
+
+
+export const addComment = async (data) => {
+    let response;
+    try{
+        response = await customerApi.post('/customer/auth/comments', data);
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}

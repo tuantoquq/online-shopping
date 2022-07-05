@@ -324,8 +324,7 @@ function ProductManager() {
       for (var key in data) {
         form_data.append(key, data[key]);
       }
-      console.log(form_data)
-      console.log(data);
+
       try {
         AddProduct(form_data).then(res =>{
           toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
