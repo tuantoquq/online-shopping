@@ -77,3 +77,21 @@ export const getOrder = async (status) => {
   }
   return response;
 };
+
+export const changeOrderStatus = async (status,orderId,reason) => {
+  let response;
+  let data = {
+    status:status,
+    orderId:orderId,
+    reason:reason}
+  try {
+    response = await shopperApi({
+      url:"/shopper/auth/updateOrder",
+      method:'put',
+      data:data
+    })
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};

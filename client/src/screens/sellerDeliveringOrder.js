@@ -16,7 +16,7 @@ function DeliveringOrder({ navigation }) {
     getOrder(1)
     .then(res =>{
       setData(res.data.data)
-      console.log(res.data.data)
+      // console.log(res.data.data)
     })
     .catch(err => console.log(err))
 

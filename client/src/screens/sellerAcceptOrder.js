@@ -15,6 +15,7 @@ function AcceptOrder({ navigation }) {
   useEffect(()=>{
     getOrder(0)
     .then(res =>{
+      setData(res.data.data)
       console.log(res.data.data)
     })
     .catch(err => console.log(err))
@@ -45,7 +46,7 @@ function AcceptOrder({ navigation }) {
 
             <div className={styles.tab2}>
               <Search />
-              <OrderProduct type={0} />
+              <OrderProduct type={0} data={data}/>
 
             </div>
           </div>

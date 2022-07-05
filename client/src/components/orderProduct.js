@@ -9,7 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { changeOrderStatus } from "../service/ShopperService";
 
 
 function OrderProduct(props) {
@@ -24,11 +24,31 @@ function OrderProduct(props) {
     const handleClose = () => {
         setOpen(false);
     };
+    const acceptOrder = (status,orderId)=>{
+        console.log('hi')
+        changeOrderStatus(status,orderId,'')
+        .then(res=>{
+            window.location.reload()
+        })
+        .catch(err =>console.log(err))
+
+    }
+    const rejectOrder = ()=>{
+        
+    }
+
+
 
     return (
         <div className={styles.content}>
             {
                 listOrder?.map((item, index) => {
+                    let totalPrice = 0
+                    let orderProduct = item?.orderProduct
+                    for(var i = 0; i < orderProduct.length;i++){
+                        totalPrice += Number(orderProduct[i]?.currentPrice) * orderProduct[i]?.count
+                    }
+
                     return <div key={index}>
                         <div className={styles.displayInfo}>
                             <p className={styles.customerName}>{item?.receiverName}</p>
@@ -52,12 +72,12 @@ function OrderProduct(props) {
 
 
                         <div className={styles.listProduct}>
-                            <ProductItem data={item}/>
+                            <ProductItem data={orderProduct} order_id ={item._id}/>
                         </div>
                         <div className={styles.comp1}>
                             <div className={styles.displayMoney}>
                                 <p className={styles.disTotalPrice}>Tổng số tiền:</p>
-                                <p className={styles.totalPrice}>đ 300.000</p>
+                                <p className={styles.totalPrice}>đ {totalPrice}</p>
                             </div>
 
                             {
@@ -65,7 +85,7 @@ function OrderProduct(props) {
                                 <div className={styles.comp2}>
                                     <Stack spacing={2} direction="row">
                                         <Button variant="outlined" color="success">Chi tiết</Button>
-                                        <Button variant="contained" color="success">Chấp nhận</Button>
+                                        <Button variant="contained" color="success" onClick={()=>acceptOrder(1,item._id)}>Chấp nhận</Button>
                                         <Button variant="contained" color="error" onClick={handleClickOpen}>Từ chối</Button>
                                     </Stack>
                                 </div>
