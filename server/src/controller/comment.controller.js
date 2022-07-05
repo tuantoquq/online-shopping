@@ -4,7 +4,7 @@ import CommentService from '../service/comment.service.js';
 import ProductService from '../service/product.service.js';
 import { Comment } from '../model/index.js';
 
-export const addComment = async (req, res) => {
+export const addComment = async (req, res, next) => {
     try {
         let userId = req.userId;
         let productId = req.body.productId;
@@ -15,14 +15,28 @@ export const addComment = async (req, res) => {
             productId,
         );
 
+        //upload images
+        let imageFiles = req.files;
+        //check file extensions
+        if (!imageFiles) {
+            const error = new Error('Upload file again!');
+            error.httpStatusCode = 400;
+            return next(error);
+        }
+
+        let imageUrls = [];
+        for (let i = 0; i < imageFiles.length; i++) {
+            imageUrls.push(`${process.env.IMAGE_PRE_PATH}/${imageFiles[i].filename}`);
+        }
+
         if (!checkComment) {
             //not exist => can comment
             let newComment = new Comment({
                 customerId: userId,
                 productId: productId,
                 content: req.body.content,
-                ratingStar: req.body.ratingStar,
-                images: req.body.images,
+                ratingStar: parseInt(req.body.ratingStar),
+                images: imageUrls,
             });
             let rsComment = await CommentService.addComment(newComment);
             return res.status(httpStatus.OK).send({
