@@ -242,7 +242,7 @@ function ProductInformation({navigation}) {
                   imageTest={imageTest}
                   userName="Kito"
                   ratingScore={comment?.ratingStar}
-                  timeRate={comment?.createdAt}
+                  timeRate={(new Date(comment?.createdAt)).toLocaleString()}
                   comment={comment?.content}
                   imageProduct={comment?.images}
                 />

@@ -310,15 +310,15 @@ function ProductManager() {
       //   files: null
       // };
       data = {
-        productName: 'aaaa',
-        shortDescription: 'aaaaaa',
-        longDescription: 'aaaaaa',
-        price: 10000,
-        soldHistory: 100,
+        productName: name,
+        shortDescription: detail,
+        longDescription: detail,
+        price: cost,
+        soldHistory: 0,
         sizes: { "type": "color", "values": ["black", "white"] },
-        count: 100,
-        categoryId: '629ddae383ec9b8c85475215',
-        files: null
+        count: count,
+        categoryId: type,
+        files: avatarImg
       };
       var form_data = new FormData();
       for (var key in data) {
@@ -413,7 +413,7 @@ function ProductManager() {
         console.log(err)
       })
 
-  }, [openInforProduct])
+  }, [open])
 
   // sort && page
   const [searchTerm, setSearchTerm] = useState('');
