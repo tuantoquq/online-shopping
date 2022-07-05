@@ -1,4 +1,4 @@
-import ProductItem from "./productItem"
+import ProductItem_1 from "./productItem_1"
 import styles from './CSS/orderProduct.module.css'
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -44,7 +44,7 @@ function OrderProductShip(){
             <div>
             {
                 cartItem.map((item,index) => {
-                    return <ProductItem productId={item.productId} quantity={item.count} key={index}/>
+                    return <ProductItem_1 productId={item.productId} quantity={item.count} key={index}/>
                 })
             }
             </div>
