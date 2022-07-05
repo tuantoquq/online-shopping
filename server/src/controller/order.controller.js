@@ -146,7 +146,7 @@ export const getListOrderByCustomerWithOptionStatus = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
     try {
         let { status, orderId, reasonReject} = req.body;
-        if (status === 1 || status === -1) {
+        if (status === 1 || status === -1 || status === 2) {
             let order;
             if(status === -1){
                 if(reasonReject === undefined || reasonReject === ""){
