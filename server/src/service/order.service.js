@@ -40,9 +40,34 @@ OrderService.updateOrder = async (orderId, orderStatus) => {
     }
     return order;
 };
+OrderService.rejectOrder = async (orderId, reasonReject) => {
+    let order = await Order.findByIdAndUpdate(
+        orderId,
+        { orderStatus: -1 , reasonReject: reasonReject},
+        { new: true }    
+    );
+    if (!order) {
+        throw new CustomError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            apiStatus.DATABASE_ERROR,
+            `Order not found with id: ${orderId}`,
+        );
+    }
+    return order;
+};
 
 OrderService.getListOrderByCustomerAndStatus = async (customerId, status) => {
     let listOrder = await Order.find({ customerId: customerId, orderStatus: status });
     return listOrder;
 };
+
+OrderService.getListOrderByShopId = async (shopId, status) => {
+    let listOrder;
+    if(status === undefined) {
+        listOrder = await Order.find({shopId: shopId});
+    }else {
+        listOrder = await Order.find({shopId: shopId, orderStatus: status});
+    }
+    return listOrder;
+}
 export default OrderService;

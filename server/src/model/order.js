@@ -11,6 +11,10 @@ const OrderSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
+    shopId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Shop'
+    },
     receiverName: {
         type: String,
         required: true,

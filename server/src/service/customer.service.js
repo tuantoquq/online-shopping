@@ -56,8 +56,8 @@ CustomerService.updateAvatar = async (avtUrl, customerId) => {
     return response;
 };
 
-CustomerService.blockCustomer = async (email) => {
-    let customer = await Customer.findOneAndUpdate({email: email}, {isBlock: 1}, {new: true});
+CustomerService.onOffBlockCustomer = async (email, state) => {
+    let customer = await Customer.findOneAndUpdate({email: email}, {isBlock: state}, {new: true});
     if(!customer){
         throw new CustomError(
             httpStatus.NOT_FOUND,

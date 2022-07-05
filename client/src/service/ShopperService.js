@@ -13,7 +13,7 @@ export const getShopperProfile = async () => {
 export const updateShopperProfile = async (updateInfo) => {
   let response;
   try {
-    response = await shopperApi.post('/shopper/auth/update', updateInfo, {
+    response = await shopperApi.put('/shopper/auth/update-profile', updateInfo, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -51,11 +51,13 @@ export const UpdateProduct = async (id, product) => {
 export const AddProduct = async (product) => {
   let response;
   try {
-    response = await shopperApi.post(`/shopper/auth/add-product`, product, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    response = await shopperApi({
+      url:'/shopper/auth/add-product',
+      method:'post',
+      headers: { "Content-Type": "multipart/form-data" },
+      data:product
+
+    })
   } catch (err) {
     console.log(err);
   }
