@@ -74,6 +74,18 @@ function AdminSidebar({ select }) {
               <span>Danh sách khách hàng </span>
             </Link>
 
+            <div className={clsx(styles.listItem)}>
+              <Link
+                to="/admin/shoppers"
+                className={clsx(styles.listItemButton, {
+                  [styles.selectedItem]: selected === 'shoppers',
+                })}
+                onClick={() => setSelected('shoppers')}
+              >
+                <span>Danh sách người bán hàng </span>
+              </Link>
+            </div>
+
             <Link
               to="/admin/shop"
               className={clsx(styles.listItemButton, {

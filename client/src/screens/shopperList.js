@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DefaultAvatar from '../assets/avatar/defaultAvatar.png';
 import clsx from 'clsx';
 import styles from './CSS/customersListCSS.module.scss';
 import AdminSidebar from '../components/adminSidebar';
 import AdminHeader from '../components/adminHeader';
+import AccountsList from '../components/accountsList';
 import { format } from 'date-fns';
 import MUIDataTable from 'mui-datatables';
 import axiosConfig from '../config/axios';
+import { Tooltip, IconButton } from '@mui/material';
+import BlockIcon from '@mui/icons-material/Block';
 import Avatar from '@mui/material/Avatar';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
@@ -39,8 +42,7 @@ const style = {
   p: 4,
 };
 
-function CustomerLists(props) {
-  // console.log('re-render');
+function ShopperLists(props) {
   const [data, setData] = useState([]);
   // const [customerList, setCustomerList] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
@@ -48,7 +50,7 @@ function CustomerLists(props) {
   const [errMsg, setErrMsg] = useState({ status: 'info', message: '' });
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  // console.log(openModal);
+  console.log(openModal);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -59,48 +61,6 @@ function CustomerLists(props) {
   };
 
   const handleChangeStatus = () => {
-    // axiosConfig({
-    //   method: 'get',
-    //   url: '/customer/getall',
-    // })
-    //   .then((res) => {
-    //     console.log(res.data.data);
-    //     return res.data.data.map((item) => {
-    //       const status = item.isBlock === 0 ? 'Active' : 'Blocked';
-    //       const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
-    //       const avatarUrl =
-    //         item.avatarUrl === 'avt_default.png'
-    //           ? DefaultAvatar
-    //           : item.avatarUrl;
-    //       const dateOfBirth = item.dateOfBirth
-    //         ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
-    //         : null;
-
-    //       return {
-    //         id: item._id,
-    //         email: item.email,
-    //         phoneNumber: item.phoneNumber,
-    //         fullname: item.firstName + ' ' + item.lastName,
-    //         gender: gender,
-    //         status: status,
-    //         avatarUrl: avatarUrl,
-    //         createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-    //         updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-    //         dateOfBirth: dateOfBirth,
-    //       };
-    //     });
-    //   })
-    //   .then((customerList) => {
-    //     setData(customerList);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setErrMsg({
-    //       type: 'error',
-    //       message: err,
-    //     });
-    //   });
-
     let tmp = data;
     if (tmp[itemIndex].status === 'Blocked') {
       tmp[itemIndex].status = 'Active';
@@ -131,11 +91,11 @@ function CustomerLists(props) {
   useEffect(() => {
     axiosConfig({
       method: 'get',
-      url: '/customer/getall',
+      url: '/shopper/get-shopper-with-state?state=1',
     })
       .then((res) => {
-        // console.log(res.data.data);
-        return res.data.data.map((item) => {
+        console.log(res.data.data);
+        let shopperActive = res.data.data.map((item) => {
           const status = item.isBlock === 0 ? 'Active' : 'Blocked';
           const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
           const avatarUrl =
@@ -145,24 +105,69 @@ function CustomerLists(props) {
           const dateOfBirth = item.dateOfBirth
             ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
             : null;
+          const issueDate = item.issueDate
+            ? format(new Date(item.issueDate), 'dd/MM/yyyy')
+            : null;
 
           return {
             id: item._id,
-            email: item.email,
             cccd: item.cccd,
+            email: item.email,
+            avatarUrl: avatarUrl,
             phoneNumber: item.phoneNumber,
             fullname: item.firstName + ' ' + item.lastName,
             gender: gender,
+            role: 'Người bán hàng',
             status: status,
-            avatarUrl: avatarUrl,
+            dateOfBirth: dateOfBirth,
             createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
             updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
-            dateOfBirth: dateOfBirth,
+            issueDate: issueDate,
+            issuePlace: item.issuePlace,
           };
         });
       })
-      .then((customerList) => {
-        setData(customerList);
+      .then((shopperActive) => {
+        axiosConfig({
+          method: 'get',
+          url: '/shopper/get-shopper-with-state?state=0',
+        })
+          .then((res) => {
+            console.log(res.data.data);
+            let shopperBlocked = res.data.data.map((item) => {
+              const status = item.isBlock === 0 ? 'Active' : 'Blocked';
+              const gender = item.gender ? item.gender.toUpperCase() : 'OTHER';
+              const avatarUrl =
+                item.avatarUrl === 'avt_default.png'
+                  ? DefaultAvatar
+                  : item.avatarUrl;
+              const dateOfBirth = item.dateOfBirth
+                ? format(new Date(item.dateOfBirth), 'dd/MM/yyyy')
+                : null;
+              const issueDate = item.issueDate
+                ? format(new Date(item.issueDate), 'dd/MM/yyyy')
+                : null;
+
+              return {
+                id: item._id,
+                cccd: item.cccd,
+                email: item.email,
+                avatarUrl: avatarUrl,
+                phoneNumber: item.phoneNumber,
+                fullname: item.firstName + ' ' + item.lastName,
+                gender: gender,
+                role: 'Người bán hàng',
+                status: status,
+                dateOfBirth: dateOfBirth,
+                createdAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
+                updatedAt: format(new Date(item.createdAt), 'dd/MM/yyyy'),
+                issueDate: issueDate,
+                issuePlace: item.issuePlace,
+              };
+            });
+            setData([...shopperActive, ...shopperBlocked]);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -294,6 +299,8 @@ function CustomerLists(props) {
     // },
   };
 
+  // const [customerList, setCustomerList] = useState([]);
+
   const accessToken = TokenService.getLocalAccessToken(
     RoleService.getLocalRole()
   );
@@ -397,4 +404,4 @@ function CustomerLists(props) {
     }
   }
 }
-export default CustomerLists;
+export default ShopperLists;

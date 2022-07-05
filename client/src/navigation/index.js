@@ -24,6 +24,7 @@ import AccountShopper from '../components/accountShopper';
 import AddressInfomation from '../screens/addressInfomation';
 import AdminShopRequest from '../screens/adminShopRequest';
 import AdminShop from '../screens/adminShop';
+import ShoppersList from '../screens/shopperList';
 // import BasicTable from '../components/Test';
 
 function RootRoutes() {
@@ -75,6 +76,7 @@ function RootRoutes() {
       <Route path="/admin/statistic-order" element={<StatisticOrder />} />
       <Route path="/admin/statistic-revenue" element={<StatisticRevenue />} />
       <Route path="/admin/customers" element={<CustomersList />} />
+      <Route path="/admin/shoppers" element={<ShoppersList />} />
     </Routes>
   );
 }
