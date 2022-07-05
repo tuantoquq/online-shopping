@@ -46,7 +46,7 @@ function TabInfor(props) {
     setErrMsg('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit_info = async (e) => {
     e.preventDefault();
     const REGISTER_URL = `/api/v1/register`;
 
@@ -55,7 +55,7 @@ function TabInfor(props) {
       let data = {};
       console.log('submit');
       const bday = new Date(birthday);
-      const iday = new Date(ngayCap);
+      const iday = ngayCap;
       data = {
         email: email,
         firstName: firstName,
@@ -64,7 +64,6 @@ function TabInfor(props) {
         gender: gender,
         birthDay: bday,
         address: address,
-        password: password,
         avatar: avatarImg,
         cccd: cmnd,
         issueDate: iday,
@@ -77,7 +76,8 @@ function TabInfor(props) {
         //     'Content-Type': 'application/json',
         //   },
         // });
-        updateShopperProfile(data).then(res=>{setSuccess(true);console.log(res?.data)})
+        updateShopperProfile(data).then(res=>{setSuccess(true);
+          console.log(res?.data)})
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
@@ -99,7 +99,7 @@ function TabInfor(props) {
       setGender(res?.data?.data?.gender);
       setCmnd(res?.data?.data?.cccd);
       setNoiCap(res?.data?.data?.issuePlace);
-      // setNgayCap(res?.data?.data?.issueDate);
+      setNgayCap(res?.data?.data?.issueDate);
       setAvatarImg(res?.data?.data?.avatarUrl)
     })
   },[])
@@ -132,7 +132,7 @@ function TabInfor(props) {
             </Snackbar>
           </div>
           <div className={clsx(styles.registerForm)}>
-            <form onSubmit={handleSubmit} className={clsx(styles.row)}>
+            <form onSubmit={handleSubmit_info} className={clsx(styles.row)}>
               {/* <div className={clsx(styles.formTitle, styles.row)}>
                 <h2 className={clsx(styles.title)}> Thông tin tài khoản </h2>
               </div> */}
@@ -443,7 +443,11 @@ function TabPassword(props) {
     setOpen(false);
     setErrMsg('');
   };
-
+  useEffect(()=>{
+    getShopperProfile().then(res=>{
+      setOldPassword(res?.data?.data?.password);
+    })
+  },[])
   const handleSubmit = async (e) => {
     e.preventDefault();
     const REGISTER_URL = `/api/v1/register`;
@@ -465,30 +469,15 @@ function TabPassword(props) {
       const iday = new Date(ngayCap);
       setPassword(newPassword);
       data = {
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phone,
-        gender: gender,
-        birthDay: bday,
-        address: address,
-        password: password,
-        avatar: avatarImg,
-        cccd: cmnd,
-        issueDate: iday,
-        issuePlace: noiCap,
+        password: newPassword,
       };
       console.log(data);
       try {
-        const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
+        updateShopperProfile(data).then(res => {
+          setSuccess(true);
+          console.log(res?.data);
         });
-        console.log(JSON.stringify(response?.data));
-        console.log(JSON.stringify(response));
-        setSuccess(true);
+        
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
