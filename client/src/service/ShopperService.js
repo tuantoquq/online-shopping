@@ -13,7 +13,7 @@ export const getShopperProfile = async () => {
 export const updateShopperProfile = async (updateInfo) => {
   let response;
   try {
-    response = await shopperApi.post('/shopper/auth/update', updateInfo, {
+    response = await shopperApi.put('/shopper/auth/update-profile', updateInfo, {
       headers: {
         'Content-Type': 'application/json',
       },
