@@ -8,6 +8,7 @@ import axiosConfig from '../config/axios';
 import { useNavigate, Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
+import { Button } from '@mui/material';
 
 function Cart() {
   const navigate = useNavigate();
@@ -17,17 +18,22 @@ function Cart() {
     }
   };
   const [cartItem, setCartItem] = useState([]);
-  const [totalPrice, setTotalPrice] = useState();
+  const [totalPrice, setTotalPrice] = useState(0);
   const [price, setPrice] = useState();
   const [change, setChange] = useState(0);
+  const [isEmpty, setIsEmpty] = useState(false);
   function getChange() {
     setChange(change + 1);
   }
+  useEffect(()=>{
+    if(cartItem.length === 0){setIsEmpty(true); console.log('empty')}
+    else{setIsEmpty(false); console.log('not empty')}
+  },[cartItem])
   useEffect(() => {
     getCartItem()
       .then((res) => {
         // console.log(res?.data?.data);
-        setCartItem(res?.data?.data);
+        setCartItem(res.data.data);
         const list_id = res.data.data.map((item) => item.productId);
         const list_count = res.data.data.map((item) => item.count);
         let total = 0;
@@ -85,8 +91,7 @@ function Cart() {
                   />
                 );
               })}
-            </div>
-
+          {!isEmpty && (<div>
             <div className={styles.comp1}>
               <div className={styles.displayMoney}>
                 <p className={styles.disTotalPrice}>Tổng số tiền:</p>
@@ -108,6 +113,18 @@ function Cart() {
                 Thanh toán
               </button>
             </div>
+          </div>)}
+          {isEmpty && (
+          <div className={styles.container}>
+            <p className={styles.text}> Không có sản phẩm nào trong giỏ hàng</p>
+            <Button
+              className={styles.center}
+              onClick={() => {
+                navigatePath('/');
+              }}
+            >Tiếp tục mua sắm</Button>
+          </div>)}
+          </div>
           </div>
           <Footer />
         </div>

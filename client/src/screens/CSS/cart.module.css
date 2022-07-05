@@ -25,3 +25,24 @@
     right: 5%;
     color: red;
 }
+.container {
+    height: 200px;
+    position: relative;
+    border: 1px solid white;
+}
+.center {
+    margin: 0;
+    position: absolute;
+    border: solid 3px blue;
+    font-weight: 25px;
+    font-size: 20px;
+    top: 20%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+.text{
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
