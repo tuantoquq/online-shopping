@@ -3,15 +3,22 @@ import { httpStatus, apiStatus, RoleConstants } from "../constants/index.js";
 import CustomerService from "../service/customer.service.js";
 import ShopperService from "../service/shopper.service.js";
 
-export const blockUser = async (req, res) => {
+export const onOffBlockUser = async (req, res) => {
     try{
         let email = req.body.email;
         let role = req.body.role;
+        let state = parseInt(req.query.isBlock);
+        if(state !== 1 && state !== 0){
+            return res.status(httpStatus.BAD_REQUEST).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "Invalid state request"
+            });
+        }
         let blockUser;
         if(role === RoleConstants.CUSTOMER){
-            blockUser = await CustomerService.blockCustomer(email);
+            blockUser = await CustomerService.onOffBlockCustomer(email, state);
         }else if (role === RoleConstants.SHOPPER){
-            blockUser = await ShopperService.blockShopper(email);
+            blockUser = await ShopperService.onOffBlockShopper(email, state);
         } else {
             return res.status(httpStatus.BAD_REQUEST).send({
                 status: apiStatus.INVALID_PARAM,
@@ -20,7 +27,7 @@ export const blockUser = async (req, res) => {
         }
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
-            message: "block user successfully",
+            message: `${state == 0 ? "un block" : "block"} user successfully`,
             data: {
                 user: blockUser,
                 role: role

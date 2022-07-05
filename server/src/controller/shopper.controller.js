@@ -116,13 +116,6 @@ export const getAllOrderWithStatus = async (req, res) => {
         let status = req.query.status;
         let shop = await ShopService.findShopByShopperId(shopperId);
 
-        if(status === 2) {
-            return res.status(httpStatus.BAD_REQUEST).send({
-                status: apiStatus.SUCCESS,
-                message: "You can only manage order in status CREATE, ACCEPT and CANCEL",
-            });
-        }
-
         let listOrder = await OrderService.getListOrderByShopId(shop._id, status);
         for (let i = 0; i< listOrder.length; i++){
             listOrder[i] = listOrder[i].toObject();

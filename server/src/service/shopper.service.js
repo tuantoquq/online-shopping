@@ -62,8 +62,8 @@ ShopperService.updateAvatar = async (avtUrl, shopperId) => {
     return response;
 };
 
-ShopperService.blockShopper = async (email) => {
-    let shopper = await Shopper.findOneAndUpdate({email: email}, {isBlock: 1}, {new: true});
+ShopperService.onOffBlockShopper = async (email, state) => {
+    let shopper = await Shopper.findOneAndUpdate({email: email}, {isBlock: state}, {new: true});
     if(!shopper){
         throw new CustomError(
             httpStatus.NOT_FOUND,
