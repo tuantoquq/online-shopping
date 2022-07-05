@@ -16,54 +16,63 @@ import imageTest from '../assets/testproduct.jpg'
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import clsx from 'clsx';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
-function ButtonOrder({post, st}){
+function ButtonOrder({ post, st ,productOrder}) {
     const navigate = useNavigate();
     const navigatePath = function (path) {
         if (window.location.pathname !== path) {
-          navigate(path);
+            navigate(path);
         }
-      };
+    };
     return (
         <div >
-            {post.map((p) => {
-                return(
-                    <div >
+            {post.map((p,index) => {
+                return (
+                    <div key={index}>
                         {p.status === st && (
                             <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>
                                 <div className={stylesProduct.tap}>
-                                    <Button variant="outlined" onClick={() => navigatePath("/cart")}> {p.button1} </Button>                                
-                                </div>          
-                                 
+                                    <Button variant="outlined" onClick={() => navigatePath("/cart")}> {p.button1} </Button>
+                                </div>
+
                                 {p.button2 === "Đánh giá shop" && (
                                     <div className={stylesProduct.tap}>
-                                        <Button variant="outlined" onClick={() => navigatePath("/TestShop")}> {p.button2} </Button>                  
-                                    </div>       
+                                        <Button variant="outlined" onClick={()=> navigate('/comment',{state:{id:productOrder}})}> 
+                                        {p.button2} </Button>
+                                    </div>
                                 )}
                             </div>
                         )}
                     </div>
                 )
             })
-        }
+            }
         </div>
-      );
+    );
 
 }
 
-function OrderUserItem({productOrder, status}){
+function OrderUserItem({ productOrder, status }) {
     const posts = [
-        {status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: ""},
-        {status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: ""},
-        {status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop"},
-        {status: "Đã hủy", button1: "Mua lại", button2: ""}
-      ];
-    return(
+        { status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: "" },
+        { status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: "" },
+        { status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop" },
+        { status: "Đã hủy", button1: "Mua lại", button2: "" }
+    ];
+    return (
         <div className={styleOrderUser.Home}>
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
-                    <div className={styleOrderUser.tdisplay}>  
+                    <div className={styleOrderUser.tdisplay}>
                         {/* <Link to='/testShop' >
                             <h2>
                                 Shop Mo Hinh
@@ -72,24 +81,24 @@ function OrderUserItem({productOrder, status}){
                         <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
                     </div>
                     {productOrder.map((order) => {
-                        return(
+                        return (
                             <div className={styleOrderUser.productImage}>
-                                <Link to= {"/product/" + order?.productId}>
+                                <Link to={"/product/" + order?.productId}>
                                     <div className="image">
                                         <Card sx={{ maxWidth: 80, minWidth: 80 }}>
                                             <CardActionArea>
                                                 <CardMedia
-                                                component="img"
-                                                image={order?.productImageUrl}
-                                                alt="green iguana"
+                                                    component="img"
+                                                    image={order?.productImageUrl}
+                                                    alt="green iguana"
                                                 />
                                             </CardActionArea>
                                         </Card>
-                                    </div>                        
+                                    </div>
                                 </Link>
-                                
+
                                 <div className={styleOrderUser.productTitle}>
-                                    <h5> 
+                                    <h5>
                                         {order?.productName}
                                     </h5>
                                     {/* <h5 className={styleOrderUser.item}> Loại hàng: {productOrder.type} </h5> */}
@@ -110,13 +119,14 @@ function OrderUserItem({productOrder, status}){
                         </h2>
                     </div>
                     <div className={styleOrderUser.button}>
-                        <ButtonOrder post = {posts} st = {status.status} />                
+                        <ButtonOrder post={posts} st={status.status} productOrder={productOrder}/>
                     </div>
                     <div className={stylesProduct.footFake}>
-                            <p>  </p>
+                        <p>  </p>
                     </div>
                 </div>
             </div>
+
         </div>
     );
 }
