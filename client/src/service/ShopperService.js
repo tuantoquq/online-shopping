@@ -83,7 +83,7 @@ export const changeOrderStatus = async (status,orderId,reason) => {
   let data = {
     status:status,
     orderId:orderId,
-    reason:reason}
+    reasonReject:reason}
   try {
     response = await shopperApi({
       url:"/shopper/auth/updateOrder",

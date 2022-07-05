@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ProductItem from "./productItem"
 import styles from './CSS/orderProduct.module.css'
 import Stack from '@mui/material/Stack';
@@ -16,8 +16,13 @@ function OrderProduct(props) {
     const type = props?.type
     const listOrder = props?.data
     const [open, setOpen] = React.useState(false);
+    const [id_reject,setId_reject] = useState()
 
-    const handleClickOpen = () => {
+    const [reason_reject,setReason_reject] = useState('')
+
+
+    const handleClickOpen = (id) => {
+        setId_reject(id)
         setOpen(true);
     };
 
@@ -25,7 +30,6 @@ function OrderProduct(props) {
         setOpen(false);
     };
     const acceptOrder = (status,orderId)=>{
-        console.log('hi')
         changeOrderStatus(status,orderId,'')
         .then(res=>{
             window.location.reload()
@@ -34,6 +38,16 @@ function OrderProduct(props) {
 
     }
     const rejectOrder = ()=>{
+        let reject_status = -1
+        changeOrderStatus(reject_status,id_reject,reason_reject)
+        .then(res=>{
+            console.log('hi')
+            setOpen(false);
+
+
+            window.location.reload()
+        })
+        .catch(err =>console.log(err))
         
     }
 
@@ -86,14 +100,24 @@ function OrderProduct(props) {
                                     <Stack spacing={2} direction="row">
                                         <Button variant="outlined" color="success">Chi tiết</Button>
                                         <Button variant="contained" color="success" onClick={()=>acceptOrder(1,item._id)}>Chấp nhận</Button>
-                                        <Button variant="contained" color="error" onClick={handleClickOpen}>Từ chối</Button>
+                                        <Button variant="contained" color="error" onClick={()=>handleClickOpen(item._id)}>Từ chối</Button>
+                                    </Stack>
+                                </div>
+                            }
+
+{
+                                type ===  1 &&
+                                <div className={styles.comp2}>
+                                    <Stack spacing={2} direction="row">
+                                        <Button variant="outlined" color="success">Chi tiết</Button>
+                                        <Button variant="contained" color="success" onClick={()=>acceptOrder(2,item._id)}>Đã giao thành công</Button>
                                     </Stack>
                                 </div>
                             }
 
 
                             {
-                                type !== 0 &&
+                                type !== 0 && type !==  1&&
                                 <div className={styles.comp3}>
                                     <Stack spacing={2} direction="row">
                                         <Button variant="outlined" color="success">Chi tiết</Button>
@@ -117,11 +141,12 @@ function OrderProduct(props) {
                                     type="text"
                                     fullWidth
                                     variant="standard"
+                                    onChange={e=> setReason_reject(e.target.value)}
                                 />
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose} color="error">Huỷ bỏ</Button>
-                                <Button onClick={handleClose}>Xác nhận</Button>
+                                <Button onClick={rejectOrder}>Xác nhận</Button>
                             </DialogActions>
                         </Dialog>
 
