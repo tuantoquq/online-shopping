@@ -35,11 +35,12 @@ function TabPanel(props) {
     { id: 0, status: 'Chờ xác nhận' },
     { id: 1, status: 'Chờ lấy hàng' },
     { id: 2, status: 'Đã giao' },
-    { id: -1, status: 'Đã huỷ' },
+    { id: -1, status: 'Bị từ chối' },
+    { id: -2, status: 'Đã huỷ' },
   ];
 
   var listOrder = productOrders?.filter(
-    (productOrder) => value === productOrder?.orderStatus || value === -2
+    (productOrder) => value === productOrder?.orderStatus || value === -3
   );
   return (
     <div>
@@ -130,17 +131,18 @@ function OrderUserManager({ navigation }) {
                       aria-label="secondary tabs example"
                       orientation="vertical"
                     >
-                      <Tab value={-2} label="Tất cả" />
+                      <Tab value={-3} label="Tất cả" />
                       <Tab value={0} label="Chờ xác nhận" />
                       <Tab value={1} label="Chờ lấy hàng" />
                       <Tab value={2} label="Đã giao" />
-                      <Tab value={-1} label="Đã hủy" />
+                      <Tab value={-1} label="Bị từ chối" />
+                      <Tab value={-2} label="Đã hủy" />
                     </Tabs>
                   </Grid>
                   <Grid item xs={10}>
                     <TabPanel
                       value={value}
-                      index={-2}
+                      index={-3}
                       productOrders={orderData}
                     ></TabPanel>
                     <TabPanel
@@ -161,6 +163,11 @@ function OrderUserManager({ navigation }) {
                     <TabPanel
                       value={value}
                       index={-1}
+                      productOrders={orderData}
+                    ></TabPanel>
+                    <TabPanel
+                      value={value}
+                      index={-2}
                       productOrders={orderData}
                     ></TabPanel>
                   </Grid>

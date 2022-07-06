@@ -96,7 +96,8 @@ function OrderUserItem({ productOrder, status }) {
         { status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: "" },
         { status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: "" },
         { status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop" },
-        { status: "Đã hủy", button1: "Mua lại", button2: "" }
+        { status: "Bị từ chối", button1: "Mua lại", button2: "" },
+        { status: "Đã huỷ", button1: "Mua lại", button2: "" }
     ];
 
     return (
@@ -104,7 +105,11 @@ function OrderUserItem({ productOrder, status }) {
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>
-                        <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                        <div>
+                            <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                            {status.status === "Bị từ chối" &&(<h3> Lý do: {productOrder?.reasonReject} </h3>)}                            
+                        </div>
+
                     </div>
                     {productOrder.map((order) => {
                         return (
