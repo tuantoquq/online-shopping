@@ -12,7 +12,7 @@ function Footer() {
     <div className={clsx(styles.footer, styles.textColor)}>
       <div className={styles.footerCol_1}>
         <h3>About Us</h3>
-        <p>Giám đỐc: Nguyễn Hoàng Anh Tuấn</p>
+        <p>Giám đốc: Nguyễn Hoàng Anh Tuấn</p>
         <p>+84376180160</p>
         <p>Địa chỉ: Số 1, Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
       </div>

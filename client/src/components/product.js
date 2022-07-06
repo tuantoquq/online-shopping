@@ -176,7 +176,7 @@ function ProductInformation({navigation}) {
                 </Card>
               </div>
               <div className={stylesProduct.productTitle}>
-                <Link to={"/shop/" + shopData?.shopperId} >
+                <Link to={"/shop/" + shopData?._id} >
                   <h2>
                     {shopData?.shopName}
                   </h2>

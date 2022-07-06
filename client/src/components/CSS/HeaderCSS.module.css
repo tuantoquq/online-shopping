@@ -6,6 +6,9 @@
     z-index: 1;
     width: 100%;
 }
+.btcart{
+    cursor: pointer;
+}
 
 .toolBar{
     /* justify-content: space-between; */

@@ -26,14 +26,31 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { addCartItem } from '../service/CustomerService';
+import { cancelOrder } from '../service/CustomerService';
 
-function ButtonOrder({ post, st ,productOrder}) {
+function ButtonOrder({ post, st ,productOrder, orderId}) {
     const navigate = useNavigate();
     const navigatePath = function (path) {
         if (window.location.pathname !== path) {
             navigate(path);
         }
     };
+    const handleCanleOrder = () => {
+        try {
+            cancelOrder(orderId).then(res =>{
+            }
+            ).catch(err => {
+              console.log(err);
+            });
+          } catch (err) {
+            if (!err?.response) {
+            } else {
+              console.log(err);
+            }
+          }
+          window.location.reload()
+    }
+
     return (
         <div >
             {post.map((p,index) => {
@@ -42,12 +59,19 @@ function ButtonOrder({ post, st ,productOrder}) {
                         {p.status === st && (
                             <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>
                                 <div className={stylesProduct.tap}>
-                                    <Button variant="outlined" onClick={() => {
+                                    {/* <Button variant="outlined" onClick={() => {
                                         productOrder.map(item => {
                                             addCartItem({productId: item.productId, quantity: item.count});
                                         })
-                                        // navigatePath("/cart")
-                                        }}> {p.button1} </Button>
+                                        navigatePath("/cart")
+                                        }}> {p.button1} </Button> */}
+                                    {p.button1 === "Mua lại" && (<Button variant="outlined" onClick={() => {
+                                        productOrder.map(item => {
+                                            addCartItem({productId: item.productId, quantity: item.count});
+                                        })
+                                        navigatePath("/cart")
+                                        }}> {p.button1} </Button>)}
+                                    {p.button1 === "Huỷ đơn hàng" && (<Button variant="outlined" onClick={handleCanleOrder}> {p.button1} </Button>)}
                                 </div>
 
                                 {p.button2 === "Đánh giá shop" && (
@@ -74,6 +98,7 @@ function OrderUserItem({ productOrder, status }) {
         { status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop" },
         { status: "Đã hủy", button1: "Mua lại", button2: "" }
     ];
+
     return (
         <div className={styleOrderUser.Home}>
             <div className={styleOrderUser.content} >
@@ -120,7 +145,7 @@ function OrderUserItem({ productOrder, status }) {
                         </h2>
                     </div>
                     <div className={styleOrderUser.button}>
-                        <ButtonOrder post={posts} st={status.status} productOrder={productOrder}/>
+                        <ButtonOrder post={posts} st={status.status} productOrder={productOrder} orderId={productOrder[0]?.orderId}/>
                     </div>
                     <div className={stylesProduct.footFake}>
                         <p>  </p>

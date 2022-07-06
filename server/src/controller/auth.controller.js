@@ -283,6 +283,11 @@ export const loginShopper = async (req, res) => {
                 status: apiStatus.AUTH_ERROR,
                 message: 'Your Account is Block!',
             });
+        }else if(shopper.state !== 1){
+            return res.status(httpStatus.UNAUTHORIZED).send({
+                status: apiStatus.AUTH_ERROR,
+                message: 'Admin has unconfirmed your account! Try later... !',
+            }); 
         }
         const passwordIsValid = compareSync(req.body.password, shopper.password);
         if (!passwordIsValid) {
