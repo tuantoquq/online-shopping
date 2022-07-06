@@ -239,8 +239,8 @@ function ProductInformation({navigation}) {
             {comments?.map((comment) => {
               return(
                 <UserRating
-                  imageTest={imageTest}
-                  userName="Kito"
+                  imageAvatar={comment?.customer?.avatarUrl}
+                  userName={`${comment?.customer?.firstName} ${comment?.customer?.lastName}`}
                   ratingScore={comment?.ratingStar}
                   timeRate={(new Date(comment?.createdAt)).toLocaleString()}
                   comment={comment?.content}
@@ -249,31 +249,6 @@ function ProductInformation({navigation}) {
               )
             })
             }
-            
-            {/* <UserRating
-              imageTest={imageTest}
-              userName="Kito"
-              ratingScore={5}
-              timeRate="14:30:00 29/05/2022"
-              comment="San pham dep"
-            />
-
-            <UserRating
-              imageTest={imageTest}
-              userName="Ayano"
-              ratingScore={4}
-              timeRate="14:30:00 29/04/2022"
-              comment="San pham tot"
-            />
-
-            <UserRating
-              imageTest={imageTest}
-              userName="Mitsuha"
-              ratingScore={4}
-              timeRate="14:30:00 05/05/2022"
-              comment="Nino is the best"
-            /> */}
-
           </div>
         </div>
         <Footer navigation={navigation}/>

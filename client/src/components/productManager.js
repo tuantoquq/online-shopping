@@ -39,6 +39,7 @@ import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getShopInformation } from '../service/ShopperService';
 
 
 const useStyles = makeStyles({
@@ -392,27 +393,38 @@ function ProductManager() {
   let pathShop = `/shops/profile?shopId=${tmp}`
   let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
   let pathListCategory = '/category/get?all=true'
+
   useEffect(() => {
-    axiosConfig.get(pathShop).then(async res => {
-      setShopData(res.data.data)
-      await axiosConfig.get(pathProduct).then(res => {
-        setProductData(res?.data?.data?.products)
-        setData(res?.data?.data?.products)
-      })
-        .catch(err => {
-          console.log(err)
+    getShopInformation()
+    .then(async (res) => {
+      // console.log(res?.data?.data);
+      let tmp = res?.data?.data?._id
+      console.log(tmp)
+      let pathShop = `/shops/profile?shopId=${tmp}`
+      let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+      await axiosConfig.get(pathShop).then(async res => {
+        setShopData(res.data.data)
+        await axiosConfig.get(pathProduct).then(res => {
+          setProductData(res?.data?.data?.products)
+          setData(res?.data?.data?.products)
         })
-      await axiosConfig.get(pathListCategory).then(res => {
-        setListCategory(res?.data?.data)
-      })
-        .catch(err => {
-          console.log(err)
+          .catch(err => {
+            console.log(err)
+          })
+        await axiosConfig.get(pathListCategory).then(res => {
+          setListCategory(res?.data?.data)
         })
-    })
+          .catch(err => {
+            console.log(err)
+          })
+      })
       .catch(err => {
         console.log(err)
       })
-
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }, [open])
 
   // sort && page
