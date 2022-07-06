@@ -31,7 +31,7 @@ export const getCustomerProfile = async (req, res) => {
 export const cancelOrder = async (req, res) => {
     try {
         const orderId = req.query.orderId;
-        let updateOrder = await OrderService.updateOrder(orderId, -1);
+        let updateOrder = await OrderService.updateOrder(orderId, -2);
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'cancel order successfully',

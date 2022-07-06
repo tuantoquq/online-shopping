@@ -7,7 +7,7 @@ const OrderSchema = new mongoose.Schema({
         required: true,
     },
     orderStatus: {
-        type: Number, // 0: created, 1: accepted, 2: finished, -1: canceled
+        type: Number, // 0: created, 1: accepted, 2: finished, -1: shop canceled, -2: customer canceled
         required: true,
         default: 0,
     },
