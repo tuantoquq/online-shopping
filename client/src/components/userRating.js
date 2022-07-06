@@ -21,11 +21,9 @@ function UserRating({imageAvatar, userName, ratingScore, timeRate, comment, imag
           </Card>
         </div>
         <div className={stylesProduct.productTitle}>
-          <Link to='/testShop' >
-            <h4>
-              {userName}
-            </h4>
-          </Link>
+          <h4>
+            {userName}
+          </h4>
           <div className={stylesProduct.ratingUser}>                  
             <Rating name="half-rating-read" defaultValue={ratingScore} readOnly size="small" />
           </div>

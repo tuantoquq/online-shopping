@@ -9,11 +9,13 @@ export const addComment = async (req, res, next) => {
         let userId = req.userId;
         let productId = req.body.productId;
 
+
         //check exist comment
         let checkComment = await CommentService.findCommentByCustomerAndProduct(
             userId,
             productId,
         );
+
 
         //upload images
         let imageFiles = req.files;
@@ -23,6 +25,7 @@ export const addComment = async (req, res, next) => {
             error.httpStatusCode = 400;
             return next(error);
         }
+
 
         let imageUrls = [];
         for (let i = 0; i < imageFiles.length; i++) {
@@ -42,9 +45,13 @@ export const addComment = async (req, res, next) => {
             return res.status(httpStatus.OK).send({
                 status: apiStatus.SUCCESS,
                 message: 'add comment successfully',
-                data: rsComment,
+                data: rsComment
             });
         }
+        return res.status(httpStatus.BAD_REQUEST).send({
+            status: apiStatus.INVALID_PARAM,
+            message: 'Already exist comment for customer with this product',
+        });
     } catch (err) {
         if (err instanceof CustomError) {
             return res.status(err.httpStatus).send({
@@ -68,6 +75,12 @@ export const getAllCommentOfProduct = async (req, res) => {
 
         //if exist
         let listComment = await CommentService.findAllCommentForProduct(productId);
+        for (let i = 0; i < listComment.length ; i++){
+            listComment[i] = listComment[i].toObject();
+            let customer = listComment[i].customerId;
+            delete listComment[i]['customerId']
+            listComment[i].customer = customer;
+        }
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'get all comment of product successfully',

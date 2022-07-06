@@ -95,3 +95,13 @@ export const changeOrderStatus = async (status,orderId,reason) => {
   }
   return response;
 };
+
+export const getShopInformation = async () => {
+  let response;
+  try {
+    response = await shopperApi.get('/shopper/auth/shop-info');
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};

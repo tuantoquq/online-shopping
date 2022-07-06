@@ -18,7 +18,7 @@ CommentService.findById = async (commentId) => {
 };
 
 CommentService.findAllCommentForProduct = async (productId) => {
-    let listComments = await Comment.find({ productId: productId });
+    let listComments = await Comment.find({ productId: productId }).populate('customerId');
     return listComments;
 };
 

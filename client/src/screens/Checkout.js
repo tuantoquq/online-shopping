@@ -134,7 +134,6 @@ function Checkout() {
                     }).then((res) => {
                       console.log(res?.data);
                     });
-                    listCartItems.map((item) => deleteCartItem(item));
                   }
                 }}
               >
