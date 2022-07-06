@@ -54,6 +54,7 @@ function TabPanel(props) {
                   status={orderId.find(
                     (st) => st.id === productOrder?.orderStatus
                   )}
+                  reasonReject={productOrder?.reasonReject}
                 />
               </div>
             );
