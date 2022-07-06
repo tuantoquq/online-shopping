@@ -7,6 +7,7 @@ import {
     getTop30RecommendProducts,
     getTop6SellingProduct,
     updateProduct,
+    getListProductOfCategory
 } from '../controller/product.controller.js';
 import { verifyToken } from '../middleware/authJwt.js';
 import multer from 'multer';
@@ -30,6 +31,7 @@ productRoutes.put(
 
 // productRoutes.get('/api/v1/product/search', productController.search);
 productRoutes.post('/api/v1/product/filter', filterProduct);
+productRoutes.get('/api/v1/product/get-product-by-category', getListProductOfCategory);
 productRoutes.get('/api/v1/product/top-6-selling', getTop6SellingProduct);
 productRoutes.get('/api/v1/product/top-30-recommend', getTop30RecommendProducts);
 productRoutes.post(
