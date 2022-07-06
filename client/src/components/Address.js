@@ -180,10 +180,10 @@ function Address(props){
                             <label className={styles.column}>Phường Xã</label>
                             <label className={styles.midColumn}>{listAddress[0]?.ward}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(5)}
+                                onClick={()=>displayUpdate(7)}
                             >Thay đổi</label>
                         </div>
-                        <div className={styles.update} id={5}>
+                        <div className={styles.update} id={7}>
                             <lable className={styles.column}>
                                 Cập nhật thông tin
                             </lable>
@@ -214,10 +214,10 @@ function Address(props){
                             <label className={styles.column}>Địa chỉ</label>
                             <label className={styles.midColumn}>{listAddress[0]?.details}</label>
                             <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(6)}
+                                onClick={()=>displayUpdate(8)}
                             >Thay đổi</label>
                         </div>
-                        <div className={styles.update} id={6}>
+                        <div className={styles.update} id={8}>
                             <lable className={styles.column}>
                                 Cập nhật thông tin
                             </lable>

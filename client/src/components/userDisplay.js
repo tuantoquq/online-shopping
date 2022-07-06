@@ -3,7 +3,7 @@ import styles from './CSS/UserDisplay.module.css'
 import clsx from "clsx";
 // import { submitFile } from "../api/newsApi";
 // import { updateAvatarImage } from "../api/userApi";
-import {updateCustomerProfile} from '../service/CustomerService.js';
+import {updateCustomerProfile, uploadAvatar} from '../service/CustomerService.js';
 
 function UserDisplay(props){
     const user_url = props.user_url
@@ -27,8 +27,9 @@ function UserDisplay(props){
         }
     }
     const updateAvatar = () => {
-        updateCustomerProfile({avatarUrl: userUrl}).then(res => {
-            console.log("Update info: ", res.data);
+        console.log(userUrl)
+        uploadAvatar({avatarUrl: userUrl}).then(res => {
+            console.log("Update avatar info: ", res.data);
         })
     }
 

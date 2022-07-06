@@ -25,6 +25,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import { addCartItem } from '../service/CustomerService';
 
 function ButtonOrder({ post, st ,productOrder}) {
     const navigate = useNavigate();
@@ -41,7 +42,12 @@ function ButtonOrder({ post, st ,productOrder}) {
                         {p.status === st && (
                             <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>
                                 <div className={stylesProduct.tap}>
-                                    <Button variant="outlined" onClick={() => navigatePath("/cart")}> {p.button1} </Button>
+                                    <Button variant="outlined" onClick={() => {
+                                        productOrder.map(item => {
+                                            addCartItem({productId: item.productId, quantity: item.count});
+                                        })
+                                        // navigatePath("/cart")
+                                        }}> {p.button1} </Button>
                                 </div>
 
                                 {p.button2 === "Đánh giá shop" && (
@@ -73,11 +79,6 @@ function OrderUserItem({ productOrder, status }) {
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>
-                        {/* <Link to='/testShop' >
-                            <h2>
-                                Shop Mo Hinh
-                            </h2>
-                        </Link>  */}
                         <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
                     </div>
                     {productOrder.map((order) => {
