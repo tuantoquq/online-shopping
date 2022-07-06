@@ -9,7 +9,10 @@ export const getShopperProfile = async (req, res) => {
     try {
         const shopperId = req.userId;
         let shopper = await ShopperService.findShopperById(shopperId);
+        let shop = await ShopService.findShopByShopperId(shopperId);
         shopper.password = '';
+        shopper = shopper.toObject();
+        shopper.shop = shop;
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
             message: 'get shopper profile successfully',
