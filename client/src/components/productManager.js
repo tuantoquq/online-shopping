@@ -391,7 +391,7 @@ function ProductManager() {
   let s = window.location.href.split('/')
   let tmp = '629ddb1783ec9b8c85475236'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
   let pathListCategory = '/category/get?all=true'
 
   useEffect(() => {
@@ -401,7 +401,7 @@ function ProductManager() {
       let tmp = res?.data?.data?._id
       console.log(tmp)
       let pathShop = `/shops/profile?shopId=${tmp}`
-      let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+      let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
       await axiosConfig.get(pathShop).then(async res => {
         setShopData(res.data.data)
         await axiosConfig.get(pathProduct).then(res => {
