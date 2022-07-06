@@ -76,7 +76,7 @@ function Cart() {
         <div>
           <Header />
           <div>
-            <div className="container">
+            <div className='container' style={{marginLeft:'10%'}}>
               <h3>Giỏ hàng</h3>
             </div>
             <div>
@@ -101,7 +101,7 @@ function Cart() {
                 </p>
               </div>
             </div>
-            <div>
+            <div style={{marginLeft:'10%'}}>
               <button>Trở lại</button>
               <button
                 onClick={() => {

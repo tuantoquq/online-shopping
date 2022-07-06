@@ -147,8 +147,9 @@ function ProductInformation({navigation}) {
                       <Button variant="contained" onClick={() => {
                         addCartItem({productId: s[s.length-1], quantity: quantity}).then(res => {
                           console.log(res.data);
+                          navigatePath("/cart")
                         });
-                        navigatePath("/cart")
+                        
                         }}> Mua ngay </Button>                         
                     </div>
                  
@@ -175,7 +176,7 @@ function ProductInformation({navigation}) {
                 </Card>
               </div>
               <div className={stylesProduct.productTitle}>
-                <Link to={"/shop/" + shopData?.shopperId} >
+                <Link to={"/shop/" + shopData?._id} >
                   <h2>
                     {shopData?.shopName}
                   </h2>
@@ -239,41 +240,16 @@ function ProductInformation({navigation}) {
             {comments?.map((comment) => {
               return(
                 <UserRating
-                  imageTest={imageTest}
-                  userName="Kito"
+                  imageAvatar={comment?.customer?.avatarUrl}
+                  userName={`${comment?.customer?.firstName} ${comment?.customer?.lastName}`}
                   ratingScore={comment?.ratingStar}
-                  timeRate={comment?.createdAt}
+                  timeRate={(new Date(comment?.createdAt)).toLocaleString()}
                   comment={comment?.content}
                   imageProduct={comment?.images}
                 />
               )
             })
             }
-            
-            {/* <UserRating
-              imageTest={imageTest}
-              userName="Kito"
-              ratingScore={5}
-              timeRate="14:30:00 29/05/2022"
-              comment="San pham dep"
-            />
-
-            <UserRating
-              imageTest={imageTest}
-              userName="Ayano"
-              ratingScore={4}
-              timeRate="14:30:00 29/04/2022"
-              comment="San pham tot"
-            />
-
-            <UserRating
-              imageTest={imageTest}
-              userName="Mitsuha"
-              ratingScore={4}
-              timeRate="14:30:00 05/05/2022"
-              comment="Nino is the best"
-            /> */}
-
           </div>
         </div>
         <Footer navigation={navigation}/>

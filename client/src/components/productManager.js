@@ -39,6 +39,7 @@ import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getShopInformation } from '../service/ShopperService';
 
 
 const useStyles = makeStyles({
@@ -310,15 +311,15 @@ function ProductManager() {
       //   files: null
       // };
       data = {
-        productName: 'aaaa',
-        shortDescription: 'aaaaaa',
-        longDescription: 'aaaaaa',
-        price: 10000,
-        soldHistory: 100,
+        productName: name,
+        shortDescription: detail,
+        longDescription: detail,
+        price: cost,
+        soldHistory: 0,
         sizes: { "type": "color", "values": ["black", "white"] },
-        count: 100,
-        categoryId: '629ddae383ec9b8c85475215',
-        files: null
+        count: count,
+        categoryId: type,
+        files: avatarImg
       };
       var form_data = new FormData();
       for (var key in data) {
@@ -390,30 +391,41 @@ function ProductManager() {
   let s = window.location.href.split('/')
   let tmp = '629ddb1783ec9b8c85475236'
   let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=100`
+  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
   let pathListCategory = '/category/get?all=true'
+
   useEffect(() => {
-    axiosConfig.get(pathShop).then(async res => {
-      setShopData(res.data.data)
-      await axiosConfig.get(pathProduct).then(res => {
-        setProductData(res?.data?.data?.products)
-        setData(res?.data?.data?.products)
-      })
-        .catch(err => {
-          console.log(err)
+    getShopInformation()
+    .then(async (res) => {
+      // console.log(res?.data?.data);
+      let tmp = res?.data?.data?._id
+      console.log(tmp)
+      let pathShop = `/shops/profile?shopId=${tmp}`
+      let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
+      await axiosConfig.get(pathShop).then(async res => {
+        setShopData(res.data.data)
+        await axiosConfig.get(pathProduct).then(res => {
+          setProductData(res?.data?.data?.products)
+          setData(res?.data?.data?.products)
         })
-      await axiosConfig.get(pathListCategory).then(res => {
-        setListCategory(res?.data?.data)
-      })
-        .catch(err => {
-          console.log(err)
+          .catch(err => {
+            console.log(err)
+          })
+        await axiosConfig.get(pathListCategory).then(res => {
+          setListCategory(res?.data?.data)
         })
-    })
+          .catch(err => {
+            console.log(err)
+          })
+      })
       .catch(err => {
         console.log(err)
       })
-
-  }, [openInforProduct])
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }, [open])
 
   // sort && page
   const [searchTerm, setSearchTerm] = useState('');

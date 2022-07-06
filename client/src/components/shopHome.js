@@ -23,8 +23,8 @@ function ShopHome({navigation}) {
 
   let s = window.location.href.split('/')
   let tmp = '629ddb1583ec9b8c8547522d'
-  let pathShop = `/shops/profile?shopId=${tmp}`
-  let pathProduct = `/shops/list-products?shopId=${tmp}&limit=1000`
+  let pathShop = `/shops/profile?shopId=${s[s.length-1]}`
+  let pathProduct = `/shops/list-products?shopId=${s[s.length-1]}&limit=1000`
   useEffect(()=>{
     axiosConfig.get(pathShop).then(async res=>{
       let data = res.data.data

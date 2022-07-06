@@ -4,6 +4,7 @@ import userImage from '../assets/user1.png';
 import menuImage from '../assets/squares.png';
 import cartImage from '../assets/shopping-cart.png';
 import styles from './CSS/HeaderCSS.module.css';
+import { IconButton } from '@mui/material';
 
 import Cookies from 'js-cookie';
 import TokenService from '../service/TokenService';
@@ -223,7 +224,9 @@ function Header() {
         </div>
 
         <div className={styles.cart}>
+        <IconButton>
           <img
+            className={styles.btcart}
             src={cartImage}
             onClick={() =>
               accessToken
@@ -232,6 +235,7 @@ function Header() {
             }
             alt=""
           />
+          </IconButton>
         </div>
       </div>
     </div>

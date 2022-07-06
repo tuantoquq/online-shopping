@@ -130,7 +130,7 @@ export const uploadAvatar = async (avatar) => {
     try{
         response = await customerApi.post('/user/auth/upload-file', avatar, {
             headers: {
-                'Content-Type': 'application/file'
+                'Content-Type': 'form-data/file'
             }
         });
     }catch(err){
@@ -144,6 +144,16 @@ export const addComment = async (data) => {
     let response;
     try{
         response = await customerApi.post('/customer/auth/comments', data);
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}
+
+export const cancelOrder = async (idOrder) => {
+    let response;
+    try{
+        response = await customerApi.post(`/customer/auth/cancel-order?orderId=${idOrder}`);
     }catch(err){
         console.log(err);
     }

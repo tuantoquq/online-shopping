@@ -44,6 +44,21 @@ ProductService.getListProductOfShop = async (shopId, page, size) => {
     return response;
 };
 
+ProductService.getListProductOfCategory = async (categoryId, page, size) => {
+    const limit = size ? size : 10;
+    const offset = page ? (page - 1) * limit : 1;
+    let condition = {categoryId: categoryId}
+    let response = await Product.paginate(condition, {offset, limit}).then((data) => {
+        return {
+            totalProducts: data.totalDocs,
+            products: data.docs,
+            totalPages: data.totalPages,
+            currentPage: parseInt(page ? page : offset)
+        }
+    })
+    return response;
+};
+
 ProductService.addProduct = async (productRequest) => {
     await productRequest.save(function (err, product) {
         if (err)
