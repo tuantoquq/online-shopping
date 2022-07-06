@@ -1,3 +1,8 @@
+.content{
+    margin-right: 10%;
+    margin-left: 10%;
+    background-color: rgb(245, 242, 242);
+}
 .displayaddress{
     display: flex;
     flex-direction: row;
