@@ -149,3 +149,13 @@ export const addComment = async (data) => {
     }
     return response;
 }
+
+export const cancelOrder = async (idOrder) => {
+    let response;
+    try{
+        response = await customerApi.post(`/customer/auth/cancel-order?orderId=${idOrder}`);
+    }catch(err){
+        console.log(err);
+    }
+    return response;
+}

@@ -42,7 +42,7 @@ function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct, pl
           </Button>          
         </div>
 
-        <p  className={stylesProduct.numberProduct}>{numberProduct} san pham con hang</p>
+        <p  className={stylesProduct.numberProduct}>{numberProduct}Sản phẩm còn hàng</p>
       </div>
     );
   };
