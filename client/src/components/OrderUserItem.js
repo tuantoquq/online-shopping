@@ -93,7 +93,11 @@ function OrderUserItem({ productOrder, status }) {
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>
-                        <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                        <div>
+                            <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                            {status.status === "Bị từ chối" &&(<h3> Lý do: {productOrder?.reasonReject} </h3>)}                            
+                        </div>
+
                     </div>
                     {productOrder.map((order) => {
                         return (

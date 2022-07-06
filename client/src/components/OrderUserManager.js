@@ -142,7 +142,7 @@ function OrderUserManager({ navigation }) {
                   <Grid item xs={10}>
                     <TabPanel
                       value={value}
-                      index={-2}
+                      index={-3}
                       productOrders={orderData}
                     ></TabPanel>
                     <TabPanel
@@ -163,6 +163,11 @@ function OrderUserManager({ navigation }) {
                     <TabPanel
                       value={value}
                       index={-1}
+                      productOrders={orderData}
+                    ></TabPanel>
+                    <TabPanel
+                      value={value}
+                      index={-2}
                       productOrders={orderData}
                     ></TabPanel>
                   </Grid>
