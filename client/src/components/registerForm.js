@@ -66,72 +66,79 @@ function RegisterForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const REGISTER_URL = `/${role}/register`;
-    if (password !== confirmPassword) {
-      setErrMsg('Mật khẩu không khớp!');
-    }
-    if (password.length < 6) {
-      setErrMsg('Mật khẩu phải chứa ít nhất 6 kí tự!');
-    }
-
-    if (errMsg === '') {
-      //console.log(avatarImg);
-      let data = {};
-      // console.log('submit');
-      const bday = new Date(birthday);
-      if (role === 'customer') {
-        data = {
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phone,
-          gender: gender,
-          dateOfBirth: bday,
-          address: address,
-          password: password,
-          avatarUrl: avatarImg,
-        };
+    if (gender) {
+      if (password !== confirmPassword) {
+        setErrMsg('Mật khẩu không khớp!');
       } else {
-        const iday = new Date(ngayCap);
-        data = {
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phone,
-          gender: gender,
-          dateOfBirth: bday,
-          address: address,
-          password: password,
-          avatarUrl: avatarImg,
-          cccd: cmnd,
-          issueDate: iday,
-          issuePlace: noiCap,
-        };
-      }
-      //console.log(data);
-      try {
-        const response = await axios.post(REGISTER_URL, JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        });
-        // console.log(JSON.stringify(response?.data));
-        // console.log(JSON.stringify(response));
-        setSuccess(true);
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-          setOpen(true);
-        } else if (err.response?.data?.message) {
-          setErrMsg(err.response.data.message);
-          //console.log(err);
-          setOpen(true);
+        if (password.length < 6) {
+          setErrMsg('Mật khẩu phải chứa ít nhất 6 kí tự!');
         } else {
-          setErrMsg('Đăng kí thất bại.');
-          //console.log(err);
-          setOpen(true);
+          if (errMsg === '') {
+            //console.log(avatarImg);
+            let data = {};
+            // console.log('submit');
+            const bday = new Date(birthday);
+            if (role === 'customer') {
+              data = {
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phone,
+                gender: gender,
+                dateOfBirth: bday,
+                address: address,
+                password: password,
+                avatarUrl: avatarImg,
+              };
+            } else {
+              const iday = new Date(ngayCap);
+              data = {
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                phoneNumber: phone,
+                gender: gender,
+                dateOfBirth: bday,
+                address: address,
+                password: password,
+                avatarUrl: avatarImg,
+                cccd: cmnd,
+                issueDate: iday,
+                issuePlace: noiCap,
+              };
+            }
+            //console.log(data);
+            try {
+              await axios.post(REGISTER_URL, JSON.stringify(data), {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                // withCredentials: true,
+              });
+              // console.log(JSON.stringify(response?.data));
+              // console.log(JSON.stringify(response));
+              setSuccess(true);
+            } catch (err) {
+              if (!err?.response) {
+                setErrMsg('No Server Response');
+                setOpen(true);
+              } else if (err.response?.data?.message) {
+                setErrMsg(err.response.data.message);
+                //console.log(err);
+                setOpen(true);
+              } else {
+                setErrMsg('Đăng kí thất bại.');
+                //console.log(err);
+                setOpen(true);
+              }
+            }
+          }
         }
       }
+    } else {
+      setErrMsg('Vui lòng chọn giới tính');
+      //console.log(err);
+      setOpen(true);
     }
   };
 
