@@ -95,6 +95,7 @@ function OrderItem({productId, quantity, cartId, handle}) {
                             onClick={() => {
                               deleteCartItem(cartId).then(res => {
                                 handle(); 
+                                window.location.reload();
                                 console.log(res);
                               })
                             }}

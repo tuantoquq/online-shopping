@@ -25,6 +25,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import { addCartItem } from '../service/CustomerService';
 import { cancelOrder } from '../service/CustomerService';
 
 function ButtonOrder({ post, st ,productOrder, orderId}) {
@@ -58,7 +59,18 @@ function ButtonOrder({ post, st ,productOrder, orderId}) {
                         {p.status === st && (
                             <div className={clsx(stylesProduct.soldInfo, stylesProduct.button2)}>
                                 <div className={stylesProduct.tap}>
-                                    {p.button1 === "Mua lại" && (<Button variant="outlined" onClick={() => navigatePath("/cart")}> {p.button1} </Button>)}
+                                    {/* <Button variant="outlined" onClick={() => {
+                                        productOrder.map(item => {
+                                            addCartItem({productId: item.productId, quantity: item.count});
+                                        })
+                                        navigatePath("/cart")
+                                        }}> {p.button1} </Button> */}
+                                    {p.button1 === "Mua lại" && (<Button variant="outlined" onClick={() => {
+                                        productOrder.map(item => {
+                                            addCartItem({productId: item.productId, quantity: item.count});
+                                        })
+                                        navigatePath("/cart")
+                                        }}> {p.button1} </Button>)}
                                     {p.button1 === "Huỷ đơn hàng" && (<Button variant="outlined" onClick={handleCanleOrder}> {p.button1} </Button>)}
                                 </div>
 

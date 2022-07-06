@@ -1,3 +1,12 @@
+.Home{
+    background-color: rgb(245, 242, 242);
+}
+.content{
+    margin-right: 10%;
+    margin-left: 10%;
+    background-color: rgb(245, 242, 242);
+    margin-top: 20px;
+}
 .all{
     margin-top: 20px;
 }
