@@ -87,8 +87,6 @@ function OrderUserItem({ productOrder, status,  reasonReject}) {
         { status: "Bị từ chối", button1: "Mua lại", button2: "" },
         { status: "Đã huỷ", button1: "Mua lại", button2: "" }
     ];
-    console.log(productOrder)
-
     return (
         <div className={styleOrderUser.Home}>
             <div className={styleOrderUser.content} >
