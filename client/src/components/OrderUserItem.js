@@ -91,20 +91,24 @@ function ButtonOrder({ post, st ,productOrder, orderId}) {
 
 }
 
-function OrderUserItem({ productOrder, status }) {
+function OrderUserItem({ productOrder, status,  reasonReject}) {
     const posts = [
         { status: "Chờ xác nhận", button1: "Huỷ đơn hàng", button2: "" },
         { status: "Chờ lấy hàng", button1: "Huỷ đơn hàng", button2: "" },
         { status: "Đã giao", button1: "Mua lại", button2: "Đánh giá shop" },
-        { status: "Đã hủy", button1: "Mua lại", button2: "" }
+        { status: "Bị từ chối", button1: "Mua lại", button2: "" },
+        { status: "Đã huỷ", button1: "Mua lại", button2: "" }
     ];
-
     return (
         <div className={styleOrderUser.Home}>
             <div className={styleOrderUser.content} >
                 <div className={styleOrderUser.wraper}>
                     <div className={styleOrderUser.tdisplay}>
-                        <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                        <div>
+                            <h3 className={styleOrderUser.statusTitle}> {status.status} </h3>
+                            {status.status === "Bị từ chối" &&(<h3> Lý do: {reasonReject} </h3>)}                            
+                        </div>
+
                     </div>
                     {productOrder.map((order) => {
                         return (

@@ -39,7 +39,7 @@ function OrderProductShip(){
     }, []);
     // console.log(cartItem);
     return (
-        <div className={styles.content}>
+        <div className={styles.content} style={{marginLeft:'10%',marginRight:'10%'}}>
             <div className={styles.listProduct}>
             <div>
             {
@@ -52,11 +52,11 @@ function OrderProductShip(){
             <div className={styles.comp1}>
             <div className={styles.displayMoney}>
                     <p className={styles.disTotalPrice}>Chi phí vận chuyển:</p>
-                    <p className={styles.totalPrice}>{cartItem.length !=0 ? 10000: 0}</p>
+                    <p className={styles.totalPrice} style={{marginRight:'6%'}}>{cartItem.length !=0 ? 10000: 0}</p>
                 </div>
                 <div className={styles.displayMoney}>
                     <p className={styles.disTotalPrice}>Tổng số tiền:</p>
-                    <p className={styles.totalPrice}>{totalPrice}</p>
+                    <p className={styles.totalPrice} style={{marginRight:'6%'}}>{totalPrice}</p>
                 </div>
 
                 {/* <div className={styles.comp3}>

@@ -79,7 +79,7 @@ function Checkout() {
         <div>
           <Header />
           <div>
-            <div className="container">
+            <div className="container" style={{marginLeft:'10%',marginRight:'10%'}}>
               <h1>Thanh toán</h1>
             </div>
             <div className={styles.content}>
@@ -118,10 +118,10 @@ function Checkout() {
                             } */}
                 </div>
               </div>
-            </div>
+            </div >
             <OrderProductShip></OrderProductShip>
             <div></div>
-            <div>
+            <div style={{marginLeft:'10%',marginRight:'10%'}}>
               <button onClick={() => navigatePath('/cart')}>Trở lại</button>
               <button
                 onClick={() => {

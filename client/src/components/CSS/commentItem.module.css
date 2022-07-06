@@ -3,6 +3,14 @@
     width: 60%;
     margin-bottom: 30px;
 }
+.avatarInput {
+    margin-top: 20px;
+    margin-left: 40%;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 .all{
     margin-top: 20px;
 }
