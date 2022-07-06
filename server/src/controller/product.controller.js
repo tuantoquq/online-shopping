@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { httpStatus, apiStatus } from '../constants/index.js';
 import CustomError from '../error/customError.js';
 import { Product, Category } from '../model/index.js';
@@ -334,6 +335,26 @@ export const addProduct = async (req, res, next) => {
     }
 };
 
+export const getListProductOfCategory = async (req, res, next) => {
+    const categoryId = req.query.categoryId 
+    let currentPage = req.body.currentPage ? req.body.currentPage : 1;
+    let maxItem = req.body.maxItem ? req.body.maxItem : 20;
+    try {
+        let productsRes = await ProductService.getListProductOfCategory(categoryId, currentPage, maxItem)
+        console.log(productsRes)
+        return res.status(httpStatus.OK).json({
+            message: "Success",
+            data: productsRes
+        })
+    }
+    catch (err) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
+
 export const updateProduct = async (req, res, next) => {
     try {
         let productId = req.params.productId;
@@ -452,3 +473,5 @@ async function generateCodes() {
     }
     return res;
 }
+
+
