@@ -147,8 +147,9 @@ function ProductInformation({navigation}) {
                       <Button variant="contained" onClick={() => {
                         addCartItem({productId: s[s.length-1], quantity: quantity}).then(res => {
                           console.log(res.data);
+                          navigatePath("/cart")
                         });
-                        navigatePath("/cart")
+                        
                         }}> Mua ngay </Button>                         
                     </div>
                  
