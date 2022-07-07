@@ -14,8 +14,10 @@ Ex: http://localhost:3000/admin/login
 
 ## About Backend tutorial
 
-
-
+### Start
+#### Step 1: cd server
+#### Step 2: npm i 
+#### Step 3: nodemon src/server.js
 
 
 
