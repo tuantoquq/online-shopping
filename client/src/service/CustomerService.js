@@ -130,7 +130,7 @@ export const uploadAvatar = async (avatar) => {
     try{
         response = await customerApi.put('/user/auth/update-avatar', avatar, {
             headers: {
-                'Content-Type': 'application/form-data/file'
+                'Content-Type': 'multipart/form-data'
             }
         });
     }catch(err){
