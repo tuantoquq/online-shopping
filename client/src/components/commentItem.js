@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { addComment } from '../service/CustomerService';
-
+import ImageUploader from '../components/imageUploader';
 
 function CommentItem() {
     const navigate = useNavigate()
@@ -54,27 +54,31 @@ function CommentItem() {
                     productId: key,
                     content: data['content'],
                     ratingStar: data['ratingStar'],
-                    files: null
+                    files: avatarImg
                 }
                 var form_data = new FormData();
                 for (var key in body) {
                     form_data.append(key, body[key]);
                 }
                 addComment(form_data)
-                .then(res=>{
-                    console.log('done')
-                })
-                .catch(err=>console.log(err))
+                    .then(res => {
+                        console.log('done')
+                    })
+                    .catch(err => console.log(err))
             }
             catch (error) {
                 console.error(error);
             }
-            finally{
+            finally {
                 navigate('/user/orderManager')
             }
         }
 
     }
+    const defautlAvatar =
+  'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
+    const [avatarImg, setAvatarImg] = useState(defautlAvatar);
+
 
 
 
@@ -91,6 +95,12 @@ function CommentItem() {
                                         <p>{item.productName}</p>
                                         <p>Giá: {item.currentPrice}</p>
                                     </div>
+                                </div>
+                                <div className={clsx(styles.avatarInput, styles.col)}>
+                                    <ImageUploader
+                                        avatarImg={avatarImg}
+                                        onAvatarChange={setAvatarImg}
+                                    />
                                 </div>
 
                                 <div className={clsx(styles.all, styles.rating)}>
@@ -117,7 +127,7 @@ function CommentItem() {
             <Box sx={{
                 marginLeft: 65
             }}>
-                <Button>Trở lại</Button>
+                <Button onClick={()=> navigate('/user/orderManager')}>Trở lại</Button>
                 <Button variant="contained" onClick={submit}>Hoàn thành</Button>
             </Box>
 

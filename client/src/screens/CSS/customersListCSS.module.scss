@@ -9,10 +9,16 @@
 }
 .unlocked {
   color: rgb(24, 83, 19);
+  :hover {
+    cursor: pointer;
+  }
 }
 
 .locked {
   color: rgb(172, 14, 14);
+  :hover {
+    cursor: pointer;
+  }
 }
 .modalTitle {
   width: 100%;

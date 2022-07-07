@@ -151,7 +151,7 @@ function LoginForm(props) {
       //console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response));
       if (response.data.status === 2) {
-        setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
+        setErrMsg('Email hoặc mật khẩu không đúng.');
         setOpen(true);
       } else {
         const token = response?.data?.data?.token;
@@ -171,10 +171,15 @@ function LoginForm(props) {
       } else if (err.response?.status === 400) {
         setErrMsg('Missing email or Password');
       } else if (err.response?.status === 401) {
-        setErrMsg('Email hoặc mật khẩu không đúng.');
+        // console.log(err.response.data.message);
+        if (err.response.data.message === 'Incorrect password!') {
+          setErrMsg('Email hoặc mật khẩu không đúng.');
+        } else {
+          setErrMsg(err.response.data.message);
+        }
         setOpen(true);
       } else {
-        setErrMsg('Tên đăng nhập hoặc mật khẩu không đúng.');
+        setErrMsg('Email hoặc mật khẩu không đúng.');
         setOpen(true);
       }
       errRef.current.focus();
