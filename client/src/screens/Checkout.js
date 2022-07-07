@@ -15,7 +15,7 @@ import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 
-function Checkout() {
+function Checkout({ navigation }) {
   const navigate = useNavigate();
   const navigatePath = function (path) {
     if (window.location.pathname !== path) {
@@ -77,7 +77,7 @@ function Checkout() {
     if (RoleService.getLocalRole() === 'customer') {
       return (
         <div>
-          <Header />
+          <Header navigation={navigation}/>
           <div>
             <div className="container" style={{marginLeft:'10%',marginRight:'10%'}}>
               <h1>Thanh toán</h1>
@@ -141,7 +141,9 @@ function Checkout() {
               </button>
             </div>
           </div>
-          <Footer />
+          <div className={styles.footer} >
+            <Footer navigation={navigation}/>
+          </div>
         </div>
       );
     }
