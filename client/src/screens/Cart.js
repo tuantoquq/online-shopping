@@ -10,7 +10,7 @@ import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 import { Button } from '@mui/material';
 
-function Cart() {
+function Cart({ navigation }) {
   const navigate = useNavigate();
   const navigatePath = function (path) {
     if (window.location.pathname !== path) {
@@ -74,7 +74,7 @@ function Cart() {
       return (
         // console.log(numberProduct),
         <div>
-          <Header />
+          <Header navigation={navigation}/>
           <div>
             <div className='container' style={{marginLeft:'10%'}}>
               <h3>Giỏ hàng</h3>
@@ -126,7 +126,9 @@ function Cart() {
           </div>)}
           </div>
           </div>
-          <Footer />
+          <div className={styles.footer} >
+          <Footer navigation={navigation}/>
+          </div>
         </div>
       );
     }
