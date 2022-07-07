@@ -59,7 +59,7 @@ function UserInformation(navigation, role) {
       <div className={styles.content}>
         <UserDisplay
           user_url={
-            user?.avatarUrl === 'avt_default.png' ? avtImage : user?.avatarUrl
+            user?.avatarUrl === undefined ? avtImage : user?.avatarUrl
           }
           user_name={user?.lastName}
           user_age={
