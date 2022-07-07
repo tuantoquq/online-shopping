@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from './CSS/UserDisplay.module.css'
-import clsx from "clsx";
 // import { submitFile } from "../api/newsApi";
 // import { updateAvatarImage } from "../api/userApi";
-import {updateCustomerProfile, uploadAvatar} from '../service/CustomerService.js';
+import { uploadAvatar} from '../service/CustomerService.js';
 
 function UserDisplay(props){
     const user_url = props.user_url
@@ -11,10 +10,11 @@ function UserDisplay(props){
     const user_age = props.user_age
     const user_phone = props.user_phone
     const [userUrl, setUserUrl] = useState()
-
+    const [file, setFile] = useState();
+    let formData = new FormData();
     useEffect(() => {
         setUserUrl(user_url)
-    },[user_url])
+    },[])
 
 
     const displayUpdate = (id)=>{
@@ -27,12 +27,13 @@ function UserDisplay(props){
         }
     }
     const updateAvatar = () => {
-        console.log(userUrl)
-        uploadAvatar({avatarUrl: userUrl}).then(res => {
-            console.log("Update avatar info: ", res.data);
-        })
+        formData.append("file", file);
+        uploadAvatar(formData).then(res => {
+            setUserUrl(res?.data?.data);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
-
     return (
         <div className={styles.container}>
             <h2 className={styles.title}>Tài khoản của tôi</h2>
@@ -47,7 +48,7 @@ function UserDisplay(props){
                             >Thay đổi</label>
 
                         <div className={styles.update} id={1}>
-                            <input class="form-control" type="file" id="formFile" name="formFile"/>
+                            <input class="form-control" type="file" id="formFile" name="formFile" onChange={(e) => setFile(e.target.files[0])}/>
                             <lable className={styles.replaceInfor} onClick={updateAvatar}>Lưu thay đổi</lable>
                         </div>
                     </div>
@@ -66,4 +67,4 @@ function UserDisplay(props){
     )
 
 }
-export default UserDisplay
+export default UserDisplay;
