@@ -19,5 +19,9 @@ Ex: http://localhost:3000/admin/login
 #### Step 2: npm i 
 #### Step 3: nodemon src/server.js
 
+### Admin account
+#### Account: sipadmin1
+#### Password: Adminsip@123
+
 
 
