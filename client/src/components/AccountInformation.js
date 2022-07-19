@@ -3,7 +3,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import styles from './CSS/AccountInformation.module.css'
 import clsx from "clsx";
 import {updateCustomerProfile, getCustomerProfile} from '../service/CustomerService.js';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function AccountInformation(props){
     const role = props.role;
     const [newFirstName, setNewFirstName] = useState();
@@ -66,11 +67,12 @@ function AccountInformation(props){
                         <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                             onClick={() => {
                                 if(newPassword == null){
-                                    alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                    toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                 }else{
                                     updateCustomerProfile({password: newPassword}).then(res => {
                                         console.log("Update info: ", res.data);
-                                        window.location.reload()
+                                        toast.success("Thay đổi thành công");
+                                        setTimeout(() =>window.location.reload(), 3000)
                                     })
                                 }
                             }}
@@ -102,11 +104,12 @@ function AccountInformation(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newFirstName == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else{
                                         updateCustomerProfile({firstName: newFirstName}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -136,11 +139,12 @@ function AccountInformation(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newLastName == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else{
                                         updateCustomerProfile({lastName: newLastName}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -169,13 +173,14 @@ function AccountInformation(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() =>{
                                     if(newEmail == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else if(newEmail == currentUser?.email){
                                         window.location.reload();
                                     }else{
                                         updateCustomerProfile({email: newEmail}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -185,36 +190,6 @@ function AccountInformation(props){
                         </div>
                     </div>
                     
-                    {/* <div className={styles.group}>
-                        <div className={styles.infor}>
-                            <label className={styles.column}>Địa chỉ</label>
-                            <label className={styles.midColumn}>{currentUser?.address}</label>
-                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={()=>displayUpdate(8)}
-                            >Thay đổi</label>
-                        </div>
-                        <div className={styles.update} id={8}>
-                            <lable className={styles.column}>
-                                Cập nhật thông tin
-                            </lable>
-                            <input placeholder='Nhập thông tin...'
-                                className={clsx(styles.midColumn,styles.inputUpdate)}
-                                value={newAddress}
-                                onChange={(e) => setNewAddress(e.target.value)}
-                            />
-                            <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
-                                onClick={() => {
-                                    if(newAddress == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
-                                    }else{
-                                        updateCustomerProfile({deliveryAddress: newAddress}).then(res => {
-                                            console.log("Update info: ", res.data);
-                                        })
-                                    }
-                                }}
-                            >Lưu thay đổi</lable>
-                        </div>
-                    </div> */}
 
                     <div className={styles.group}>
                         <div className={styles.infor}>
@@ -238,15 +213,16 @@ function AccountInformation(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newPhone == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
-                                    if(newPhone.length != 10 ){
-                                        alert("Số điện thoại không hợp lệ")
+                                    else if(newPhone.length != 10 ){
+                                        toast.error("Số điện thoại không hợp lệ")
                                     } 
                                     else{
-                                        updateCustomerProfile({phonenumber: newPhone}).then(res => {
+                                        updateCustomerProfile({phoneNumber: newPhone}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -283,18 +259,20 @@ function AccountInformation(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newBirthday == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
                                         updateCustomerProfile({dateOfBirth: newBirthday}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            setTimeout(() =>window.location.reload(), 3000);
+                                            toast.success("Thay đổi thành công");
                                         })
                                     }
                                 }}
                             >Lưu thay đổi</lable>
                         </div>
                     </div>
+                    <ToastContainer />
                 </div>
                 )}
             </div>
