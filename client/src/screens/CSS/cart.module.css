@@ -53,6 +53,7 @@
 }
 .center {
     margin: 0;
+    margin-top: 50px;
     position: absolute;
     border: solid 3px blue;
     font-weight: 25px;
