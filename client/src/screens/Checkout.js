@@ -14,6 +14,8 @@ import { Avatar, Button, Menu, MenuItem } from '@mui/material';
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Checkout({ navigation }) {
   const navigate = useNavigate();
@@ -125,14 +127,15 @@ function Checkout({ navigation }) {
               <button onClick={() => navigatePath('/cart')}>Trở lại</button>
               <button
                 onClick={() => {
-                  navigatePath('/user/orderManager');
+                  setTimeout(() => navigate('/user/orderManager'), 3000);
                   if (listCartItems != 0) {
-                    console.log(listCartItems);
+                    // console.log(listCartItems);
                     addOrder({
                       addressId: address[0]._id,
                       listCartItems: listCartItems,
                     }).then((res) => {
-                      console.log(res?.data);
+                      // console.log(res?.data);
+                      toast.success("Đặt hàng thành công!");
                     });
                   }
                 }}
@@ -141,9 +144,10 @@ function Checkout({ navigation }) {
               </button>
             </div>
           </div>
-          <div className={styles.footer} >
+          <div>
             <Footer navigation={navigation}/>
           </div>
+          <ToastContainer />
         </div>
       );
     }

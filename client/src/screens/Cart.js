@@ -115,20 +115,27 @@ function Cart({ navigation }) {
             </div>
           </div>)}
           {isEmpty && (
-          <div className={styles.container}>
-            <p className={styles.text}> Không có sản phẩm nào trong giỏ hàng</p>
-            <Button
-              className={styles.center}
-              onClick={() => {
-                navigatePath('/');
-              }}
-            >Tiếp tục mua sắm</Button>
+          <div>
+            <div className={styles.container}>
+              <p className={styles.text}> Không có sản phẩm nào trong giỏ hàng</p>
+              <Button
+                className={styles.center}
+                onClick={() => {
+                  navigatePath('/');
+                }}
+              >Tiếp tục mua sắm</Button>         
+            </div>
+            <div className={styles.footer}>
+              <Footer navigation={navigation}/>
+            </div>
+          </div>
+          )}
+          </div>
+          </div>
+          {!isEmpty && (
+          <div >
+            <Footer navigation={navigation}/>
           </div>)}
-          </div>
-          </div>
-          <div className={styles.footer} >
-          <Footer navigation={navigation}/>
-          </div>
         </div>
       );
     }
