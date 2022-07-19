@@ -7,6 +7,9 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { addComment } from '../service/CustomerService';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ImageUploader from '../components/imageUploader';
 
 function CommentItem() {
@@ -63,6 +66,9 @@ function CommentItem() {
                 addComment(form_data)
                     .then(res => {
                         console.log('done')
+                        toast.success("Thêm bình luận thành công!");
+                        toast.error("Thành luận chứa từ ngữ tiêu cực!");
+                        toast.error("Không đúng định dạng file ảnh!");
                     })
                     .catch(err => console.log(err))
             }
@@ -70,7 +76,7 @@ function CommentItem() {
                 console.error(error);
             }
             finally {
-                navigate('/user/orderManager')
+                setTimeout(() => navigate('/user/orderManager'), 3000);
             }
         }
 
@@ -130,6 +136,7 @@ function CommentItem() {
                 <Button onClick={()=> navigate('/user/orderManager')}>Trở lại</Button>
                 <Button variant="contained" onClick={submit}>Hoàn thành</Button>
             </Box>
+            <ToastContainer />
 
         </>
 
