@@ -11,6 +11,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { changeOrderStatus } from "../service/ShopperService";
 import Box from '@mui/material/Box';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function OrderProduct(props) {
@@ -18,6 +20,7 @@ function OrderProduct(props) {
     const listOrder = props?.data
     const [open, setOpen] = React.useState(false);
     const [id_reject, setId_reject] = useState()
+    const [detail, setDetail] = useState(0)
 
     const [reason_reject, setReason_reject] = useState('')
 
@@ -40,17 +43,29 @@ function OrderProduct(props) {
     }
     const rejectOrder = () => {
         let reject_status = -1
-        changeOrderStatus(reject_status, id_reject, reason_reject)
-            .then(res => {
-                console.log('hi')
-                setOpen(false);
+        if (reason_reject === '') {
+            toast.error("Chưa điền lý do từ chối!");
 
+        } else {
 
-                window.location.reload()
-            })
-            .catch(err => console.log(err))
+            changeOrderStatus(reject_status, id_reject, reason_reject)
+                .then(res => {
+                    setOpen(false);
+                    toast.success("Từ chối đơn hàng thành công!")
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },3000)
+                    
+                    
+                })
+                .catch(err => console.log(err))
+                
+        }
 
     }
+
+    console.log('lis', listOrder)
+    console.log('detail', detail)
 
 
 
@@ -68,6 +83,7 @@ function OrderProduct(props) {
                         <div className={styles.displayInfo}>
                             <p className={styles.customerName}>{item?.receiverName}</p>
                             {type === 0 &&
+
                                 <p className={styles.infor}>Chờ xác nhận</p>
 
                             }
@@ -87,7 +103,15 @@ function OrderProduct(props) {
                         <Box sm={{
                             display: 'flex', flexDirection: 'row', p: 1
                         }}>
-                            <p>Lý do từ chối: {item.reasonReject}</p>
+                            {type === 3 &&
+                                <p>Lý do từ chối: {item.reasonReject}</p>
+                            }
+                            {detail === true &&
+                                <>
+                                    <p>Địa chỉ giao hàng: {item.deliveryAddress}</p>
+                                    <p>Ngày đặt hàng: {new Date(item.createdAt).toLocaleString()}</p>
+                                </>
+                            }
                         </Box>
 
 
@@ -104,7 +128,7 @@ function OrderProduct(props) {
                                 type === 0 &&
                                 <div className={styles.comp2}>
                                     <Stack spacing={2} direction="row">
-                                        <Button variant="outlined" color="success">Chi tiết</Button>
+                                        <Button variant="outlined" color="success" onClick={() => setDetail(!detail)} >Chi tiết</Button>
                                         <Button variant="contained" color="success" onClick={() => acceptOrder(1, item._id)}>Chấp nhận</Button>
                                         <Button variant="contained" color="error" onClick={() => handleClickOpen(item._id)}>Từ chối</Button>
                                     </Stack>
@@ -160,6 +184,7 @@ function OrderProduct(props) {
 
                 })
             }
+            <ToastContainer />
 
 
         </div>

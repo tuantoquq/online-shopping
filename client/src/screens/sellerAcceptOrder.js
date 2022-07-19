@@ -21,6 +21,7 @@ function AcceptOrder({ navigation }) {
     .catch(err => console.log(err))
 
   },[])
+  console.log(data)
 
   const accessToken = TokenService.getLocalAccessToken(
     RoleService.getLocalRole()
