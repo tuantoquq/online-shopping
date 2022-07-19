@@ -123,7 +123,7 @@ function RegisterForm(props) {
                 setErrMsg('No Server Response');
                 setOpen(true);
               } else if (err.response?.data?.message) {
-                setErrMsg(err.response.data.message);
+                setErrMsg('Số điện thoại hoặc email không đúng định dạng!');
                 //console.log(err);
                 setOpen(true);
               } else {
@@ -275,7 +275,14 @@ function RegisterForm(props) {
                       name="phone"
                       type="text"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      pattern="[0-9]*"
+                      onChange={(e) => {
+                        setPhone((v) =>
+                          e.target.validity.valid || e.target.value === ''
+                            ? e.target.value
+                            : v
+                        );
+                      }}
                       className={clsx(styles.formInput, styles.row)}
                       placeholder="Số điện thoại..."
                       required
