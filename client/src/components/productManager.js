@@ -368,11 +368,11 @@ function ProductManager() {
     console.log(id);
     deleteProduct(id)
       .then
-      // res => {
-      //     console(res);
-      // }
-      ()
+      (
+        toast.success("Xoá sản phẩm thành công!",{theme: "colored" })
+      )
       .catch((err) => {
+        toast.error("Xoá sản phẩm thất bại!",{theme: "colored" })
         console.log(err);
       });
     handleCloseDelete();
