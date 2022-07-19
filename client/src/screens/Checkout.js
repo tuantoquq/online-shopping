@@ -141,7 +141,7 @@ function Checkout({ navigation }) {
               </button>
             </div>
           </div>
-          <div className={styles.footer} >
+          <div>
             <Footer navigation={navigation}/>
           </div>
         </div>
