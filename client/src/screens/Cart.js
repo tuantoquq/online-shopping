@@ -102,14 +102,14 @@ function Cart({ navigation }) {
               </div>
             </div>
             <div style={{marginLeft:'10%', marginBottom:'10px'}}>
-              <button
+              <Button variant="contained" style={{marginLeft:'950px', marginTop:'10px'}}
                 onClick={() => {
                   if (cartItem.length > 0) {
                     navigatePath('/');
                   }
                 }}
-              >Trở lại</button>
-              <button
+              >Trở lại</Button>
+              <Button variant="contained" style={{marginLeft:'10px', marginTop:'10px'}}
                 onClick={() => {
                   if (cartItem.length > 0) {
                     navigatePath('/user/checkout');
@@ -117,7 +117,7 @@ function Cart({ navigation }) {
                 }}
               >
                 Thanh toán
-              </button>
+              </Button>
             </div>
           </div>)}
           {isEmpty && (

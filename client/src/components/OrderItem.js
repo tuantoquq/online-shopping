@@ -64,7 +64,7 @@ function OrderItem({productId, quantity, cartId, handle}) {
                       {/* <p>Số lượng: {itemCount}</p> */}
                   </div>
                   
-                  <div className={styles.count}>
+                  <div className={styles.count} style={{marginTop:'50px'}}>
                     <ButtonGroup>
                       <Button
                         onClick={() => {
@@ -91,7 +91,7 @@ function OrderItem({productId, quantity, cartId, handle}) {
                     </ButtonGroup>
                   </div>
                   <div className={styles.comp2}>
-                          <Button className={styles.last}
+                          <Button  variant="outlined"  className={styles.last}
                             onClick={() => {
                               deleteCartItem(cartId).then(res => {
                                 handle(); 

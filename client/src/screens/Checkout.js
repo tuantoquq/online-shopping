@@ -123,9 +123,12 @@ function Checkout({ navigation }) {
             </div >
             <OrderProductShip></OrderProductShip>
             <div></div>
-            <div style={{marginLeft:'10%',marginRight:'10%'}}>
-              <button onClick={() => navigatePath('/cart')}>Trở lại</button>
-              <button
+            <div style={{marginLeft:'10%',marginRight:'10%', marginBottom:'10px'}}>
+              <Button variant="contained" style={{marginLeft:'950px', marginTop:'10px'}}
+              onClick={() => navigatePath('/cart')}>
+                Trở lại
+              </Button>
+              <Button variant="contained" style={{marginLeft:'10px',marginTop:'10px'}}
                 onClick={() => {
                   setTimeout(() => navigate('/user/orderManager'), 3000);
                   if (listCartItems != 0) {
@@ -141,7 +144,7 @@ function Checkout({ navigation }) {
                 }}
               >
                 Đặt Hàng
-              </button>
+              </Button>
             </div>
           </div>
           <div>
