@@ -14,7 +14,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosConfig from '../config/axios';
 import {addCartItem } from '../service/CustomerService';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const defautlAvatar =
   'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
 
@@ -33,6 +34,9 @@ function ProductInformation({navigation}) {
         if (quantity > 1) {
             setQuantity(quantity - 1)
         }
+    }
+    function handle_write(count) {
+        setQuantity(count);
     }
     let s = window.location.href.split('/')
     let path = `/product/get?productId=${s[s.length-1]}`
@@ -132,14 +136,15 @@ function ProductInformation({navigation}) {
                       titleRight="+"
                       startValue={1}
                       numberProduct={productData?.count}
-                      plus={handle_plus} minus={handle_minus}
+                      plus={handle_plus} minus={handle_minus} write={handle_write}
                     />       
                   </div>
                   <div className={stylesProduct.soldInfo}>
                     <div className={stylesProduct.button2}>
                       <Button variant="contained" onClick={() => 
-                        addCartItem({productId: s[s.length-1], quantity: 1}).then(res => {
+                        addCartItem({productId: s[s.length-1], quantity: quantity}).then(res => {
                           console.log(res.data);
+                          toast.success('Đã thêm vào giỏ hàng!!!')
                       })
                         }> Thêm vào giỏ hàng </Button>
                     </div>
@@ -251,6 +256,7 @@ function ProductInformation({navigation}) {
             })
             }
           </div>
+          <ToastContainer />
         </div>
         <Footer navigation={navigation}/>
       </div>

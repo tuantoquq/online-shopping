@@ -3,7 +3,7 @@ import stylesProduct from '../screens/CSS/productInfor.module.css';
 import {useState} from 'react';
 import { Button } from '@mui/material';
 
-function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct, plus, minus}) {
+function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct, plus, minus, write}) {
     const [count, setCount] = useState(startValue);
 
     const handleChange = event => {
@@ -13,9 +13,11 @@ function ButtonChangeValue({titleLeft, titleRight, startValue, numberProduct, pl
       const result = event.target.value.replace(/\D/g, '');
       if(Number(result) >= numberProduct){
         setCount(numberProduct);
+        write(numberProduct);
       }
       else
         setCount(result);
+        write(result);
     };
 
     return (
