@@ -40,7 +40,7 @@ import RoleService from '../service/RoleService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getShopInformation } from '../service/ShopperService';
-
+import Snackbar from '@mui/material/Snackbar';
 
 const useStyles = makeStyles({
   table: {
@@ -155,6 +155,7 @@ function ProductManager() {
     setSuccess(false);
     setTextTitle('Nhập thông tin sản phẩm');
     setTextButtonRight('Huỷ');
+    setErrMsg('');
   };
   const handleClose = () => {
     setOpen(false);
@@ -171,6 +172,7 @@ function ProductManager() {
     setDetail(product?.shortDescription);
     setCount(product?.count);
     setCost(product?.price);
+    setErrMsg('');
     // let pathCategory = `/category/get?categoryId=${product?.categoryId}`
     // axiosConfig.get(pathCategory).then(async res=>{
     //   setType(res.data.data?.categoryName);
@@ -223,6 +225,19 @@ function ProductManager() {
   // info
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
+  const [openerrMsg, setOpenerrMsg] = useState(false);
+  const handleCloseErrMsg = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenerrMsg(false);
+    setErrMsg('');
+  };
+  useEffect(() => {
+    if (errMsg !== '') {
+      setOpenerrMsg(true);
+    }
+  }, [errMsg]);
   //console.log(avatarImg);
 
   const handleCloseAvatar = (event, reason) => {
@@ -246,109 +261,106 @@ function ProductManager() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (openInforProduct) {
-      let data = {};
-      data = {
-        productName: name,
-        count: count,
-        price: cost,
-        shortDescription: detail,
-        categoryId: type,
-        imageUrls: []
-      };
-      console.log(data);
-      try {
-        UpdateProduct(id, data).then(
-          
-
-        )
-          .catch(err => {
-            console.log(err)
-          })
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-          setOpen(true);
-        } else {
-          setErrMsg('Cập nhật sản phẩm thành công');
-          console.log(err);
-          setOpen(true);
+      if(cost <  0){
+        setErrMsg("Giá phải là một số dương")
+        toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+      } else if (count < 0) {
+        setErrMsg("Số lượng phải là một số dương")
+        toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+      } else if (name === '') {
+        setErrMsg("Tên sản phẩm không được để trống")
+        toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+      } else if (type === '') {
+        setErrMsg("Loại sản phẩm không được để trống")
+        toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+      } else if (errMsg === ''){
+          let data = {};
+          data = {
+            productName: name,
+            count: count,
+            price: cost,
+            shortDescription: detail,
+            categoryId: type,
+            imageUrls: []
+          };
+          console.log(data);
+          try {
+            UpdateProduct(id, data).then( res => {
+                toast.success("Cập nhật sản phẩm thành công!",{theme: "colored" })
+                handleClose();  
+              }
+            )
+            .catch(err => {
+              console.log(err)
+            })
+          } catch (err) {
+            if (!err?.response) {
+              setErrMsg('No Server Response');
+              toast.error("No Server Response!", {theme: "colored" })
+            } else {
+              setErrMsg('Cập nhật sản phẩm thành công');
+              toast.success("Cập nhật sản phẩm thành công!",{theme: "colored" })
+              console.log(err);
+              handleClose();
+            }
+          }
         }
-      }
 
-    } else {
-      let data = {}
-      // var data = new FormData();
-      // data.append('productName', name);
-      // data.append('shortDescription', detail);
-      // data.append('longDescription', detail);
-      // data.append('price', cost);
-      // data.append('soldHistory', 0);
-      // data.append('sizes', {
-      //   "type": "color",
-      //   "values": [
-      //       "black",
-      //       "white"
-      //       ]
-      //   },);
-      // data.append('count', count);
-      // data.append('files', []);
-      // data.append('categoryId', type);
-      // data = {
-      //   productName: name,
-      //   shortDescription: detail,
-      //   longDescription: detail,
-      //   price: cost,
-      //   soldHistory: 0,
-      //   sizes: {
-      //     "type": "color",
-      //     "values": [
-      //       "black",
-      //       "white"
-      //     ]
-      //   },
-      //   count: count,
-      //   categoryId: type,
-      //   files: null
-      // };
-      data = {
-        productName: name,
-        shortDescription: detail,
-        longDescription: detail,
-        price: cost,
-        soldHistory: 0,
-        sizes: { "type": "color", "values": ["black", "white"] },
-        count: count,
-        categoryId: type,
-        files: avatarImg
-      };
-      var form_data = new FormData();
-      for (var key in data) {
-        form_data.append(key, data[key]);
-      }
+      } else {
+        if(cost <  0){
+          setErrMsg("Giá phải là một số dương")
+          toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+        } else if (count < 0) {
+          setErrMsg("Số lượng phải là một số dương")
+          toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+        } else if (name === '') {
+          setErrMsg("Tên sản phẩm không được để trống")
+          toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+        } else if (type === '') {
+          setErrMsg("Loại sản phẩm không được để trống")
+          toast.error("Loại sản phẩm không được để trống!", {theme: "colored" })
+        } 
+        else if (errMsg === '') { 
+          let data = {}
+          data = {
+            productName: name,
+            shortDescription: detail,
+            longDescription: detail,
+            price: cost,
+            soldHistory: 0,
+            sizes: { "type": "color", "values": ["black", "white"] },
+            count: count,
+            categoryId: type,
+            files: avatarImg
+          };
+          var form_data = new FormData();
+          for (var key in data) {
+            form_data.append(key, data[key]);
+          }
 
-      try {
-        AddProduct(form_data).then(res =>{
-          toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
+          try {
+            AddProduct(form_data).then(res =>{
+              toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
+              handleClose();
+            }
+              
+            ).catch(err => {
+              toast.error("Thêm sản phẩm thật bại!",{theme: "colored" })
 
-        }
-          
-        ).catch(err => {
-          toast.error("Thêm sản phẩm thật bại!",{theme: "colored" })
-
-          console.log(err);
-        });
-      } catch (err) {
-        if (!err?.response) {
-          setErrMsg('No Server Response');
-          setOpen(true);
-        } else {
-          setErrMsg('Thêm sản phẩm thành công');
-          console.log(err);
-          setOpen(true);
-        }
+              console.log(err);
+            });
+          } catch (err) {
+            if (!err?.response) {
+              setErrMsg('No Server Response');
+            } else {
+              setErrMsg('Thêm sản phẩm thành công');
+              toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
+              console.log(err);
+              handleClose();
+            }
+          }
       }
     }
-    handleClose();
   };
 
   //delete product
@@ -356,11 +368,11 @@ function ProductManager() {
     console.log(id);
     deleteProduct(id)
       .then
-      // res => {
-      //     console(res);
-      // }
-      ()
+      (
+        toast.success("Xoá sản phẩm thành công!",{theme: "colored" })
+      )
       .catch((err) => {
+        toast.error("Xoá sản phẩm thất bại!",{theme: "colored" })
         console.log(err);
       });
     handleCloseDelete();
@@ -489,7 +501,24 @@ function ProductManager() {
       return (
         <div className={styles.Home}>
           <Header />
-
+          <div
+            className={
+              errMsg
+                ? clsx(styles.snackbar, styles.show)
+                : clsx(styles.snackbar, styles.offscreen)
+            }
+            aria-live="assertive"
+          >
+            <Snackbar open={openerrMsg} autoHideDuration={2000} onClose={handleCloseErrMsg}>
+              <Alert
+                onClose={handleCloseErrMsg}
+                severity="error"
+                sx={{ width: '100%' }}
+              >
+                {errMsg}
+              </Alert>
+            </Snackbar>
+          </div>
           <Modal
             open={open}
             aria-labelledby="modal-modal-title"
@@ -517,6 +546,7 @@ function ProductManager() {
               <div className={stylesProductManger.wraper}>
                 <p> {textTitle} </p>
               </div>
+              <form>
 
               <div className={stylesProductManger.row}>
                 <div className={stylesProductManger.flex}>
@@ -738,7 +768,8 @@ function ProductManager() {
                   />
                 </div>
               </div>
-
+                
+              </form>
               <div className={stylesProductManger.button}>
                 <Button onClick={handleClose}> {textButtonRight} </Button>
                 {openInforProduct && (
