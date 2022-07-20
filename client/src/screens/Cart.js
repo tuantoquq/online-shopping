@@ -77,7 +77,7 @@ function Cart({ navigation }) {
           <Header navigation={navigation}/>
           <div>
             <div className='container' style={{marginLeft:'10%'}}>
-              <h3>Giỏ hàng</h3>
+              <h1>Giỏ hàng</h1>
             </div>
             <div>
               {cartItem.map((item, index) => {
@@ -101,8 +101,14 @@ function Cart({ navigation }) {
                 </p>
               </div>
             </div>
-            <div style={{marginLeft:'10%'}}>
-              <button>Trở lại</button>
+            <div style={{marginLeft:'10%', marginBottom:'10px'}}>
+              <button
+                onClick={() => {
+                  if (cartItem.length > 0) {
+                    navigatePath('/');
+                  }
+                }}
+              >Trở lại</button>
               <button
                 onClick={() => {
                   if (cartItem.length > 0) {
