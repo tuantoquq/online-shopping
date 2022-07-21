@@ -3,12 +3,13 @@ import CustomError from '../error/customError.js';
 import CommentService from '../service/comment.service.js';
 import ProductService from '../service/product.service.js';
 import { Comment } from '../model/index.js';
+import fs from 'fs';
 
 export const addComment = async (req, res, next) => {
     try {
+        
         let userId = req.userId;
         let productId = req.body.productId;
-
 
         //check exist comment
         let checkComment = await CommentService.findCommentByCustomerAndProduct(
@@ -16,23 +17,32 @@ export const addComment = async (req, res, next) => {
             productId,
         );
 
-
-        //upload images
-        let imageFiles = req.files;
-        //check file extensions
-        if (!imageFiles) {
-            const error = new Error('Upload file again!');
-            error.httpStatusCode = 400;
-            return next(error);
-        }
-
-
-        let imageUrls = [];
-        for (let i = 0; i < imageFiles.length; i++) {
-            imageUrls.push(`${process.env.IMAGE_PRE_PATH}/${imageFiles[i].filename}`);
-        }
-
         if (!checkComment) {
+            const content = req.body.content;
+
+            const checkIsBadComment = await checkBadWordInComment(content);
+            console.log("check in controller: ", checkIsBadComment);
+            if(checkIsBadComment){
+                return res.status(httpStatus.BAD_REQUEST).send({
+                    status: apiStatus.INVALID_PARAM,
+                    message: "Your comment has contain bad word! Retry with clean comment!"
+                });
+            }
+
+            //upload images
+            let imageFiles = req.files;
+            //check file extensions
+            if (!imageFiles) {
+                const error = new Error('Upload file again!');
+                error.httpStatusCode = 400;
+                return next(error);
+            }
+
+
+            let imageUrls = [];
+            for (let i = 0; i < imageFiles.length; i++) {
+                imageUrls.push(`${process.env.IMAGE_PRE_PATH}/${imageFiles[i].filename}`);
+            }
             //not exist => can comment
             let newComment = new Comment({
                 customerId: userId,
@@ -99,3 +109,18 @@ export const getAllCommentOfProduct = async (req, res) => {
         });
     }
 };
+
+const checkBadWordInComment = async (comment) => {
+    const filename = 'src/utils/badWord.txt';
+    let dataBadWord = await fs.promises.readFile(filename, 'utf-8');
+
+    const listBadWord = dataBadWord.split(' ');
+    const listWordInComment = comment.split(' ');
+
+    for(const ele of listWordInComment){
+        if(listBadWord.includes(ele)){
+            return true;
+        }
+    }
+    return false;
+}
