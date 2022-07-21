@@ -139,7 +139,7 @@ function AdminSidebar({ select }) {
               <span>Yêu cầu đăng bán </span>
             </Link>
             <Link
-              to="/admin"
+              to="/admin/product-popular"
               className={clsx(styles.listItemButton, {
                 [styles.selectedItem]: selected === 6,
               })}
