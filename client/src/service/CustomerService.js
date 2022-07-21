@@ -146,6 +146,7 @@ export const addComment = async (data) => {
         response = await customerApi.post('/customer/auth/comments', data);
     }catch(err){
         console.log(err);
+        return err
     }
     return response;
 }

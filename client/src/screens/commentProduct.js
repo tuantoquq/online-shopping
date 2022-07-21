@@ -4,6 +4,8 @@ import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
 import Button from '@mui/material/Button';
+import Header from '../components/header';
+import Footer from '../components/footer';
 
 
 function CommentProduct() {
@@ -26,7 +28,10 @@ function CommentProduct() {
     if (RoleService.getLocalRole() === 'customer') {
       return (
         <div>
+          <Header/>
           <CommentItem />
+          <Footer/>
+
           
         </div>
       );

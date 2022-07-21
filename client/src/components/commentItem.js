@@ -11,6 +11,8 @@ import { addComment } from '../service/CustomerService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageUploader from '../components/imageUploader';
+import customerApi from '../service/CustomerApi.js';
+
 
 function CommentItem() {
     const navigate = useNavigate()
@@ -63,33 +65,49 @@ function CommentItem() {
                 for (var key in body) {
                     form_data.append(key, body[key]);
                 }
-                addComment(form_data)
-                    .then(res => {
+                customerApi.post('/customer/auth/comments', form_data)
+                    .then(req => {
+
+
                         console.log('done')
                         toast.success("Thêm bình luận thành công!");
-                        toast.error("Thành luận chứa từ ngữ tiêu cực!");
-                        toast.error("Không đúng định dạng file ảnh!");
+                        // setTimeout(() => navigate('/user/orderManager'), 3000);
+
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        let res = err.response.data
+
+                        if (res.message === 'Your comment has contain bad word! Retry with clean comment!') {
+                            toast.error("Bình luận chứa từ ngữ tiêu cực!");
+                            setTimeout(() => {
+                                console.log('Bình luận chứa từ ngữ tiêu cực!')
+                            }, 3000);
+                        }
+                        else if (res.message === "Already exist comment for customer with this product") {
+                            toast.error("Bạn đã bình luận sản phẩm này rồi!");
+                            setTimeout(() => {
+                                console.log('Bạn đã bình luận sản phẩm này rồi!')
+                            }, 3000);
+
+                        }
+                    })
             }
             catch (error) {
+                toast.error("Lỗi!");
                 console.error(error);
-            }
-            finally {
-                setTimeout(() => navigate('/user/orderManager'), 3000);
             }
         }
 
     }
     const defautlAvatar =
-  'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
+        'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
     const [avatarImg, setAvatarImg] = useState(defautlAvatar);
 
 
 
 
     return (
-        <>
+        <div style={{marginBottom:'20px',marginTop:'20px'}}>
             {
                 data?.map((item, index) => {
                     return (
@@ -133,12 +151,12 @@ function CommentItem() {
             <Box sx={{
                 marginLeft: 65
             }}>
-                <Button onClick={()=> navigate('/user/orderManager')}>Trở lại</Button>
+                <Button onClick={() => navigate('/user/orderManager')}>Trở lại</Button>
                 <Button variant="contained" onClick={submit}>Hoàn thành</Button>
             </Box>
             <ToastContainer />
 
-        </>
+        </div>
 
     )
 
