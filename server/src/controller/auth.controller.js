@@ -66,7 +66,7 @@ export const updateInforCustomer = async (req, res) => {
         let listPros = [
             'email',
             'password',
-            'phone',
+            'phoneNumber',
             'firstName',
             'lastName',
             'dateOfBirth',
