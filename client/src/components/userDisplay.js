@@ -28,6 +28,7 @@ function UserDisplay(props){
     }
     const updateAvatar = () => {
         formData.append("file", file);
+        console.log(file)
         uploadAvatar(formData).then(res => {
             setUserUrl(res?.data?.data);
         }).catch((err) => {

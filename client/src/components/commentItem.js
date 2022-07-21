@@ -65,6 +65,7 @@ function CommentItem() {
                 for (var key in body) {
                     form_data.append(key, body[key]);
                 }
+                console.log(body)
                 customerApi.post('/customer/auth/comments', form_data)
                     .then(req => {
 
@@ -121,10 +122,12 @@ function CommentItem() {
                                     </div>
                                 </div>
                                 <div className={clsx(styles.avatarInput, styles.col)}>
-                                    <ImageUploader
+                                <input class="form-control" type="file" id="formFile" name="formFile" onChange={(e) => setAvatarImg(e.target.files)}/>
+
+                                    {/* <ImageUploader
                                         avatarImg={avatarImg}
                                         onAvatarChange={setAvatarImg}
-                                    />
+                                    /> */}
                                 </div>
 
                                 <div className={clsx(styles.all, styles.rating)}>

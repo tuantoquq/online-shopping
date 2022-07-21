@@ -128,7 +128,7 @@ export const getOrderHistory = async () => {
 export const uploadAvatar = async (avatar) => {
     let response;
     try{
-        response = await customerApi.put('/user/auth/update-avatar', avatar, {
+        response = await customerApi.put('/customer/auth/update-avatar', avatar, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
