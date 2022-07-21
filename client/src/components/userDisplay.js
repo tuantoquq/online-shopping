@@ -14,7 +14,7 @@ function UserDisplay(props){
     let formData = new FormData();
     useEffect(() => {
         setUserUrl(user_url)
-    },[])
+    },[props])
 
 
     const displayUpdate = (id)=>{
