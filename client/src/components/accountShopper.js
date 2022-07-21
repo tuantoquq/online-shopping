@@ -15,7 +15,8 @@ import {getShopperProfile, updateShopperProfile} from '../service/ShopperService
 import { Navigate } from 'react-router-dom';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function TabInfor(props) {
   const { value, account } = props;
   const [firstName, setFirstName] = useState('Bùi');
@@ -77,13 +78,16 @@ function TabInfor(props) {
         //   },
         // });
         updateShopperProfile(data).then(res=>{setSuccess(true);
-          console.log(res?.data)})
+          console.log(res?.data)});
+          toast.success('Cập nhật thành công');
       } catch (err) {
         if (!err?.response) {
           setErrMsg('No Server Response');
+          toast.error('No Server Response');
           setOpen(true);
         } else {
           setErrMsg('Thay đổi thất bại.');
+          toast.error('Thay đổi thất bại.');
           console.log(err);
           setOpen(true);
         }
@@ -406,6 +410,7 @@ function TabInfor(props) {
               </div>
             </form>
           </div>
+          <ToastContainer />
         </div>
       )}
     </div>
@@ -453,12 +458,15 @@ function TabPassword(props) {
     const REGISTER_URL = `/api/v1/register`;
     if (password !== oldPassword) {
       setErrMsg('Sai mật khẩu!');
+      toast.error('Sai mật khẩu!');
     }
     if (newPassword !== confirmPassword) {
       setErrMsg('Mật khẩu không khớp!');
+      toast.error('Mật khẩu không khớp!');
     }
     if (newPassword.length < 6) {
       setErrMsg('Mật khẩu phải chứa ít nhất 6 kí tự!');
+      toast.error('Mật khẩu phải chứa ít nhất 6 kí tự!');
     }
 
     if (errMsg === '') {
@@ -664,6 +672,7 @@ function AccountShopper({ navigation, account }) {
                 ></TabPassword>
               </Box>
             </div>
+            <ToastContainer />
           </div>
           <Footer navigation={navigation} />
         </div>
