@@ -281,11 +281,13 @@ export const addProduct = async (req, res, next) => {
         }
         //upload images
         let imageFiles = req.files;
-        if(!imageFiles.mimetype.startsWith("image/")){
-            return res.status(httpStatus.BAD_REQUEST).send({
-                status: apiStatus.INVALID_PARAM,
-                message: "Only support image file!"
-            });
+        for(const file of imageFiles){
+            if(!file.mimetype.startsWith("image/")){
+                return res.status(httpStatus.BAD_REQUEST).send({
+                    status: apiStatus.INVALID_PARAM,
+                    message: "Only support image file!"
+                });
+            }
         }
         //check file extensions
         if (!imageFiles) {
@@ -341,7 +343,7 @@ export const addProduct = async (req, res, next) => {
     }
 };
 
-export const getListProductOfCategory = async (req, res, next) => {
+export const getListProductOfCategory = async (req, res) => {
     const categoryId = req.query.categoryId 
     let currentPage = req.body.currentPage ? req.body.currentPage : 1;
     let maxItem = req.body.maxItem ? req.body.maxItem : 20;
@@ -415,6 +417,14 @@ export const updateProduct = async (req, res, next) => {
             //upload images
             let imageFiles = req.files;
             //check file extensions
+            for(const file of imageFiles){
+                if(!file.mimetype.startsWith("image/")){
+                    return res.status(httpStatus.BAD_REQUEST).send({
+                        status: apiStatus.INVALID_PARAM,
+                        message: "Only support image file!"
+                    });
+                }
+            }
             if (!imageFiles) {
                 const error = new Error('Upload file again!');
                 error.httpStatusCode = 400;
