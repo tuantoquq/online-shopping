@@ -31,11 +31,13 @@ export const addComment = async (req, res, next) => {
 
             //upload images
             let imageFiles = req.files;
-            if(!imageFiles.mimetype.startsWith("image/")){
-                return res.status(httpStatus.BAD_REQUEST).send({
-                    status: apiStatus.INVALID_PARAM,
-                    message: "Only support image file!"
-                });
+            for(const file of imageFiles){
+                if(!file.mimetype.startsWith("image/")){
+                    return res.status(httpStatus.BAD_REQUEST).send({
+                        status: apiStatus.INVALID_PARAM,
+                        message: "Only support image file!"
+                    });
+                }
             }
             //check file extensions
             if (!imageFiles) {
