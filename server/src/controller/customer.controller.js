@@ -56,6 +56,12 @@ export const updateAvatar = async (req, res, next) => {
         const file = req.file;
         let customerId = req.userId;
         //check file extensions
+        if(!file.mimetype.startsWith("image/")){
+            return res.status(httpStatus.BAD_REQUEST).send({
+                status: apiStatus.INVALID_PARAM,
+                message: "Only support image file!"
+            });
+        }
         if (!file) {
             const error = new Error('Upload file again!');
             error.httpStatusCode = 400;
