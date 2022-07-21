@@ -26,6 +26,7 @@ import AdminShopRequest from '../screens/adminShopRequest';
 import AdminShop from '../screens/adminShop';
 import ShoppersList from '../screens/shopperList';
 // import BasicTable from '../components/Test';
+import AdminProductPopular from '../screens/adminProductPopular';
 
 function RootRoutes() {
   return (
@@ -43,6 +44,7 @@ function RootRoutes() {
       <Route path="/admin/login" element={<Login role="admin" />} />
       <Route path="/admin/shop" element={<AdminShop />} />
       <Route path="/admin/shop-request" element={<AdminShopRequest />} />
+      <Route path="/admin/product-popular" element={<AdminProductPopular />} />
 
       <Route path="/customer/register" element={<Register role="customer" />} />
       <Route path="/shopper/register" element={<Register role="shopper" />} />
