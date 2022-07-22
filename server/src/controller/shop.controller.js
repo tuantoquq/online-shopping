@@ -117,3 +117,24 @@ export const addNewShop = async (req, res) => {
         });
     }
 }
+
+
+export const deleteShop = async (req, res) => {
+    try{
+        let shopId = req.query.id 
+        let shop = await Shop.findByIdAndDelete(shopId)
+        if(!shop){
+            return res.status(httpStatus.OK).json({
+                status: apiStatus.OK,
+                message: "delete shop success",
+                data: shop
+            })
+        }
+    }
+    catch(err){
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+            status: apiStatus.OTHER_ERROR,
+            message: err.message,
+        });
+    }
+}
