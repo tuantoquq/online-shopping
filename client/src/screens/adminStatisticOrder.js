@@ -15,7 +15,7 @@ import RoleService from '../service/RoleService';
 import { Navigate } from 'react-router-dom';
 
 function StatisticOrder({ navigation }) {
-  const width = window.screen.width - 370;
+  const width = window.screen.width - 470;
   const height = window.screen.height * 0.85 - 200;
 
   const toDay = new Date();
@@ -26,6 +26,8 @@ function StatisticOrder({ navigation }) {
   const [endDate, setEndDate] = useState(toDay);
 
   const [countOrder, setCountOrder] = useState([]);
+  const [rejectOrder, setRejectOrder] = useState([]);
+
 
   useEffect(() => {
     //request for data
@@ -65,6 +67,33 @@ function StatisticOrder({ navigation }) {
           return 0;
         });
         setCountOrder(data1);
+      })
+      .catch((err) => console.log(err));
+
+      axios
+      .post(
+        '/statistic/count-cancel-order',
+        {
+          startDate: format(startDate, 'yyyy-MM-dd'),
+          endDate: format(endDate, 'yyyy-MM-dd'),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        const data1 = date.map((i) => {
+          for (const e of res.data.data) {
+            // console.log(e._id);
+            if (e._id === format(i, 'yyyy-MM-dd')) {
+              return e.count;
+            }
+          }
+          return 0;
+        });
+        setRejectOrder(data1);
       })
       .catch((err) => console.log(err));
 
@@ -146,8 +175,8 @@ function StatisticOrder({ navigation }) {
                   id="visits"
                   startDate={startDate}
                   endDate={endDate}
-                  lines={[countOrder]}
-                  xAxis={['Số đơn hàng']}
+                  lines={[countOrder,rejectOrder]}
+                  xAxis={['Số đơn hàng','Số đơn từ chối']}
                   width={width}
                   height={height}
                 />
