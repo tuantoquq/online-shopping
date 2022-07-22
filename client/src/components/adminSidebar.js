@@ -120,7 +120,7 @@ function AdminSidebar({ select }) {
         </div>
         <div>
           <div className={clsx(styles.listItem)}>
-            <Link
+            {/* <Link
               to="/admin"
               className={clsx(styles.listItemButton, {
                 [styles.selectedItem]: selected === 4,
@@ -137,7 +137,7 @@ function AdminSidebar({ select }) {
               onClick={() => setSelected(5)}
             >
               <span>Yêu cầu đăng bán </span>
-            </Link>
+            </Link> */}
             <Link
               to="/admin/product-popular"
               className={clsx(styles.listItemButton, {

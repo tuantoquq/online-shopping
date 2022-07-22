@@ -9,7 +9,7 @@ import AdminHeader from '../components/adminHeader';
 import axios from '../config/axios';
 import TokenService from '../service/TokenService';
 import RoleService from '../service/RoleService';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,8 +17,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getPopularProduct } from '../service/AdminService';
 
 function AdminProductPopular(props) {
+    const rooter = useNavigate()
     const [rows, setRow] = useState([
         {
             'fiels': 'Dịch vụ',
@@ -26,6 +28,32 @@ function AdminProductPopular(props) {
             'quantity': 600
         }
     ])
+
+    useEffect(() => {
+        getPopularProduct()
+            .then(res => {
+                let data = res.data.data
+
+                let list_data = []
+                for (var item in data) {
+                    list_data.push({
+                        'fiels': item,
+                        'product': data[item]['productName'],
+                        'quantity': data[item]['count'],
+                        'productId': data[item]['productId']
+
+                    })
+                }
+                setRow(list_data)
+            })
+            .catch(err => console.log(err))
+
+    }, [])
+
+    console.log(rows)
+
+
+
 
 
 
@@ -45,9 +73,9 @@ function AdminProductPopular(props) {
         if (RoleService.getLocalRole() === 'admin') {
             return (
                 <div>
-                    <AdminHeader select={6}/>
+                    <AdminHeader />
                     <div className={clsx(styles.pageContainer)}>
-                        <AdminSidebar select="statstic_visits" />
+                        <AdminSidebar select={6} />
                         <div className={clsx(styles.pageBody)}>
                             <TableContainer component={Paper}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,7 +97,12 @@ function AdminProductPopular(props) {
                                                     {index}
                                                 </TableCell>
                                                 <TableCell align="center">{row.fiels}</TableCell>
-                                                <TableCell align="center">{row.product}</TableCell>
+                                                <TableCell align="center" onClick={() => rooter(`/product/${row?.productId}`)} sx={{
+                                                    '&:hover': {
+                                                        background: "#03fcfc",
+                                                        cursor: 'pointer'
+                                                    }
+                                                }}>{row.product}</TableCell>
                                                 <TableCell align="center">{row.quantity}</TableCell>
                                             </TableRow>
                                         ))}
