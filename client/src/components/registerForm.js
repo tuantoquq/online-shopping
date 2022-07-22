@@ -519,13 +519,23 @@ function RegisterForm(props) {
                 </Link>
               )}
 
-              <button
-                value="Submit"
-                type="submit"
-                className={clsx(styles.btn, styles.primary)}
-              >
-                ĐĂNG KÝ
-              </button>
+              <div className={clsx(styles.btnContainer)}>
+                <button
+                  value="Submit"
+                  type="submit"
+                  className={clsx(styles.btn, styles.primary)}
+                >
+                  ĐĂNG KÝ
+                </button>
+                <button
+                  onClick={() => {
+                    navigate('/');
+                  }}
+                  className={clsx(styles.btn, styles.cancel)}
+                >
+                  HỦY
+                </button>
+              </div>
             </div>
           </form>
         </div>

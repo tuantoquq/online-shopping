@@ -23,7 +23,7 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { changeShopperState } from '../service/AdminService';
+import { changeShopperState, deleteRequest } from '../service/AdminService';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -71,6 +71,30 @@ function AdminShopRequest(props) {
         setErrMsg({
           status: 'success',
           message: 'Phê duyệt yêu cầu đăng kí thành công',
+        });
+        setOpenModal(false);
+      })
+      .catch((err) => {
+        setErrMsg({
+          status: 'error',
+          message: err.message,
+        });
+        console.log(err);
+      });
+  };
+
+  const handleReject = () => {
+    deleteRequest(selectedItem.id, 1)
+      .then((res) => {
+        // console.log(res);
+        let tmp = data;
+        tmp.splice(itemIndex, 1);
+
+        setData(tmp);
+
+        setErrMsg({
+          status: 'success',
+          message: 'Từ chối yêu cầu đăng kí thành công',
         });
         setOpenModal(false);
       })
@@ -297,7 +321,7 @@ function AdminShopRequest(props) {
                   variant="h4"
                   component="h2"
                 >
-                  {'Phê duyệt yêu cầu đăng kí này?'}
+                  {'Phê duyệt/Từ chối yêu cầu đăng kí này?'}
                 </Typography>
                 <TextField
                   className={clsx(styles.modalTextField)}
@@ -317,10 +341,19 @@ function AdminShopRequest(props) {
                   </Button>
                   <Button
                     className={clsx(styles.modalBtn)}
+                    onClick={handleReject}
+                    color="error"
+                    variant="contained"
+                  >
+                    TỪ CHỐI
+                  </Button>
+
+                  <Button
+                    className={clsx(styles.modalBtn)}
                     onClick={() => {
                       setOpenModal(false);
                     }}
-                    color="error"
+                    color="secondary"
                     variant="contained"
                   >
                     HỦY
