@@ -9,8 +9,6 @@ server/node_modules
 # testing
 /coverage
 
-# production
-/client/build
 
 # misc
 .DS_Store
