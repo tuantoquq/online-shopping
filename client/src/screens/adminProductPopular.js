@@ -17,6 +17,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getPopularProduct } from '../service/AdminService';
 
 function AdminProductPopular(props) {
     const [rows, setRow] = useState([
@@ -26,6 +27,27 @@ function AdminProductPopular(props) {
             'quantity': 600
         }
     ])
+
+    useEffect(() => {
+        getPopularProduct()
+            .then(res => {
+                let data = res.data.data
+                let list_data = []
+                for (var item in data) {
+                    list_data.push({
+                        'fiels': item,
+                        'product': data[item]['productName'],
+                        'quantity': data[item]['count']
+                    })
+                }
+                setRow(list_data)
+            })
+            .catch(err => console.log(err))
+
+    }, [])
+
+
+
 
 
 
@@ -45,9 +67,9 @@ function AdminProductPopular(props) {
         if (RoleService.getLocalRole() === 'admin') {
             return (
                 <div>
-                    <AdminHeader select={6}/>
+                    <AdminHeader />
                     <div className={clsx(styles.pageContainer)}>
-                        <AdminSidebar select="statstic_visits" />
+                        <AdminSidebar select={6}/>
                         <div className={clsx(styles.pageBody)}>
                             <TableContainer component={Paper}>
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">

@@ -34,3 +34,20 @@ export const changeShopperState = async (shopperId, state) => {
   }
   return response;
 };
+
+export const getPopularProduct = async () => {
+  let response;
+  try {
+    response = await adminApi.post(
+      '/statistic/top-category',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};
