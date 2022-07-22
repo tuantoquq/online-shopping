@@ -109,7 +109,7 @@ statisticController.countTopEachCategory = async (req, res) => {
                         "$sum": "$order_products.count"
                     },
                     "infor": {
-                        "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "productUrl": "$productUrl"}
+                        "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "id": "$_id"}
                     }
                 }
             },
@@ -121,13 +121,14 @@ statisticController.countTopEachCategory = async (req, res) => {
             } 
         ]
         const result = await Product.aggregate(query)
+        console.log(result)
         let data = {}
         for(let i=0; i<result.length; i++){
             if(!data.hasOwnProperty(result[i]['infor']['categoryName'] || result[i]['countProduct'] > data[result[i]['infor']['categoryName']])){
                 data[result[i]['infor']['categoryName']] = {
                     "productName": result[i]['infor']['productName'],
                     'count': result[i]['countProduct'],
-                    "productUrl": result[i]['infor']['productUrl']
+                    "productId": result[i]['infor']['id']
                 }
             }
         }
@@ -452,7 +453,7 @@ export default statisticController;
 //                 "$sum": "$order_products.count"
 //             },
 //             "infor": {
-//                 "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "productUrl": "$productUrl"}
+//                 "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "id": "$_id"}
 //             }
 //         }
 //     },
