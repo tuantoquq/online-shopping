@@ -109,7 +109,7 @@ statisticController.countTopEachCategory = async (req, res) => {
                         "$sum": "$order_products.count"
                     },
                     "infor": {
-                        "$push": {"productName": "$productName", "categoryName": "$categories.categoryName"}
+                        "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "productUrl": "$productUrl"}
                     }
                 }
             },
@@ -126,7 +126,8 @@ statisticController.countTopEachCategory = async (req, res) => {
             if(!data.hasOwnProperty(result[i]['infor']['categoryName'] || result[i]['countProduct'] > data[result[i]['infor']['categoryName']])){
                 data[result[i]['infor']['categoryName']] = {
                     "productName": result[i]['infor']['productName'],
-                    'count': result[i]['countProduct']
+                    'count': result[i]['countProduct'],
+                    "productUrl": result[i]['infor']['productUrl']
                 }
             }
         }
@@ -451,7 +452,7 @@ export default statisticController;
 //                 "$sum": "$order_products.count"
 //             },
 //             "infor": {
-//                 "$push": {"productName": "$productName", "categoryName": "$categories.categoryName"}
+//                 "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "productUrl": "$productUrl"}
 //             }
 //         }
 //     },
