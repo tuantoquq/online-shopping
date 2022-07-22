@@ -199,7 +199,7 @@ function ProductManager() {
   const [type, setType] = useState('');
   const [rating, setRating] = useState(0);
   const [solded, setSolded] = useState(0);
-  const [avatarImg, setAvatarImg] = useState(defautlAvatar);
+  const [avatarImg, setAvatarImg] = useState();
   const [textTitle, setTextTitle] = useState('');
   const [textButtonRight, setTextButtonRight] = useState('');
   const [listCategory, setListCategory] = useState();
@@ -330,36 +330,32 @@ function ProductManager() {
             soldHistory: 0,
             sizes: { "type": "color", "values": ["black", "white"] },
             count: count,
-            categoryId: type,
-            files: avatarImg
+            categoryId: type
+            
           };
           var form_data = new FormData();
           for (var key in data) {
             form_data.append(key, data[key]);
           }
-
-          try {
-            AddProduct(form_data).then(res =>{
-              toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
-              handleClose();
-            }
-              
-            ).catch(err => {
-              toast.error("Thêm sản phẩm thật bại!",{theme: "colored" })
-
-              console.log(err);
-            });
-          } catch (err) {
-            if (!err?.response) {
-              setErrMsg('No Server Response');
-            } else {
-              setErrMsg('Thêm sản phẩm thành công');
-              toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
-              console.log(err);
-              handleClose();
-            }
+          for (const f of avatarImg){
+            form_data.append("files", f);
           }
-      }
+          
+          AddProduct(form_data).then(res =>{
+            toast.success("Thêm sản phẩm thành công!",{theme: "colored" })
+            handleClose();
+          }).catch(err => {
+            const res = err.response.data;
+            if(res.message === "Your shop is waiting for admin accept register! Try later."){
+              toast.warn("Shop của bạn đang trong trại thái chờ đăng kí!");
+            }else if(res.message === "Only support image file!"){
+              toast.error("Chỉ hỗ trợ định dạng ảnh!");
+            }else {
+              toast.error("Thêm sản phẩm thật bại!",{theme: "colored" })
+            }
+            console.log(err);
+          });
+        }
     }
   };
 
@@ -659,10 +655,11 @@ function ProductManager() {
                       stylesProductManger.col
                     )}
                   >
-                    <ImageUploader
+                    <input class="form-control" type="file" id="formFile" multiple name="formFile" onChange={(e) => setAvatarImg(e.target.files)}/>
+                    {/* <ImageUploader
                       avatarImg={avatarImg}
                       onAvatarChange={setAvatarImg}
-                    />
+                    /> */}
                   </div>
                 </div>
 

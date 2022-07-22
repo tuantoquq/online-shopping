@@ -10,15 +10,14 @@ import { addComment } from '../service/CustomerService';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ImageUploader from '../components/imageUploader';
-import customerApi from '../service/CustomerApi.js';
 
 
 function CommentItem() {
     const navigate = useNavigate()
     const location = useLocation()
     let data = location?.state?.id
-    const [comment, setComment] = useState({})
+    const [comment, setComment] = useState({});
+    const [avatarImg, setAvatarImg] = useState();
 
     const handleChange = (product_id, e) => {
         let key = e.target.name
@@ -59,20 +58,20 @@ function CommentItem() {
                     productId: key,
                     content: data['content'],
                     ratingStar: data['ratingStar'],
-                    files: avatarImg
                 }
                 var form_data = new FormData();
                 for (var key in body) {
                     form_data.append(key, body[key]);
                 }
+                for (const f of avatarImg){
+                    form_data.append("files",f);
+                }
                 console.log(body)
-                customerApi.post('/customer/auth/comments', form_data)
-                    .then(req => {
-
-
-                        console.log('done')
+                addComment(form_data)
+                    .then(res => {
+                        console.log('done', res?.data)
                         toast.success("Thêm bình luận thành công!");
-                        // setTimeout(() => navigate('/user/orderManager'), 3000);
+                        setTimeout(() => navigate('/user/orderManager'), 3000);
 
                     })
                     .catch(err => {
@@ -90,6 +89,12 @@ function CommentItem() {
                                 console.log('Bạn đã bình luận sản phẩm này rồi!')
                             }, 3000);
 
+                        }else if (res.message === "Only support image file!") {
+                            toast.error("Chỉ hỗ trợ định dạng ảnh");
+                            setTimeout(() => {
+                                console.log('Only support image file!')
+                            }, 3000);
+
                         }
                     })
             }
@@ -100,12 +105,6 @@ function CommentItem() {
         }
 
     }
-    const defautlAvatar =
-        'https://res.cloudinary.com/trinhvanthoai/image/upload/v1655489389/thoaiUploads/defaultAvatar_jxx3b9.png';
-    const [avatarImg, setAvatarImg] = useState(defautlAvatar);
-
-
-
 
     return (
         <div style={{marginBottom:'20px',marginTop:'20px'}}>
@@ -122,7 +121,7 @@ function CommentItem() {
                                     </div>
                                 </div>
                                 <div className={clsx(styles.avatarInput, styles.col)}>
-                                <input class="form-control" type="file" id="formFile" name="formFile" onChange={(e) => setAvatarImg(e.target.files)}/>
+                                <input class="form-control" type="file" id="formFile" multiple name="formFile" onChange={(e) => setAvatarImg(e.target.files)}/>
 
                                     {/* <ImageUploader
                                         avatarImg={avatarImg}
