@@ -91,7 +91,6 @@ export const getProductById = async (req, res) => {
 // };
 
 export const filterProduct = async (req, res) => {
-    console.log(req.params);
     try {
         let currentPage = req.body.currentPage ? req.body.currentPage : 1;
         let maxItem = req.body.maxItem ? req.body.maxItem : 20;
@@ -106,7 +105,6 @@ export const filterProduct = async (req, res) => {
             'orderBy',
             'sortBy',
         ];
-        console.log(req.body['categoryName']);
         let query = [];
         for (let i = 0; i < listPros.length; i++) {
             let property = listPros[i];
@@ -145,7 +143,6 @@ export const filterProduct = async (req, res) => {
                     for (let i = 0; i < categories.length; i++) {
                         categoriIds.push(categories[i]._id);
                     }
-                    console.log(categoriIds);
                     query.push({
                         $match: { categoryId: { $in: categoriIds } },
                     });
@@ -201,10 +198,13 @@ export const filterProduct = async (req, res) => {
                 }
             }
         }
-
-        console.log(query);
-        const maxDocuments = await Product.aggregate(query).length;
+        let queryCount = JSON.parse(JSON.stringify(query))
+        queryCount.push({
+            $count: "countDocument"
+        })
+        let maxDocuments = await Product.aggregate(queryCount)
         console.log(maxDocuments);
+        maxDocuments = maxDocuments[0]['countDocument']
 
         let countPage = 0;
         if (maxDocuments % maxItem == 0) {

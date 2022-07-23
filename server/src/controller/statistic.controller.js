@@ -5,17 +5,17 @@ const statisticController = {}
 
 statisticController.countOrder = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -39,7 +39,7 @@ statisticController.countOrder = async (req, res) => {
 
 statisticController.countCancelOrder = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
@@ -47,12 +47,12 @@ statisticController.countCancelOrder = async (req, res) => {
             {
                 $match: { "orderStatus" : -1 }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -118,7 +118,7 @@ statisticController.countTopEachCategory = async (req, res) => {
             },
             {
                 "$sort": {"countProduct": -1}
-            } 
+            }
         ]
         const result = await Product.aggregate(query)
         console.log(result)
@@ -149,17 +149,17 @@ statisticController.countTopEachCategory = async (req, res) => {
 
 statisticController.countUser = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -183,7 +183,7 @@ statisticController.countUser = async (req, res) => {
 
 statisticController.countShop = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
@@ -191,12 +191,12 @@ statisticController.countShop = async (req, res) => {
             {
                 $match: { "status": 1 }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -221,7 +221,7 @@ statisticController.countShop = async (req, res) => {
 
 statisticController.countShopRegister = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
@@ -229,12 +229,12 @@ statisticController.countShopRegister = async (req, res) => {
             {
                 $match: { "status": 0 }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -324,7 +324,7 @@ export default statisticController;
 //     {
 //         $match: { "createdAt": { $gte: new Date("2022-06-20"), $lte: new Date("2022-06-30") } }
 //     },
-//     {   
+//     {
 //         $group: {
 //                 "_id": {
 //                     "year" : {
@@ -332,14 +332,14 @@ export default statisticController;
 //                     },
 //                     "month" : {
 //                         $month : "$createdAt"
-//                     }, 
+//                     },
 //                     "day": {
 //                         $dayOfMonth: "$createdAt"
 //                     }
 //                 },
 //                 "count": {
 //                     $sum: 1
-//                 } 
+//                 }
 //             }
 //     }
 // ])
@@ -352,12 +352,12 @@ export default statisticController;
 //     {
 //         $match: {"orderStatus": -1}
 //     },
-//     {   
+//     {
 //         $group: {
 //                 "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
 //                 "count": {
 //                     $sum: 1
-//                 } 
+//                 }
 //             }
 //     },
 //     {
@@ -417,7 +417,7 @@ export default statisticController;
 //     },
 //     {
 //         "$sort": {"countProduct": -1}
-//     } 
+//     }
 // ])
 
 // db.products.aggregate([
@@ -462,5 +462,5 @@ export default statisticController;
 //     },
 //     {
 //         "$sort": {"countProduct": -1}
-//     } 
+//     }
 // ])
