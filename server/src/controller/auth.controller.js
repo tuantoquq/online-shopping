@@ -13,6 +13,7 @@ const { sign } = jwt;
 const refreshTokensCustomer = {};
 const refreshTokensShopper = {};
 const refreshTokensAdmin = {};
+let countNumberAccess = [];
 
 //Customer
 export const registerCustomer = async (req, res) => {
@@ -159,6 +160,19 @@ export const loginCustomer = async (req, res) => {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRATION,
         });
         refreshTokensCustomer[refreshToken] = cusInfo;
+
+        const currentDate = getCurrentDate();
+
+        const checkEle = countNumberAccess.filter(ele => ele._id === currentDate);
+
+        if(checkEle.length === 0){
+            countNumberAccess.push({
+                _id: currentDate,
+                count: 1
+            });
+        }else {
+            checkEle[0].count += 1;
+        }
 
         return res.status(httpStatus.OK).send({
             status: apiStatus.SUCCESS,
@@ -555,4 +569,29 @@ export const refreshTokenForAdmin = async (req, res) => {
             message: 'refresh token is required in body',
         });
     }
+};
+
+export const getNumberAccess = async (req, res) => {
+    const {startDate, endDate} = req.body;
+
+    let listAccess = countNumberAccess.filter(ele => ele._id >= startDate && ele._id <= endDate);
+
+    return res.status(httpStatus.OK).send({
+        status: apiStatus.SUCCESS,
+        message: "get list access successfully!",
+        data: listAccess
+    });
+}
+
+const getCurrentDate = () => {
+    const today = new Date();
+
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    const yyyy = today.getFullYear();
+
+    if(dd < 10) dd = "0" + dd;
+    if(mm < 10) mm = "0" + mm;
+
+    return yyyy + "-" + mm + "-" + dd;
 };
