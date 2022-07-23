@@ -344,12 +344,19 @@ export const addProduct = async (req, res, next) => {
 };
 
 export const getListProductOfCategory = async (req, res) => {
-    const categoryId = req.query.categoryId 
+    const categoryName = req.body.categoryName 
     let currentPage = req.body.currentPage ? req.body.currentPage : 1;
     let maxItem = req.body.maxItem ? req.body.maxItem : 20;
     try {
+        let category = await Category.findOne({categoryName: categoryName})
+        if(!category){
+            return res.status(httpStatus.OK).json({
+                message: "Not exist category name",
+                data: []
+            })
+        }
+        let categoryId = category._id
         let productsRes = await ProductService.getListProductOfCategory(categoryId, currentPage, maxItem)
-        console.log(productsRes)
         return res.status(httpStatus.OK).json({
             message: "Success",
             data: productsRes
@@ -491,3 +498,18 @@ async function generateCodes() {
 }
 
 
+// db.categories.aggregate([
+//     {
+//         $lookup: {
+//             "from": "products",
+//             "localField": "_id",
+//             "foreignField": "categoryId",
+//             "as": "products"
+//         }
+//     },
+//     {
+//         "$match": {
+//             "categoryName": "Đồ Chơi - Mẹ & Bé"
+//         }
+//     },
+// ])
