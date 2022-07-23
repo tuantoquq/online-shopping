@@ -28,7 +28,10 @@ function ProductCategory({ category }) {
           sm={1}
           md={2}
           key={index}
-          onClick={() => navigate('/search/' + item.categoryName)}
+          onClick={() => {
+            console.log(item);
+            navigate('/search/category=' + item.categoryName);
+          }}
         >
           <Card sx={{ maxWidth: 345, height: 200 }}>
             <CardActionArea>
