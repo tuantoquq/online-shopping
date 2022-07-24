@@ -51,6 +51,16 @@ function AdminSidebar({ select }) {
             >
               <span>Thống kê đơn hàng </span>
             </Link>
+
+            <Link
+              to="/admin/statistic-activities"
+              className={clsx(styles.listItemButton, {
+                [styles.selectedItem]: selected === 'statistic-activities',
+              })}
+              onClick={() => setSelected('statistic-activities')}
+            >
+              <span>Thống kê hoạt động</span>
+            </Link>
           </div>
         </div>
       </div>
