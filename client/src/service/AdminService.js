@@ -34,3 +34,31 @@ export const changeShopperState = async (shopperId, state) => {
   }
   return response;
 };
+
+export const deleteRequest = async (shopperId) => {
+  let response;
+  try {
+    response = await adminApi.delete(`/shops/delete?id=${shopperId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};
+
+export const getPopularProduct = async () => {
+  let response;
+  try {
+    response = await adminApi.post('/statistic/top-category', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+};

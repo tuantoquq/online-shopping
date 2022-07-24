@@ -5,17 +5,17 @@ const statisticController = {}
 
 statisticController.countOrder = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -37,19 +37,129 @@ statisticController.countOrder = async (req, res) => {
     }
 }
 
-statisticController.countUser = async (req, res) => {
+statisticController.countCancelOrder = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
             },
-            {   
+            {
+                $match: { "orderStatus" : -1 }
+            },
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
+                    }
+            },
+            {
+                $sort: { "_id" : 1 }
+            }
+        ]
+        const result = await Order.aggregate(query)
+        return res.status(httpStatus.OK).json({
+            data: result,
+            status: apiStatus.SUCCESS
+        })
+
+
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: e.message,
+        });
+    }
+}
+
+statisticController.countTopEachCategory = async (req, res) => {
+    try {
+        let query = [
+            {
+                "$lookup": {
+                    "from": "order_products",
+                    "localField": "_id",
+                    "foreignField": "productId",
+                    "as": "order_products"
+                }
+            },
+            {
+                "$unwind": "$order_products"
+            },
+            {
+                "$lookup": {
+                    "from": "categories",
+                    "localField": "categoryId",
+                    "foreignField": "_id",
+                    "as": "categories"
+                }
+            },
+            {
+                "$unwind": "$categories"
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "productId": '$_id',
+                        "categoryId": "$categoryId"
+                    },
+                    "countProduct": {
+                        "$sum": "$order_products.count"
+                    },
+                    "infor": {
+                        "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "id": "$_id"}
+                    }
+                }
+            },
+            {
+                "$unwind": "$infor"
+            },
+            {
+                "$sort": {"countProduct": -1}
+            }
+        ]
+        const result = await Product.aggregate(query)
+        console.log(result)
+        let data = {}
+        for(let i=0; i<result.length; i++){
+            if(!data.hasOwnProperty(result[i]['infor']['categoryName'] || result[i]['countProduct'] > data[result[i]['infor']['categoryName']])){
+                data[result[i]['infor']['categoryName']] = {
+                    "productName": result[i]['infor']['productName'],
+                    'count': result[i]['countProduct'],
+                    "productId": result[i]['infor']['id']
+                }
+            }
+        }
+        console.log(data)
+        return res.status(httpStatus.OK).json({
+            data: data,
+            status: apiStatus.SUCCESS
+        })
+
+
+    } catch (e) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: apiStatus.OTHER_ERROR,
+            message: e.message,
+        });
+    }
+}
+
+statisticController.countUser = async (req, res) => {
+    try {
+        const {startDate, endDate } = req.body
+        let query = [
+            {
+                $match: { "createdAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
+            },
+            {
+                $group: {
+                        "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                        "count": {
+                            $sum: 1
+                        }
                     }
             },
             {
@@ -73,7 +183,7 @@ statisticController.countUser = async (req, res) => {
 
 statisticController.countShop = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
@@ -81,12 +191,12 @@ statisticController.countShop = async (req, res) => {
             {
                 $match: { "status": 1 }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -111,7 +221,7 @@ statisticController.countShop = async (req, res) => {
 
 statisticController.countShopRegister = async (req, res) => {
     try {
-        const {startDate, endDate } = req.body 
+        const {startDate, endDate } = req.body
         let query = [
             {
                 $match: { "createAt": { $gte: new Date(startDate), $lte: new Date(endDate) } }
@@ -119,12 +229,12 @@ statisticController.countShopRegister = async (req, res) => {
             {
                 $match: { "status": 0 }
             },
-            {   
+            {
                 $group: {
                         "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createAt" } },
                         "count": {
                             $sum: 1
-                        } 
+                        }
                     }
             },
             {
@@ -214,7 +324,7 @@ export default statisticController;
 //     {
 //         $match: { "createdAt": { $gte: new Date("2022-06-20"), $lte: new Date("2022-06-30") } }
 //     },
-//     {   
+//     {
 //         $group: {
 //                 "_id": {
 //                     "year" : {
@@ -222,14 +332,14 @@ export default statisticController;
 //                     },
 //                     "month" : {
 //                         $month : "$createdAt"
-//                     }, 
+//                     },
 //                     "day": {
 //                         $dayOfMonth: "$createdAt"
 //                     }
 //                 },
 //                 "count": {
 //                     $sum: 1
-//                 } 
+//                 }
 //             }
 //     }
 // ])
@@ -237,14 +347,17 @@ export default statisticController;
 
 // db.orders.aggregate([
 //     {
-//         $match: { "createdAt": { $gte: new Date("2022-06-20"), $lte: new Date("2022-06-30") } }
+//         $match: { "createdAt": { $gte: new Date("2022-06-20"), $lte: new Date("2022-09-30") } }
 //     },
-//     {   
+//     {
+//         $match: {"orderStatus": -1}
+//     },
+//     {
 //         $group: {
 //                 "_id": { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
 //                 "count": {
 //                     $sum: 1
-//                 } 
+//                 }
 //             }
 //     },
 //     {
@@ -273,5 +386,81 @@ export default statisticController;
 //             ],
 //             "as": "temp"
 //         }
+//     }
+// ])
+
+// db.order_products.aggregate([
+//     {
+//         "$lookup": {
+//             "from": "products",
+//             "localField": "productId",
+//             "foreignField": "_id",
+//             "as": "products"
+//         }
+//     },
+//     {
+//         "$unwind": "$products"
+//     },
+//     {
+//         "$group": {
+//             "_id": {
+//                 "productId": '$productId',
+//                 "categoryId": "$products.categoryId"
+//             },
+//             "countProduct": {
+//                 "$sum": "$count"
+//             },
+//             "doc": {
+//                 "$push": {"productName": "$products.productName"}
+//             }
+//         }
+//     },
+//     {
+//         "$sort": {"countProduct": -1}
+//     }
+// ])
+
+// db.products.aggregate([
+//     {
+//         "$lookup": {
+//             "from": "order_products",
+//             "localField": "_id",
+//             "foreignField": "productId",
+//             "as": "order_products"
+//         }
+//     },
+//     {
+//         "$unwind": "$order_products"
+//     },
+//     {
+//         "$lookup": {
+//             "from": "categories",
+//             "localField": "categoryId",
+//             "foreignField": "_id",
+//             "as": "categories"
+//         }
+//     },
+//     {
+//         "$unwind": "$categories"
+//     },
+//     {
+//         "$group": {
+//             "_id": {
+//                 "productId": '$_id',
+//                 "categoryId": "$categoryId"
+//             },
+//             "countProduct": {
+//                 "$sum": "$order_products.count"
+//             },
+//             "infor": {
+//                 "$push": {"productName": "$productName", "categoryName": "$categories.categoryName", "id": "$_id"}
+//             }
+//         }
+//     },
+//     {
+//         "$unwind": "$infor"
+//     },
+//     {
+//         "$sort": {"countProduct": -1}
 //     }
 // ])

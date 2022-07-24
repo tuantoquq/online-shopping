@@ -25,6 +25,10 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function Search() {
   let { search } = useParams();
+  const [cat, setCat] = useState('');
+  // if (search.indexOf('category=') >= 0) {
+  //   setCat(search.replace('category=', ''));
+  // }
   //request data with search term;
   const PRODUCT_SEARCH_URL = `/product/filter`;
 
@@ -200,43 +204,80 @@ function Search() {
         console.log(err);
       }
     }
-    searchShop();
+    if (search.indexOf('category=') >= 0) {
+      setCat(search.replace('category=', ''));
+      setCategories(search.replace('category=', ''));
+    } else {
+      setCategories([]);
+      searchShop();
+    }
   }, [search]);
 
   useEffect(() => {
-    //console.log('filter change');
-    setLoading(true);
-    const filter = {
-      query: search,
-      categoryName: categories.length > 0 ? categories : undefined,
-      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
-      endPrice: toPriceApplied ? toPriceApplied : undefined,
-      orderBy: sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
-      sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
-      currentPage: 1,
-    };
-    // console.log(filter);
-    const searchProduct = async () => {
+    if (search.indexOf('category=') >= 0) {
+      const getProductByCat = async () => {
+        // console.log(filter);
+        //console.log('Filter changed');
+        //request for new data +numPages
+        try {
+          const response = await axios.post(
+            '/product/get-product-by-category',
+            { categoryName: search.replace('category=', ''), currentPage: 1 },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              // withCredentials: true,
+            }
+          );
+          console.log(response);
+          setProductIdList([...response.data.data.products]);
+          setNumPages(response.data.data.totalPages); //numPages was responsed
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      setCat(search.replace('category=', ''));
+      setCategories(search.replace('category=', ''));
+      setPage(1);
+      getProductByCat();
+    } else {
+      //console.log('filter change');
+      setLoading(true);
+      const filter = {
+        query: search,
+        categoryName: categories.length > 0 ? categories : undefined,
+        startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+        endPrice: toPriceApplied ? toPriceApplied : undefined,
+        orderBy:
+          sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
+        sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
+        currentPage: 1,
+      };
       // console.log(filter);
-      //console.log('Filter changed');
-      //request for new data +numPages
-      try {
-        const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        });
-        // console.log(response);
-        setProductIdList([...response.data.data]);
-        setNumPages(response.data.maxPage); //numPages was responsed
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    searchProduct();
-    setPage(1);
-    setLoading(false);
+      const searchProduct = async () => {
+        // console.log(filter);
+        //console.log('Filter changed');
+        //request for new data +numPages
+        try {
+          const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          });
+          console.log(response);
+          setProductIdList([...response.data.data]);
+          setNumPages(response.data.maxPage); //numPages was responsed
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      searchProduct();
+      setPage(1);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     search,
     categories,
@@ -249,39 +290,71 @@ function Search() {
   ]);
 
   useEffect(() => {
-    //Request for new data
-    setLoading(true);
-    const filter = {
-      query: search,
-      categoryName: categories.length > 0 ? categories : undefined,
-      startPrice: fromPriceApplied ? fromPriceApplied : undefined,
-      endPrice: toPriceApplied ? toPriceApplied : undefined,
-      orderBy: sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
-      sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
-      currentPage: page,
-    };
-    // console.log(filter);
-    const searchProduct = async () => {
+    if (search.indexOf('category=') >= 0) {
+      const getProductByCat = async () => {
+        // console.log(filter);
+        //console.log('Filter changed');
+        //request for new data +numPages
+        try {
+          const response = await axios.post(
+            '/product/get-product-by-category',
+            {
+              categoryName: search.replace('category=', ''),
+              currentPage: page,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              // withCredentials: true,
+            }
+          );
+          console.log(response);
+          setProductIdList([...response.data.data.products]);
+          setNumPages(response.data.data.totalPages); //numPages was responsed
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      setCat(search.replace('category=', ''));
+      setCategories(search.replace('category=', ''));
+      getProductByCat();
+    } else {
+      setLoading(true);
+      const filter = {
+        query: search,
+        categoryName: categories.length > 0 ? categories : undefined,
+        startPrice: fromPriceApplied ? fromPriceApplied : undefined,
+        endPrice: toPriceApplied ? toPriceApplied : undefined,
+        orderBy:
+          sort === 'lowerPrice' || sort === 'higherPrice' ? 'price' : sort,
+        sortBy: sort === 'lowerPrice' ? 'asc' : 'desc',
+        currentPage: page,
+      };
       // console.log(filter);
-      //console.log('Filter changed');
-      //request for new data +numPages
-      try {
-        const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true,
-        });
-        // console.log(response);
-        setProductIdList([...response.data.data]);
-        setNumPages(response.data.maxPage); //numPages was responsed
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    searchProduct();
-    setPage(page);
-    setLoading(false);
+      const searchProduct = async () => {
+        // console.log(filter);
+        //console.log('Filter changed');
+        //request for new data +numPages
+        try {
+          const response = await axios.post(PRODUCT_SEARCH_URL, filter, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // withCredentials: true,
+          });
+          console.log(response);
+          setProductIdList([...response.data.data]);
+          setNumPages(response.data.maxPage); //numPages was responsed
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      searchProduct();
+      setPage(page);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   return (
@@ -298,58 +371,59 @@ function Search() {
         </Alert>
       </Snackbar>
       <div className={clsx(styles.searchContainer)}>
-        <div className={clsx(styles.searchSidebar)}>
-          <h2 className={clsx(styles.sidebarTitle)}>
-            {' '}
-            <FilterAltIcon /> Bộ lọc tìm kiếm
-          </h2>
-          <div className={clsx(styles.searchFilter)}>
-            <h3>Theo Danh Mục</h3>
-            <div>
-              {showedCategories.map((category, index) => (
-                <div key={index} className={clsx(styles.rowFilter)}>
-                  <input
-                    className={clsx(styles.checkBox)}
-                    type="checkbox"
-                    id={`checkbox${category}`}
-                    value={category}
-                    checked={categories.includes(category)}
-                    onChange={() => {
-                      handleCategories(category);
-                    }}
-                  />
-                  <label
-                    className={clsx(styles.checkBoxLabel)}
-                    htmlFor={`checkbox${category}`}
-                  >
-                    {category}
-                  </label>
-                </div>
-              ))}
+        {search.indexOf('category=') < 0 && (
+          <div className={clsx(styles.searchSidebar)}>
+            <h2 className={clsx(styles.sidebarTitle)}>
+              {' '}
+              <FilterAltIcon /> Bộ lọc tìm kiếm
+            </h2>
+            <div className={clsx(styles.searchFilter)}>
+              <h3>Theo Danh Mục</h3>
+              <div>
+                {showedCategories.map((category, index) => (
+                  <div key={index} className={clsx(styles.rowFilter)}>
+                    <input
+                      className={clsx(styles.checkBox)}
+                      type="checkbox"
+                      id={`checkbox${category}`}
+                      value={category}
+                      checked={categories.includes(category)}
+                      onChange={() => {
+                        handleCategories(category);
+                      }}
+                    />
+                    <label
+                      className={clsx(styles.checkBoxLabel)}
+                      htmlFor={`checkbox${category}`}
+                    >
+                      {category}
+                    </label>
+                  </div>
+                ))}
 
-              {allCategories.length > 5 && (
-                <div className={clsx(styles.rowFilter)}>
-                  {showedCategories.length === 5 && (
-                    <span
-                      className={clsx(styles.viewMore)}
-                      onClick={() => setShowedCategories(allCategories)}
-                    >
-                      <ExpandMoreIcon /> Xem thêm{' '}
-                    </span>
-                  )}
-                  {showedCategories.length > 5 && (
-                    <span
-                      className={clsx(styles.viewMore)}
-                      onClick={handleSeeLessCategories}
-                    >
-                      <ExpandLessIcon /> Thu gọn{' '}
-                    </span>
-                  )}
-                </div>
-              )}
+                {allCategories.length > 5 && (
+                  <div className={clsx(styles.rowFilter)}>
+                    {showedCategories.length === 5 && (
+                      <span
+                        className={clsx(styles.viewMore)}
+                        onClick={() => setShowedCategories(allCategories)}
+                      >
+                        <ExpandMoreIcon /> Xem thêm{' '}
+                      </span>
+                    )}
+                    {showedCategories.length > 5 && (
+                      <span
+                        className={clsx(styles.viewMore)}
+                        onClick={handleSeeLessCategories}
+                      >
+                        <ExpandLessIcon /> Thu gọn{' '}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-          {/* <div className={clsx(styles.searchFilter)}>
+            {/* <div className={clsx(styles.searchFilter)}>
             <h3>Nơi Bán</h3>
             <div>
               {showedLocations.map((location, index) => (
@@ -439,101 +513,102 @@ function Search() {
               )}
             </div>
           </div> */}
-          <div className={clsx(styles.searchFilter)}>
-            <h3>Khoảng giá</h3>
-            <div>
-              <div className={clsx(styles.priceFilter)}>
-                <input
-                  className={clsx(styles.priceInput)}
-                  type="text"
-                  pattern="[0-9]*"
-                  value={fromPrice}
-                  onChange={(e) => {
-                    setFromPrice((v) =>
-                      e.target.validity.valid ? e.target.value : v
-                    );
-                  }}
-                  placeholder="đ Từ"
-                  disabled={apply}
-                />
-                <span> - </span>
-                <input
-                  className={clsx(styles.priceInput)}
-                  type="text"
-                  pattern="[0-9]*"
-                  value={toPrice}
-                  onChange={(e) => {
-                    setToPrice((v) =>
-                      e.target.validity.valid ? e.target.value : v
-                    );
-                  }}
-                  placeholder="đ Đến"
-                  disabled={apply}
-                />
-              </div>
-              <div className={clsx(styles.rowFilter, styles.buttonGroup)}>
-                <Button
-                  className={clsx(styles.button)}
-                  variant="contained"
-                  onClick={() => handleApply(true)}
-                  disabled={apply || (fromPrice === '' && toPrice === '')}
-                >
-                  Áp dụng
-                </Button>
-
-                <Button
-                  className={clsx(styles.button)}
-                  variant="contained"
-                  color="error"
-                  onClick={() => {
-                    handleApply(false);
-                  }}
-                  disabled={!apply}
-                >
-                  Hủy
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className={clsx(styles.searchFilter)}>
-            <h3>Đánh giá</h3>
-            <div>
-              {allRating.current.map((rate) => (
-                <div key={rate} className={clsx(styles.rowFilter)}>
+            <div className={clsx(styles.searchFilter)}>
+              <h3>Khoảng giá</h3>
+              <div>
+                <div className={clsx(styles.priceFilter)}>
                   <input
-                    id={`radio${rate}`}
-                    className={clsx(styles.inputRadio)}
-                    type="radio"
-                    value={rate}
-                    checked={rating === rate}
-                    onChange={() => {
-                      setRating(rate);
+                    className={clsx(styles.priceInput)}
+                    type="text"
+                    pattern="[0-9]*"
+                    value={fromPrice}
+                    onChange={(e) => {
+                      setFromPrice((v) =>
+                        e.target.validity.valid ? e.target.value : v
+                      );
                     }}
+                    placeholder="đ Từ"
+                    disabled={apply}
                   />
-                  <label
-                    className={clsx(styles.radioLabel)}
-                    htmlFor={`radio${rate}`}
-                  >
-                    <Rating
-                      className={clsx(styles.rating)}
-                      value={rate}
-                      div
-                      disabled
-                    />
-                    {rate === 5 || <span> trở lên</span>}
-                  </label>
+                  <span> - </span>
+                  <input
+                    className={clsx(styles.priceInput)}
+                    type="text"
+                    pattern="[0-9]*"
+                    value={toPrice}
+                    onChange={(e) => {
+                      setToPrice((v) =>
+                        e.target.validity.valid ? e.target.value : v
+                      );
+                    }}
+                    placeholder="đ Đến"
+                    disabled={apply}
+                  />
                 </div>
-              ))}
+                <div className={clsx(styles.rowFilter, styles.buttonGroup)}>
+                  <Button
+                    className={clsx(styles.button)}
+                    variant="contained"
+                    onClick={() => handleApply(true)}
+                    disabled={apply || (fromPrice === '' && toPrice === '')}
+                  >
+                    Áp dụng
+                  </Button>
+
+                  <Button
+                    className={clsx(styles.button)}
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                      handleApply(false);
+                    }}
+                    disabled={!apply}
+                  >
+                    Hủy
+                  </Button>
+                </div>
+              </div>
             </div>
+            <div className={clsx(styles.searchFilter)}>
+              <h3>Đánh giá</h3>
+              <div>
+                {allRating.current.map((rate) => (
+                  <div key={rate} className={clsx(styles.rowFilter)}>
+                    <input
+                      id={`radio${rate}`}
+                      className={clsx(styles.inputRadio)}
+                      type="radio"
+                      value={rate}
+                      checked={rating === rate}
+                      onChange={() => {
+                        setRating(rate);
+                      }}
+                    />
+                    <label
+                      className={clsx(styles.radioLabel)}
+                      htmlFor={`radio${rate}`}
+                    >
+                      <Rating
+                        className={clsx(styles.rating)}
+                        value={rate}
+                        div
+                        disabled
+                      />
+                      {rate === 5 || <span> trở lên</span>}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Button
+              className={clsx(styles.button)}
+              variant="contained"
+              onClick={handleClearAll}
+            >
+              Xóa tất cả
+            </Button>
           </div>
-          <Button
-            className={clsx(styles.button)}
-            variant="contained"
-            onClick={handleClearAll}
-          >
-            Xóa tất cả
-          </Button>
-        </div>
+        )}
         <div className={clsx(styles.searchBody)}>
           {shopId && (
             <div className={clsx(styles.shopContainer)}>
@@ -547,32 +622,36 @@ function Search() {
           <div>
             <span className={clsx(styles.searchedTitle)}>
               <ManageSearchOutlinedIcon className={clsx(styles.searchedIcon)} />{' '}
-              Kết quả tìm kiếm liên quan đến '<strong> {search}</strong>'
+              {search.indexOf('category=') >= 0
+                ? `Sản phẩm thuộc danh mục '${cat}'`
+                : `Kết quả tìm kiếm liên quan đến '${search}'`}
             </span>
             <div className={clsx(styles.productContent)}>
-              <div className={clsx(styles.productSort)}>
-                <span className={clsx(styles.productSortTitle)}>
-                  Sắp xếp theo{' '}
-                </span>
-                <div className={clsx(styles.productSortNav)}>
-                  {allSort.current.map((item) => (
-                    <div
-                      key={item.value}
-                      className={clsx(styles.productSortItem)}
-                    >
-                      <button
-                        className={clsx(
-                          styles.productSortBtn,
-                          sort === item.value && styles.selectedItem
-                        )}
-                        onClick={() => setSort(item.value)}
+              {search.indexOf('category=') < 0 && (
+                <div className={clsx(styles.productSort)}>
+                  <span className={clsx(styles.productSortTitle)}>
+                    Sắp xếp theo{' '}
+                  </span>
+                  <div className={clsx(styles.productSortNav)}>
+                    {allSort.current.map((item) => (
+                      <div
+                        key={item.value}
+                        className={clsx(styles.productSortItem)}
                       >
-                        {item.showed}
-                      </button>
-                    </div>
-                  ))}
+                        <button
+                          className={clsx(
+                            styles.productSortBtn,
+                            sort === item.value && styles.selectedItem
+                          )}
+                          onClick={() => setSort(item.value)}
+                        >
+                          {item.showed}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
               {productIdList.length === 0 ? (
                 <div className={clsx(styles.productContainer)}>
                   Không tìm thấy kết quả nào

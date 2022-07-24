@@ -15,7 +15,7 @@ import RoleService from '../service/RoleService';
 import { Navigate } from 'react-router-dom';
 
 function StatisticRevenue({ navigation }) {
-  const width = window.screen.width - 370;
+  const width = window.screen.width - 470;
   const height = window.screen.height * 0.85 - 200;
 
   const toDay = new Date();
