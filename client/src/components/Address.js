@@ -3,7 +3,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import styles from './CSS/AccountInformation.module.css'
 import clsx from "clsx";
 import {updateAddress, getListAddress} from '../service/CustomerService.js';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Address(props){
     const role = props.role;
     const [listAddress, setListAddress] = useState([]);
@@ -59,11 +60,12 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newName == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }else{
                                         updateAddress(listAddress[0]?._id, {receiverName: newName}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -92,15 +94,17 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newPhone == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     if(newPhone.length != 10 ){
-                                        alert("Số điện thoại không hợp lệ")
+                                        toast.error("Số điện thoại không hợp lệ")
                                     } 
                                     else{
                                         updateAddress(listAddress[0]?._id,{phone: newPhone}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công")
+                                            setTimeout(() =>window.location.reload(), 3000)
+
                                         })
                                     }
                                 }}
@@ -128,12 +132,13 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newCity == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
                                         updateAddress(listAddress[0]?._id,{city: newCity}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công")
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -162,12 +167,14 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newDistrict == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
                                         updateAddress(listAddress[0]?._id,{district: newDistrict}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công")
+                                            setTimeout(() =>window.location.reload(), 3000)
+
                                         })
                                     }
                                 }}
@@ -196,12 +203,13 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newWard == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
                                         updateAddress(listAddress[0]?._id,{ward: newWard}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
@@ -230,19 +238,20 @@ function Address(props){
                             <lable className={clsx(styles.lastColumn,styles.replaceInfor)}
                                 onClick={() => {
                                     if(newWard == null){
-                                        alert("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                     }
                                     else{
                                         updateAddress(listAddress[0]?._id,{details: newDetail}).then(res => {
                                             console.log("Update info: ", res.data);
-                                            window.location.reload()
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
                                         })
                                     }
                                 }}
                             >Lưu thay đổi</lable>
                         </div>
                     </div>
-    
+                    <ToastContainer />
                 </div>
                 )}
             </div>

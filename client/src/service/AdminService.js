@@ -62,3 +62,19 @@ export const getPopularProduct = async () => {
   }
   return response;
 };
+
+export const updateAdminPassword = async (newPassword) => {
+  let response;
+  try {
+    response = await adminApi.post('/admin/auth/change-password', newPassword,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+  return response;
+}

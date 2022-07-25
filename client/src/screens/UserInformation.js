@@ -55,26 +55,23 @@ function UserInformation(navigation, role) {
     <div className={styles.container}>
       {navigation.role !== 'admin' && <Header navigation={navigation} />}
       {navigation.role === 'admin' && <AdminHeader />}
-
+      
       <div className={styles.content}>
         <UserDisplay
           user_url={
             user?.avatarUrl === undefined ? avtImage : user?.avatarUrl
           }
-          user_name={user?.lastName}
+          user_name={user?.lastName === undefined ? 'Tuấn' : user?.lastName}
           user_age={
             user?.dateOfBirth === undefined
-              ? 'Chưa cập nhật'
+              ? '01/01/2000'
               : user?.dateOfBirth
           }
           user_phone={user?.phoneNumber}
+          role={navigation.role}
         />
-        {/* <AccountInformation user={user}/> */}
         <AccountInformation role={navigation.role} />
         <div className={styles.wrapLogout}>
-          {/* <button className={styles.logout} onClick={handleLogout}>
-            Đăng xuất
-          </button> */}
         </div>
       </div>
       <Footer navigation={navigation} />
