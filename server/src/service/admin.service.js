@@ -41,4 +41,10 @@ AdminService.addAdmin = async (admin) => {
     });
 };
 
+AdminService.updatePassword = async(userId, newPassword) => {
+    await Admin.findByIdAndUpdate(userId, {
+        password: newPassword
+    }, {new: true});
+}
+
 export default AdminService;
