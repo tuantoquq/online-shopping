@@ -83,7 +83,7 @@ function AccountInformation(props){
                                         toast.error("Mật khẩu phải có ít nhất 6 ký tự")
                                     }
                                     else{
-                                        updateCustomerProfile({oldPass: oldPassword,newPass: newPassword}).then(res => {
+                                        updateAdminPassword({oldPass: oldPassword,newPass: newPassword}).then(res => {
                                             console.log("Update info: ", res.data);
                                             toast.success("Thay đổi thành công");
                                             setTimeout(() =>window.location.reload(), 3000)
