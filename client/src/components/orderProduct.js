@@ -139,7 +139,7 @@ function OrderProduct(props) {
                                 type === 1 &&
                                 <div className={styles.comp2}>
                                     <Stack spacing={2} direction="row">
-                                        <Button variant="outlined" color="success">Chi tiết</Button>
+                                        <Button variant="outlined" color="success" onClick={() => setDetail(!detail)}>Chi tiết</Button>
                                         <Button variant="contained" color="success" onClick={() => acceptOrder(2, item._id)}>Đã giao thành công</Button>
                                     </Stack>
                                 </div>
@@ -150,7 +150,7 @@ function OrderProduct(props) {
                                 type !== 0 && type !== 1 &&
                                 <div className={styles.comp3}>
                                     <Stack spacing={2} direction="row">
-                                        <Button variant="outlined" color="success">Chi tiết</Button>
+                                        <Button variant="outlined" color="success" onClick={() => setDetail(!detail)}>Chi tiết</Button>
                                     </Stack>
                                 </div>
                             }
