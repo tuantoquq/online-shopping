@@ -28,6 +28,9 @@ function AdminDashboard(props) {
   const [visted, setVisited] = useState([]);
   const [newAccount, setNewAccount] = useState([]);
 
+  const [accessUser, setAccessUser] = useState([]);
+
+
   useEffect(() => {
     //request for data
     let date = [];
@@ -41,6 +44,33 @@ function AdminDashboard(props) {
         start = add(start, { days: 1 });
       }
     }
+
+    axios
+      .post(
+        '/statistic/get-access',
+        {
+          startDate: format(startDate, 'yyyy-MM-dd'),
+          endDate: format(endDate, 'yyyy-MM-dd'),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
+        const data1 = date.map((i) => {
+          for (const e of res.data.data) {
+            // console.log(e._id);
+            if (e._id === format(i, 'yyyy-MM-dd')) {
+              return e.count;
+            }
+          }
+          return 0;
+        });
+        setAccessUser(data1);
+      })
+      .catch((err) => console.log(err));
 
     axios
       .post(
@@ -146,8 +176,8 @@ function AdminDashboard(props) {
                   id="visits"
                   startDate={startDate}
                   endDate={endDate}
-                  lines={[visted, newAccount]}
-                  xAxis={['Số tài khoản khách hàng mới', 'Số cửa hàng mới']}
+                  lines={[visted, newAccount,accessUser]}
+                  xAxis={['Số tài khoản khách hàng mới', 'Số cửa hàng mới','Số lượng truy cập']}
                   width={width}
                   height={height}
                 />
