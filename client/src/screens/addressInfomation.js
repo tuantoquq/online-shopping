@@ -5,7 +5,7 @@ import styles from '../components/CSS/UserInformation.module.css';
 import UserDisplay from '../components/userDisplay.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCustomerProfile } from '../service/CustomerService.js';
+import { getCustomerProfile , addAddress} from '../service/CustomerService.js';
 import avtImage from '../assets/avt_default.png';
 import Address from '../components/Address';
 
@@ -16,7 +16,20 @@ import RoleService from '../service/RoleService';
 function AddressInformation(navigation, role) {
   const [user, setUser] = useState();
   const navigator = useNavigate();
-
+  useEffect(
+    () => {
+      addAddress({
+        "receiverName":"Nguyễn Hoàng Anh Tuấn",
+        "phone": "0376180161",
+        "city": "Hà Nội",
+        "district": "Hoàng Mai",
+        "ward": "Định Công",
+        "details": "245 Định Công"
+      }).then((res) => {
+        console.log(res);
+      })
+    },[]
+  )
   useEffect(() => {
     getCustomerProfile()
       .then((res) => {

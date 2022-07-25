@@ -8,6 +8,7 @@ import {
   getListAddress,
   addOrder,
   getListCartItems,
+  addAddress
 } from '../service/CustomerService.js';
 import { useState, useEffect } from 'react';
 import { Avatar, Button, Menu, MenuItem } from '@mui/material';
@@ -42,6 +43,21 @@ function Checkout({ navigation }) {
     },
   ]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  useEffect(
+    () => {
+      addAddress({
+        "receiverName":"Nguyễn Hoàng Anh Tuấn",
+        "phone": "0376180161",
+        "city": "Hà Nội",
+        "district": "Hoàng Mai",
+        "ward": "Định Công",
+        "details": "245 Định Công"
+      }).then((res) => {
+        console.log(res);
+      })
+    },[]
+  )
+
   useEffect(() => {
     getListCartItems()
       .then((res) => {
