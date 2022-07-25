@@ -14,6 +14,7 @@ function AccountInformation(props){
     const [newBirthday, setNewBirthday] = useState(new Date());
     const [newEmail, setNewEmail] = useState();
     const [newPassword, setNewPassword] = useState();
+    const [oldPassword, setOldPassword] = useState();
     const [currentUser, setCurrentUser] = useState({firstName:'Nguyễn', lastName:'Tuấn'});
     const [newAddress, setNewAddress] = useState();
     useEffect(() => {
@@ -49,7 +50,55 @@ function AccountInformation(props){
                         ></label>
                     </div>
                 </div>
-
+                {role === "admin"&&(
+                    <div>
+                    <div className={styles.group}>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Mật khẩu</label>
+                            <input type="password" disabled="disabled" value={"aaaaaa"}  className={styles.midColumn}/>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                            ></label>
+                        </div>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Mật khẩu cũ </label>
+                            <input type="password" 
+                            placeholder="Nhập mật khẩu cũ..."
+                            onChange={(e) => setOldPassword(e.target.value)}
+                             className={styles.midColumn}/>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                            ></label>
+                        </div>
+                        <div className={styles.infor}>
+                            <label className={styles.column}>Mật khẩu mới</label>
+                            <input type="password" 
+                            placeholder="Nhập mật khẩu mới..."
+                            onChange={(e) => setNewPassword(e.target.value)}
+                             className={styles.midColumn}/>
+                            <label className={clsx(styles.lastColumn,styles.replaceInfor)}
+                                onClick={() => {
+                                    if(newPassword == null || newPassword == null){
+                                        toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
+                                    }
+                                    else if(newPassword.length<6){
+                                        toast.error("Mật khẩu phải có ít nhất 6 ký tự")
+                                    }
+                                    else{
+                                        updateCustomerProfile({oldPass: oldPassword,newPass: newPassword}).then(res => {
+                                            console.log("Update info: ", res.data);
+                                            toast.success("Thay đổi thành công");
+                                            setTimeout(() =>window.location.reload(), 3000)
+                                        }).catch(err => {
+                                            toast.error("Thay đổi thất bại, vui lòng xem lại thông tin vừa nhập");
+                                        })
+                                    }
+                                }}
+                            >Thay đổi</label>
+                        </div>
+                    </div>
+                    </div>
+                )}
+                {role === "user"&&(
+                <div>
                 <div className={styles.group}>
                     <div className={styles.infor}>
                         <label className={styles.column}>Mật khẩu</label>
@@ -72,29 +121,18 @@ function AccountInformation(props){
                                 if(newPassword == null){
                                     toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                 }else{
-                                    if(role === 'customer'){
                                     updateCustomerProfile({password: newPassword}).then(res => {
                                         console.log("Update info: ", res.data);
                                         toast.success("Thay đổi thành công");
                                         setTimeout(() =>window.location.reload(), 3000)
                                     })
-                                    }
-                                    if(role === 'admin'){
-                                        updateAdminPassword({password: newPassword}).then(res => {
-                                            console.log("Update info: ", res.data);
-                                        });
-                                        toast.success("Thay đổi thành công");
-                                        setTimeout(() =>window.location.reload(), 3000)
-                                    }
                                 }
                             }}
                         >Lưu thay đổi</lable>
-
-
                     </div>
                 </div>
-            {role === "user"&&(      
-                <div>            
+                  
+                            
                     <div className={styles.group}>
                         <div className={styles.infor}>
                             <label className={styles.column}>Họ và tên đệm</label>
