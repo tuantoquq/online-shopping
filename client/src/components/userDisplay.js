@@ -5,6 +5,7 @@ import styles from './CSS/UserDisplay.module.css'
 import { uploadAvatar} from '../service/CustomerService.js';
 
 function UserDisplay(props){
+    const role = props.role;
     const user_url = props.user_url
     const user_name = props.user_name
     const user_age = props.user_age
@@ -41,7 +42,7 @@ function UserDisplay(props){
             <div className={styles.content}>
                 <div className={styles.left_cpn}>
                     <img src={userUrl} className={styles.user_avatar} />
-
+                    {role === 'customer' &&
                     <div className={styles.changeAvatar}>
 
                         <label className={styles.replaceInfor}
@@ -53,7 +54,7 @@ function UserDisplay(props){
                             <lable className={styles.replaceInfor} onClick={updateAvatar}>Lưu thay đổi</lable>
                         </div>
                     </div>
-
+                    }
                 </div>
                 <div className={styles.right_cpn}>
                     <h3>{user_name}</h3>

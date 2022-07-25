@@ -3,6 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import styles from './CSS/AccountInformation.module.css'
 import clsx from "clsx";
 import {updateCustomerProfile, getCustomerProfile} from '../service/CustomerService.js';
+import { updateAdminPassword } from "../service/AdminService.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function AccountInformation(props){
@@ -13,10 +14,12 @@ function AccountInformation(props){
     const [newBirthday, setNewBirthday] = useState(new Date());
     const [newEmail, setNewEmail] = useState();
     const [newPassword, setNewPassword] = useState();
-    const [currentUser, setCurrentUser] = useState();
+    const [currentUser, setCurrentUser] = useState({firstName:'Nguyễn', lastName:'Tuấn'});
     const [newAddress, setNewAddress] = useState();
     useEffect(() => {
-        getCustomerProfile().then(res=>{setCurrentUser(res?.data?.data)})
+        if(role!=='admin'){
+            getCustomerProfile().then(res=>{setCurrentUser(res?.data?.data)})
+        }
     },[props])
     const displayUpdate = (id)=>{
         const res = document.getElementById(id)
@@ -69,11 +72,20 @@ function AccountInformation(props){
                                 if(newPassword == null){
                                     toast.error("Vui lòng nhập thông tin trước khi lưu thay đổi")
                                 }else{
+                                    if(role === 'customer'){
                                     updateCustomerProfile({password: newPassword}).then(res => {
                                         console.log("Update info: ", res.data);
                                         toast.success("Thay đổi thành công");
                                         setTimeout(() =>window.location.reload(), 3000)
                                     })
+                                    }
+                                    if(role === 'admin'){
+                                        updateAdminPassword({password: newPassword}).then(res => {
+                                            console.log("Update info: ", res.data);
+                                        });
+                                        toast.success("Thay đổi thành công");
+                                        setTimeout(() =>window.location.reload(), 3000)
+                                    }
                                 }
                             }}
                         >Lưu thay đổi</lable>
@@ -272,11 +284,10 @@ function AccountInformation(props){
                             >Lưu thay đổi</lable>
                         </div>
                     </div>
-                    <ToastContainer />
                 </div>
                 )}
             </div>
-            
+            <ToastContainer />
 
             
         </div>
